@@ -3,8 +3,12 @@ package dk.kaloyan.mingalgeleg;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import dk.kaloyan.galgeleg.Galgelogik;
+import dk.kaloyan.galgeleg.MinGalgelogikImpl;
+
 
 public interface MinGalgelogik {
+    static MinGalgelogik getInstance();
     ArrayList<String> getBrugteBogstaver();
     String getSynligtOrd();
     String getOrdet();

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import dk.kaloyan.galgeleg.Galgelogik;
+import dk.kaloyan.galgeleg.MinGalgelogikImpl;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,8 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        MinGalgelogik spil = new MinGalgelogikImpl(new Galgelogik());
+        MinGalgelogik spil = MinGalgelogik.getInstance();
 
         spil.nulstil();
         // Kommentér ind for at hente ord fra DR
