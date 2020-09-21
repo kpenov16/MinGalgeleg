@@ -1,24 +1,52 @@
 package dk.kaloyan.mingalgeleg;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import dk.kaloyan.core.GameInteractorImpl;
+import dk.kaloyan.core.OutputPort;
 import dk.kaloyan.galgeleg.Galgelogik;
 import dk.kaloyan.galgeleg.MinGalgelogikImpl;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GameView{
+    private InputWorkerImpl inputWorker;
+    private GameViewModel viewModel;
+    private TextView textViewWordToGuess;
+
+    @Override
+    public void show(GameViewModel viewModel) {
+        textViewWordToGuess.setText(viewModel.currentGuess);
+    }
+
+    private void initialize() {
+        textViewWordToGuess = findViewById(R.id.textViewWordToGuess);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initialize();
+
+        ViewModelProvider viewModelProvider = new ViewModelProvider(getViewModelStore(),
+                ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()));
+
+        viewModel = viewModelProvider.get( GameViewModel.class );
+
+        inputWorker = new InputWorkerImpl(
+                new GameInteractorImpl( new OutputWorkerImpl(this, viewModel), new MinGalgelogikImpl(new Galgelogik()))
+        );
+
+        inputWorker.setup();
+
+        //next step is this one TODO
+        //inputWorker.play("e");
 
 
-        GameInteractorImpl interactor = new GameInteractorImpl(new MinGalgelogikImpl(new Galgelogik()));
-        interactor.setup();
-        interactor.play("e");
 
         //spil.nulstil();
 
@@ -107,4 +135,6 @@ public class MainActivity extends AppCompatActivity {
 */
 
     }
+
+
 }
