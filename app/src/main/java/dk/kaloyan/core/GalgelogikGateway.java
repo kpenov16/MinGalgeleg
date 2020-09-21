@@ -1,4 +1,4 @@
-package dk.kaloyan.mingalgeleg;
+package dk.kaloyan.core;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,8 +7,7 @@ import dk.kaloyan.galgeleg.Galgelogik;
 import dk.kaloyan.galgeleg.MinGalgelogikImpl;
 
 
-public interface MinGalgelogik {
-    static MinGalgelogik getInstance();
+public interface GalgelogikGateway {
     ArrayList<String> getBrugteBogstaver();
     String getSynligtOrd();
     String getOrdet();

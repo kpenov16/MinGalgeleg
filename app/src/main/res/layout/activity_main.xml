@@ -7,12 +7,50 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/textViewWordToGuess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewHangStatus"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/imageViewHangStatus"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewHangStatus" />
+
+    <ImageView
+        android:id="@+id/imageViewHangStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/galge" />
+
+    <Button
+        android:id="@+id/buttonGuess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/guess"
+        app:layout_constraintEnd_toEndOf="@+id/editTextLetterToGuess"
+        app:layout_constraintStart_toStartOf="@+id/editTextLetterToGuess"
+        app:layout_constraintTop_toBottomOf="@+id/editTextLetterToGuess" />
+
+
+    <EditText
+        android:id="@+id/editTextLetterToGuess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="enter you guess here"
+        android:maxLength="1"
+        app:layout_constraintEnd_toEndOf="@+id/textViewWordToGuess"
+        app:layout_constraintStart_toStartOf="@+id/textViewWordToGuess"
+        app:layout_constraintTop_toBottomOf="@+id/textViewWordToGuess" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

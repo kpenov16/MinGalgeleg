@@ -3,17 +3,12 @@ package dk.kaloyan.galgeleg;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import dk.kaloyan.galgeleg.Galgelogik;
-import dk.kaloyan.mingalgeleg.MinGalgelogik;
+import dk.kaloyan.core.GalgelogikGateway;
 
-public class MinGalgelogikImpl implements MinGalgelogik {
+public class MinGalgelogikImpl implements GalgelogikGateway {
     private Galgelogik galgelogik;
     public MinGalgelogikImpl(Galgelogik galgelogik){
         this.galgelogik = galgelogik;
-    }
-
-    public static MinGalgelogik getInstance(){
-        return new MinGalgelogikImpl(new Galgelogik());
     }
 
     @Override

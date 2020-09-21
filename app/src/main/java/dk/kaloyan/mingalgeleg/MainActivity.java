@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import dk.kaloyan.core.GameInteractorImpl;
 import dk.kaloyan.galgeleg.Galgelogik;
 import dk.kaloyan.galgeleg.MinGalgelogikImpl;
 
@@ -14,31 +15,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MinGalgelogik spil = MinGalgelogik.getInstance();
 
-        spil.nulstil();
+        GameInteractorImpl interactor = new GameInteractorImpl(new MinGalgelogikImpl(new Galgelogik()));
+        interactor.setup();
+        interactor.play("e");
+
+        //spil.nulstil();
+
         // Kommentér ind for at hente ord fra DR
-
+        /*
         try {
             spil.hentOrdFraDr();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
 
 
         // Kommentér ind for at hente ord fra et online regneark
-    /*
-    try {
-      spil.hentOrdFraRegneark("12");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    */
-        spil.logStatus();
+        /*
+        try {
+          spil.hentOrdFraRegneark("12");
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        */
 
-        spil.gætBogstav("e");
-        spil.logStatus();
 
+        //spil.logStatus();
+
+
+
+        //spil.gætBogstav("e");
+        //spil.logStatus();
+
+        /*
         spil.gætBogstav("a");
         spil.logStatus();
         System.out.println("" + spil.getAntalForkerteBogstaver());
@@ -93,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         spil.logStatus();
         if (spil.erSpilletSlut()) return;
 
+*/
 
     }
 }
