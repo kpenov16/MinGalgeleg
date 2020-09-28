@@ -1,6 +1,7 @@
 package dk.kaloyan.mingalgeleg;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -30,6 +31,16 @@ public class MainActivity extends AppCompatActivity implements GameView{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(savedInstanceState == null){
+            Fragment mainFragmet = new MainFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.frameLayoutMainFragment, mainFragmet)
+                    .commit();
+        }
+
+        /* //uncomment after fragment test is done
         initialize();
 
         ViewModelProvider viewModelProvider = new ViewModelProvider(getViewModelStore(),
@@ -43,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements GameView{
 
         inputWorker.setup();
 
+        */
         //next step is this one TODO
         //inputWorker.play("e");
 
