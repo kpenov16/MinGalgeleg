@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +32,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private TextView textViewWordToGuess;
     private ImageView imageViewHangStatus;
     private Button buttonGuess;
+    private EditText editTextLetterToGuess;
 
     public MainFragment() {
         // Required empty public constructor
@@ -70,6 +73,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         textViewWordToGuess = mainFragment.findViewById(R.id.textViewWordToGuess);
         imageViewHangStatus = mainFragment.findViewById(R.id.imageViewHangStatus);
         buttonGuess = mainFragment.findViewById(R.id.buttonGuess);
+        editTextLetterToGuess = mainFragment.findViewById(R.id.editTextLetterToGuess);
+        editTextLetterToGuess.setInputType(0);
     }
 
     @Override
@@ -80,7 +85,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }else if(imageViewHangStatus.getId() == ID){
 
         }else if(buttonGuess.getId() == ID){
-
+            Toast.makeText(getActivity(), "Guess: " + editTextLetterToGuess.getText(), Toast.LENGTH_SHORT).show();
         }
     }
 }

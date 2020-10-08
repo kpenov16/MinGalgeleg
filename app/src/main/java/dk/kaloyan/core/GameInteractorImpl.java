@@ -30,6 +30,8 @@ public class GameInteractorImpl implements InputPort{
         game.gætBogstav(guess);
         game.logStatus();
 
+        //game.erSidsteBogstavKorrekt();
+
         System.out.println("" + game.getAntalForkerteBogstaver());
         System.out.println("" + game.getSynligtOrd());
         if (game.erSpilletSlut()) return;

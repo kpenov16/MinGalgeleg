@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <TableRow style="@style/keyboard_row">
+        <TextView android:id="@+id/textViewQ" android:text="Q" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewW" android:text="W" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewE" android:text="E" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewR" android:text="R" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewT" android:text="T" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewY" android:text="Y" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewU" android:text="U" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewI" android:text="I" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewO" android:text="O" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewP" android:text="P" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewAA" android:text="Å" style="@style/keyboard_button"/>
+    </TableRow>
+    <TableRow style="@style/keyboard_row">
+        <TextView android:id="@+id/textViewA" android:text="A" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewS" android:text="S" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewD" android:text="D" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewF" android:text="F" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewG" android:text="G" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewH" android:text="H" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewJ" android:text="J" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewK" android:text="K" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewL" android:text="L" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewAE" android:text="Æ" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewOU" android:text="Ø" style="@style/keyboard_button"/>
+    </TableRow>
+    <TableRow style="@style/keyboard_row">
+        <TextView android:text=" " style="@style/keyboard_button"/>
+        <TextView android:text=" " style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewZ" android:text="Z" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewX" android:text="X" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewC" android:text="C" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewV" android:text="V" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewB" android:text="B" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewN" android:text="N" style="@style/keyboard_button"/>
+        <TextView android:id="@+id/textViewM" android:text="M" style="@style/keyboard_button"/>
+        <TextView android:text=" " style="@style/keyboard_button"/>
+        <TextView android:text=" " style="@style/keyboard_button"/>
+    </TableRow>
+</TableLayout>

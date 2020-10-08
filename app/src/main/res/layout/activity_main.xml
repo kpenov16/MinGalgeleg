@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <!-- Start Fragment Test-->
-
+    <!--
     <TextView
         android:id="@+id/textViewStartFragment"
         android:layout_width="wrap_content"
@@ -37,9 +37,10 @@
         app:layout_constraintEnd_toEndOf="@+id/frameLayoutMainFragment"
         app:layout_constraintStart_toStartOf="@+id/frameLayoutMainFragment"
         app:layout_constraintTop_toBottomOf="@+id/frameLayoutMainFragment" />
+    -->
     <!-- End Fragment Test-->
 
-    <!--
+
     <TextView
         android:id="@+id/textViewWordToGuess"
         android:layout_width="wrap_content"
@@ -64,7 +65,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/galge" />
 
-    <Button
+    <include
+        android:id="@+id/include"
+        layout="@layout/keys_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewWordToGuess" />
+
+    <!--    <Button
         android:id="@+id/buttonGuess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
