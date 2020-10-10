@@ -23,17 +23,22 @@ public class GameInteractorImpl implements InputPort{
 
         game.logStatus();
 
-        outputPort.presentSecret(game.getSynligtOrd());
+        outputPort.presentSecret(game.getSynligtOrd(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
     }
 
     public void play(String guess) {
         game.gætBogstav(guess);
         game.logStatus();
 
-        //game.erSidsteBogstavKorrekt();
+        System.out.println(game.getAntalForkerteBogstaver());
+        System.out.println(game.getSynligtOrd());
 
-        System.out.println("" + game.getAntalForkerteBogstaver());
-        System.out.println("" + game.getSynligtOrd());
-        if (game.erSpilletSlut()) return;
+        if (game.erSpilletSlut())
+            if(!game.erSpilletTabt())
+                outputPort.presentWinGame(game.getOrdet());
+            else
+                outputPort.presentLoseGame(game.getOrdet(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
+        else
+            outputPort.presentSecret(game.getSynligtOrd(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
     }
 }

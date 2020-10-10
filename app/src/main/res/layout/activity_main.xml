@@ -75,28 +75,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewWordToGuess" />
 
-    <!--    <Button
-        android:id="@+id/buttonGuess"
+    <Button
+        android:id="@+id/buttonRestart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/guess"
-        app:layout_constraintEnd_toEndOf="@+id/editTextLetterToGuess"
-        app:layout_constraintStart_toStartOf="@+id/editTextLetterToGuess"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLetterToGuess" />
-
-
-    <EditText
-        android:id="@+id/editTextLetterToGuess"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="enter you guess here"
-        android:maxLength="1"
-        app:layout_constraintEnd_toEndOf="@+id/textViewWordToGuess"
-        app:layout_constraintStart_toStartOf="@+id/textViewWordToGuess"
-        app:layout_constraintTop_toBottomOf="@+id/textViewWordToGuess" />
--->
+        android:text="Restart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/include"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

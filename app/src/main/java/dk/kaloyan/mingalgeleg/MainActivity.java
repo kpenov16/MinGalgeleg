@@ -2,20 +2,16 @@ package dk.kaloyan.mingalgeleg;
 
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import dk.kaloyan.core.GameInteractorImpl;
-import dk.kaloyan.core.OutputPort;
 import dk.kaloyan.galgeleg.Galgelogik;
 import dk.kaloyan.galgeleg.MinGalgelogikImpl;
 
@@ -23,32 +19,60 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
     private InputWorkerImpl inputWorker;
     private GameViewModel viewModel;
     private TextView textViewWordToGuess;
-    private EditText editTextLetterToGuess;
     private ImageView imageViewHangStatus;
-    private Button buttonGuess;
+    private Button buttonRestart;
 
     @Override
     public void show(GameViewModel viewModel) {
+
         textViewWordToGuess.setText(viewModel.currentGuess);
+        if(viewModel.wrongCount == 1)
+            this.imageViewHangStatus.setImageResource(R.drawable.forkert1);
+        else if(viewModel.wrongCount == 2)
+            this.imageViewHangStatus.setImageResource(R.drawable.forkert2);
+        else if(viewModel.wrongCount == 3)
+            this.imageViewHangStatus.setImageResource(R.drawable.forkert3);
+        else if(viewModel.wrongCount == 4)
+            this.imageViewHangStatus.setImageResource(R.drawable.forkert4);
+        else if(viewModel.wrongCount == 5)
+            this.imageViewHangStatus.setImageResource(R.drawable.forkert5);
+        else if(viewModel.wrongCount == 6){
+            this.imageViewHangStatus.setImageResource(R.drawable.forkert6);
+        }
+
+        if(viewModel.restartButton) {
+            setRestartButtonVisibility(Button.VISIBLE);
+        } else
+            setRestartButtonVisibility(Button.INVISIBLE);
+    }
+
+    private void setRestartButtonVisibility(int visible) {
+        buttonRestart.setVisibility(visible);
     }
 
     @Override
     public void onClick(View view) {
-        final int ID = view.getId();
-        //if(buttonGuess.getId() == ID){
-          //  Toast.makeText(this, "Key: " + editTextLetterToGuess.getText(), Toast.LENGTH_LONG).show();
-        //}
-        Toast.makeText(this, "Key: " + ((TextView)view).getText(), Toast.LENGTH_LONG).show();
-        inputWorker.play(((TextView)view).getText().toString().toLowerCase());
+        if(buttonRestart.getId() == view.getId())
+            restartGame();
+        else {
+            //Toast.makeText(this, "Key: " + ((TextView)view).getText(), Toast.LENGTH_LONG).show();
+            inputWorker.play(((TextView)view).getText().toString().toLowerCase());
+        }
     }
+    private void restartGame() {
+        inputWorker.setup();
+        setRestartButtonVisibility(Button.INVISIBLE);
+        viewModel.restartButton = false;
+        this.imageViewHangStatus.setImageResource(R.drawable.galge);
+    }
+
 
     private void initialize() {
         textViewWordToGuess = findViewById(R.id.textViewWordToGuess);
-        //editTextLetterToGuess = findViewById(R.id.editTextLetterToGuess);
-        //editTextLetterToGuess.setInputType(InputType.TYPE_NULL);
         imageViewHangStatus = findViewById(R.id.imageViewHangStatus);
-        //buttonGuess = findViewById(R.id.buttonGuess);
-        //buttonGuess.setOnClickListener(this);
+
+        buttonRestart = findViewById(R.id.buttonRestart);
+        buttonRestart.setOnClickListener(this);
 
         $(R.id.textViewA).setOnClickListener(this);
         $(R.id.textViewB).setOnClickListener(this);
@@ -89,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         /*
         if(savedInstanceState == null){
             Fragment mainFragmet = new MainFragment();
@@ -100,10 +123,7 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         }
         */
 
-        //uncomment after fragment test is done
         initialize();
-
-
 
         ViewModelProvider viewModelProvider = new ViewModelProvider(getViewModelStore(),
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()));
@@ -116,24 +136,6 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
 
         inputWorker.setup();
 
-
-        //next step is this one TODO
-        //inputWorker.play("e");
-
-
-
-        //spil.nulstil();
-
-        // Kommentér ind for at hente ord fra DR
-        /*
-        try {
-            spil.hentOrdFraDr();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-
-
         // Kommentér ind for at hente ord fra et online regneark
         /*
         try {
@@ -142,73 +144,7 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
           e.printStackTrace();
         }
         */
-
-
-        //spil.logStatus();
-
-
-
-        //spil.gætBogstav("e");
-        //spil.logStatus();
-
-        /*
-        spil.gætBogstav("a");
-        spil.logStatus();
-        System.out.println("" + spil.getAntalForkerteBogstaver());
-        System.out.println("" + spil.getSynligtOrd());
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("i");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("s");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("r");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("l");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("b");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("o");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("t");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("n");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("m");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("y");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("p");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-        spil.gætBogstav("g");
-        spil.logStatus();
-        if (spil.erSpilletSlut()) return;
-
-*/
-
-    }
+  }
 
 
 

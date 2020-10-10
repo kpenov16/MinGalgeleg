@@ -1,10 +1,8 @@
 package dk.kaloyan.mingalgeleg;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import dk.kaloyan.core.OutputPort;
-
-import static java.util.stream.Stream.generate;
 
 public class OutputWorkerImpl implements OutputPort {
     private GameView view;
@@ -15,12 +13,25 @@ public class OutputWorkerImpl implements OutputPort {
         this.viewModel = viewModel;
     }
 
-    @Override
-    public void presentSecret(String secret) {
-        if(viewModel.firstGuess){
-            viewModel.currentGuess = generate(()->"*").limit(secret.length()).collect(Collectors.joining());
-            view.show(viewModel);
-        }
 
+    @Override
+    public void presentSecret(String synligtOrd, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver) {
+        viewModel.wrongCount = antalForkerteBogstaver;
+        viewModel.currentGuess = "Synligt Ord: " + synligtOrd + "\nForkerte Bogstaver: " + antalForkerteBogstaver + "\nBrugte Bogstaver: " + brugteBogstaver.toString();
+        view.show(viewModel);
+    }
+
+    @Override
+    public void presentWinGame(String ordet) {
+        viewModel.currentGuess = "You WIN!!!\nOrdet var: " + ordet;
+        view.show(viewModel);
+    }
+
+    @Override
+    public void presentLoseGame(String ordet, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver) {
+        viewModel.wrongCount = antalForkerteBogstaver;
+        viewModel.currentGuess = "You LOSE!!!\nOrdet var: " + ordet + "\nForkerte gæt: " + antalForkerteBogstaver + "\nBrugte bogstaver: " + brugteBogstaver.toString();
+        viewModel.restartButton = true;
+        view.show(viewModel);
     }
 }
