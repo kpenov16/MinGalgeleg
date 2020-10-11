@@ -4,11 +4,16 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import dk.kaloyan.core.GameInteractorImpl;
 import dk.kaloyan.galgeleg.Galgelogik;
@@ -16,6 +21,7 @@ import dk.kaloyan.galgeleg.MinGalgelogikImpl;
 
 public class MainActivity extends AppCompatActivity implements GameView, View.OnClickListener {
     public static String PLAYER_NAME = "dk.kaloyan.mingalgeleg.MainActivity.PLAYER_NAME";
+    public static String LAST_SCORE = "dk.kaloyan.mingalgeleg.MainActivity.LAST_SCORE";
 
     private InputWorkerImpl inputWorker;
     private GameViewModel viewModel;
@@ -48,6 +54,15 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
     public void onClick(View view) {
         //Toast.makeText(this, "Key: " + ((TextView)view).getText(), Toast.LENGTH_LONG).show();
         inputWorker.play(((TextView)view).getText().toString().toLowerCase());
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(MainActivity.LAST_SCORE, viewModel.currentGuess+"_back_pressed");
+        setResult(Activity.RESULT_OK, intent);
+
+        super.onBackPressed();
     }
 
     private void initialize() {
