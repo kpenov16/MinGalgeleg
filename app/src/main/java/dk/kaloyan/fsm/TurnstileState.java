@@ -1,16 +1,7 @@
 package dk.kaloyan.fsm;
 
-public class TurnstileState {
-    public void start(TurnstileFSM turnstileFSM) {
-
-    }
-
-    public void guess(TurnstileFSM turnstileFSM) {
-
-    }
-
-    public void back(TurnstileFSM turnstileFSM) {
-
-    }
-
+public interface TurnstileState {
+    void start(TurnstileFSM turnstileFSM);
+    void guess(TurnstileFSM turnstileFSM);
+    void back(TurnstileFSM turnstileFSM);
 }

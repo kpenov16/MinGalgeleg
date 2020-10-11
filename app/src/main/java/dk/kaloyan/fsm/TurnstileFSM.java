@@ -11,6 +11,9 @@ public abstract class TurnstileFSM {
     public void back(){
         state.back(this);
     }
+    public void setState(TurnstileState state){
+        this.state = state;
+    }
 
     //| current state | event | new state |      action         |
     //|=========================================================|
