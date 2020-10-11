@@ -1,6 +1,7 @@
 package dk.kaloyan.mingalgeleg;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -46,8 +47,24 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         else if(viewModel.wrongCount == 5)
             this.imageViewHangStatus.setImageResource(R.drawable.forkert5);
         else if(viewModel.wrongCount == 6){
-            this.imageViewHangStatus.setImageResource(R.drawable.forkert6);
+
+            Intent intent = new Intent(MainActivity.this, EndGameActivity.class);
+            //intent.putExtra(MainActivity.PLAYER_NAME, playerName);
+            intent.putExtra(MainActivity.LAST_SCORE, viewModel.currentGuess);
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+            startActivity(intent);
+            finish();
+            //startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
+            //this.imageViewHangStatus.setImageResource(R.drawable.forkert6);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        setResult(StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
+        finish();
     }
 
     @Override
