@@ -3,8 +3,6 @@ package dk.kaloyan.mingalgeleg;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
-    public static final int RESULT_FROM_MAIN_ACTIVITY = 0;
+    public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
 
     private ListView listViewScore;
     private TextView textViewListElement;
@@ -44,7 +42,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             intent.putExtra(MainActivity.PLAYER_NAME, playerName);
-            startActivityForResult(intent, StartActivity.RESULT_FROM_MAIN_ACTIVITY);
+            startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
         }
     }
 
@@ -56,7 +54,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (requestCode == StartActivity.RESULT_FROM_MAIN_ACTIVITY) {
+        if (requestCode == StartActivity.RESULT_FROM_END_GAME_ACTIVITY) {
             if(resultCode == Activity.RESULT_OK){
 
                lastScore = intent.getStringExtra(MainActivity.LAST_SCORE);
@@ -103,7 +101,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private void updateScores() {
         if(lastScore != null)
             scores.add(lastScore);
-        
+
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(this, R.layout.highscore_list_element, R.id.textViewListElement, toStringArray(scores));
         listViewScore.setAdapter(adapter);
