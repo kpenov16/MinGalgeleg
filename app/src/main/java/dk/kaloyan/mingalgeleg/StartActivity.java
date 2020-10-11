@@ -7,8 +7,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -23,7 +21,7 @@ public class StartActivity extends AppCompatActivity {
         init();
 
 
-        String[] scores = new String[]{"kaloyan: score 5","bob: score 3"};
+        String[] scores = new String[]{"kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.highscore_list_element, R.id.textViewListElement, scores);
         listViewScore.setAdapter(adapter);
 
