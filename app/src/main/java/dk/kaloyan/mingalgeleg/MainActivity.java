@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,16 +15,21 @@ import dk.kaloyan.galgeleg.Galgelogik;
 import dk.kaloyan.galgeleg.MinGalgelogikImpl;
 
 public class MainActivity extends AppCompatActivity implements GameView, View.OnClickListener {
+    public static String PLAYER_NAME = "dk.kaloyan.mingalgeleg.MainActivity.PLAYER_NAME";
+
     private InputWorkerImpl inputWorker;
     private GameViewModel viewModel;
     private TextView textViewWordToGuess;
     private ImageView imageViewHangStatus;
     private Button buttonRestart;
+    private String playerName;
+    private TextView textViewPlayerName;
 
     @Override
     public void show(GameViewModel viewModel) {
 
         textViewWordToGuess.setText(viewModel.currentGuess);
+        textViewPlayerName.setText(viewModel.playerName);
         if(viewModel.wrongCount == 1)
             this.imageViewHangStatus.setImageResource(R.drawable.forkert1);
         else if(viewModel.wrongCount == 2)
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         }
     }
     private void restartGame() {
-        inputWorker.setup();
+        inputWorker.setup(playerName);
         setRestartButtonVisibility(Button.INVISIBLE);
         viewModel.restartButton = false;
         this.imageViewHangStatus.setImageResource(R.drawable.galge);
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
 
 
     private void initialize() {
+        textViewPlayerName = findViewById(R.id.textViewPlayerName);
         textViewWordToGuess = findViewById(R.id.textViewWordToGuess);
         imageViewHangStatus = findViewById(R.id.imageViewHangStatus);
 
@@ -123,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         }
         */
 
+
         initialize();
 
         ViewModelProvider viewModelProvider = new ViewModelProvider(getViewModelStore(),
@@ -134,7 +140,11 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
                 new GameInteractorImpl( new OutputWorkerImpl(this, viewModel), new MinGalgelogikImpl(new Galgelogik()))
         );
 
-        inputWorker.setup();
+        Bundle bundleFromStartActivity = getIntent().getExtras();
+        playerName = bundleFromStartActivity.getString(PLAYER_NAME);
+
+
+        inputWorker.setup(playerName);
 
         // Kommentér ind for at hente ord fra et online regneark
         /*

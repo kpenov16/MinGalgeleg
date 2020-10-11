@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public interface OutputPort {
 
-    void presentSecret(String synligtOrd, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver);
+    void presentResult(String playerName, String synligtOrd, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver);
 
     void presentWinGame(String ordet);
 

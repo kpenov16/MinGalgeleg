@@ -1,6 +1,5 @@
 package dk.kaloyan.mingalgeleg;
 
-import dk.kaloyan.core.GameInteractorImpl;
 import dk.kaloyan.core.InputPort;
 
 public class InputWorkerImpl {
@@ -10,8 +9,8 @@ public class InputWorkerImpl {
         this.inputPort = inputPort;
     }
 
-    public void setup() {
-        inputPort.setup();
+    public void setup(String playerName) {
+        inputPort.setup(playerName);
     }
 
     public void play(String guess) {

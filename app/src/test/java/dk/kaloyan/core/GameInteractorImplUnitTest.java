@@ -23,7 +23,7 @@ public class GameInteractorImplUnitTest implements GameView {
         setup();
         MinGalgelogikImpl gameImpl = new MinGalgelogikImpl(new Galgelogik());
         GameInteractorImpl actor = new GameInteractorImpl( new OutputWorkerImpl(this, new GameViewModel()), gameImpl);//new GameInteractorImpl(outputPort, game);
-        actor.setup();
+        actor.setup(playerName);
 
         assertEquals(gameImpl.getOrdet(),"");
 

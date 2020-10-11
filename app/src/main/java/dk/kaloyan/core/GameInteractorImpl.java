@@ -1,17 +1,16 @@
 package dk.kaloyan.core;
 
-import dk.kaloyan.galgeleg.MinGalgelogikImpl;
-
 public class GameInteractorImpl implements InputPort{
     private OutputPort outputPort;
     public GalgelogikGateway game;
-
+    private String playerName;
     public GameInteractorImpl(OutputPort outputPort, GalgelogikGateway game) {
         this.outputPort = outputPort;
         this.game = game;
     }
 
-    public void setup(){
+    public void setup(String playerName){
+        this.playerName = playerName;
 
         game.nulstil();
 
@@ -23,7 +22,7 @@ public class GameInteractorImpl implements InputPort{
 
         game.logStatus();
 
-        outputPort.presentSecret(game.getSynligtOrd(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
+        outputPort.presentResult(this.playerName, game.getSynligtOrd(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
     }
 
     public void play(String guess) {
@@ -39,6 +38,6 @@ public class GameInteractorImpl implements InputPort{
             else
                 outputPort.presentLoseGame(game.getOrdet(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
         else
-            outputPort.presentSecret(game.getSynligtOrd(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
+            outputPort.presentResult(this.playerName, game.getSynligtOrd(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
     }
 }

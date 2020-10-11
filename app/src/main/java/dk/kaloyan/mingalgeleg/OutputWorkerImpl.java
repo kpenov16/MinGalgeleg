@@ -15,7 +15,8 @@ public class OutputWorkerImpl implements OutputPort {
 
 
     @Override
-    public void presentSecret(String synligtOrd, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver) {
+    public void presentResult(String playerName, String synligtOrd, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver) {
+        viewModel.playerName = "Name: " + playerName;
         viewModel.wrongCount = antalForkerteBogstaver;
         viewModel.currentGuess = "Synligt Ord: " + synligtOrd + "\nForkerte Bogstaver: " + antalForkerteBogstaver + "\nBrugte Bogstaver: " + brugteBogstaver.toString();
         view.show(viewModel);
