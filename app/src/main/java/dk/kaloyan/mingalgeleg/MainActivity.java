@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
     private GameViewModel viewModel;
     private TextView textViewWordToGuess;
     private ImageView imageViewHangStatus;
-    private Button buttonRestart;
     private String playerName;
     private TextView textViewPlayerName;
 
@@ -43,41 +42,18 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         else if(viewModel.wrongCount == 6){
             this.imageViewHangStatus.setImageResource(R.drawable.forkert6);
         }
-
-        if(viewModel.restartButton) {
-            setRestartButtonVisibility(Button.VISIBLE);
-        } else
-            setRestartButtonVisibility(Button.INVISIBLE);
-    }
-
-    private void setRestartButtonVisibility(int visible) {
-        buttonRestart.setVisibility(visible);
     }
 
     @Override
     public void onClick(View view) {
-        if(buttonRestart.getId() == view.getId())
-            restartGame();
-        else {
-            //Toast.makeText(this, "Key: " + ((TextView)view).getText(), Toast.LENGTH_LONG).show();
-            inputWorker.play(((TextView)view).getText().toString().toLowerCase());
-        }
+        //Toast.makeText(this, "Key: " + ((TextView)view).getText(), Toast.LENGTH_LONG).show();
+        inputWorker.play(((TextView)view).getText().toString().toLowerCase());
     }
-    private void restartGame() {
-        inputWorker.setup(playerName);
-        setRestartButtonVisibility(Button.INVISIBLE);
-        viewModel.restartButton = false;
-        this.imageViewHangStatus.setImageResource(R.drawable.galge);
-    }
-
 
     private void initialize() {
         textViewPlayerName = findViewById(R.id.textViewPlayerName);
         textViewWordToGuess = findViewById(R.id.textViewWordToGuess);
         imageViewHangStatus = findViewById(R.id.imageViewHangStatus);
-
-        buttonRestart = findViewById(R.id.buttonRestart);
-        buttonRestart.setOnClickListener(this);
 
         $(R.id.textViewA).setOnClickListener(this);
         $(R.id.textViewB).setOnClickListener(this);

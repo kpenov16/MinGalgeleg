@@ -32,7 +32,6 @@ public class OutputWorkerImpl implements OutputPort {
     public void presentLoseGame(String ordet, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver) {
         viewModel.wrongCount = antalForkerteBogstaver;
         viewModel.currentGuess = "You LOSE!!!\nOrdet var: " + ordet + "\nForkerte gæt: " + antalForkerteBogstaver + "\nBrugte bogstaver: " + brugteBogstaver.toString();
-        viewModel.restartButton = true;
         view.show(viewModel);
     }
 }

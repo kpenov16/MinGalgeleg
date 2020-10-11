@@ -11,7 +11,6 @@ public class GameViewModel extends ViewModel {
 
     public static final String KEY_CURRENT_GUESS = "dk.kaloyan.mingalgeleg.CURRENT_GUESS";
     public static final String KEY_WRONG_COUNT = "dk.kaloyan.mingalgeleg.WRONG_COUNT";
-    public boolean restartButton = false;
 
     public void saveState(Bundle outState) {
         outState.putString(KEY_CURRENT_GUESS, currentGuess);
