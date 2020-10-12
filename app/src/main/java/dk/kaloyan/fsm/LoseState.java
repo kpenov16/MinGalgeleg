@@ -15,4 +15,10 @@ public class LoseState extends HangGameStateBase {
     public void back(HangGameFSM hangGameFSM) {
 
     }
+
+    HangGameState context;
+    @Override
+    public void setContext(HangGameState context) {
+        this.context = context;
+    }
 }

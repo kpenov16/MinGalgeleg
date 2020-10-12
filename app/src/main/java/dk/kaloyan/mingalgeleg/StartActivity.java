@@ -21,8 +21,10 @@ import java.util.List;
 
 import dk.kaloyan.fsm.HangGameFSM;
 import dk.kaloyan.fsm.HangGameFSMImpl;
+import dk.kaloyan.fsm.HangGameState;
+import dk.kaloyan.fsm.HangGameStateBase;
 
-public class StartActivity extends AppCompatActivity implements View.OnClickListener {
+public class StartActivity extends AppCompatActivity implements View.OnClickListener{//, HangGameState {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
 
     private ListView listViewScore;
@@ -33,6 +35,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private String playerName;
     private List<String> scores = new ArrayList<>();
     private String lastScore;
+    //private HangGameFSM fsm = HangGameFSMImpl.getInstance();
 
     @Override
     public void onClick(View view) {
@@ -41,14 +44,27 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
             viewModelStart.playerName = playerName;
             viewModelStart.scores = toStringArray(scores);
-
-
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             intent.putExtra(MainActivity.PLAYER_NAME, playerName);
             startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
+            //fsm.start();
         }
     }
-
+    /*
+    @Override
+    public void start(HangGameFSM fsm) {
+        playerName = editTextPlayerName.getText().toString();
+        viewModelStart.playerName = playerName;
+        viewModelStart.scores = toStringArray(scores);
+        Intent intent = new Intent(StartActivity.this, MainActivity.class);
+        intent.putExtra(MainActivity.PLAYER_NAME, playerName);
+        startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
+    }
+    @Override
+    public void guess(HangGameFSM fsm) {}
+    @Override
+    public void back(HangGameFSM fsm) {}
+    */
     private String[] toStringArray(List<String> scores) {
         return scores.toArray(new String[scores.size()]);
     }
@@ -81,6 +97,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        //fsm
+        //HangGameStateBase.INIT.setContext(this);
+        //fsm.setState(HangGameStateBase.INIT);
+        //fsm
 
         ViewModelProvider viewModelProvider = new ViewModelProvider(getViewModelStore(),
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()));
@@ -121,5 +142,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             viewModelStart.saveState(outState);
         }
     }
+
+
+
 
 }

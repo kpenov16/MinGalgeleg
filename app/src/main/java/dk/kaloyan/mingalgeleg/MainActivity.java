@@ -17,10 +17,23 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import dk.kaloyan.core.GameInteractorImpl;
+import dk.kaloyan.fsm.HangGameFSM;
+import dk.kaloyan.fsm.HangGameFSMImpl;
+import dk.kaloyan.fsm.HangGameState;
+import dk.kaloyan.fsm.HangGameStateBase;
 import dk.kaloyan.galgeleg.Galgelogik;
 import dk.kaloyan.galgeleg.MinGalgelogikImpl;
 
-public class MainActivity extends AppCompatActivity implements GameView, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements GameView, View.OnClickListener{//, HangGameState {
+    /*
+    @Override
+    public void start(HangGameFSM fsm) {}
+    @Override
+    public void guess(HangGameFSM fsm) {}
+    @Override
+    public void back(HangGameFSM fsm) {}
+    */
+
     public static String PLAYER_NAME = "dk.kaloyan.mingalgeleg.MainActivity.PLAYER_NAME";
     public static String LAST_SCORE = "dk.kaloyan.mingalgeleg.MainActivity.LAST_SCORE";
 
@@ -122,10 +135,14 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         return (T) super.findViewById(id);
     }
 
+    private HangGameFSM fsm = HangGameFSMImpl.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //HangGameStateBase.PLAYING.setContext(this);
+
         /*
         if(savedInstanceState == null){
             Fragment mainFragmet = new MainFragment();
@@ -163,7 +180,5 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         }
         */
   }
-
-
 
 }
