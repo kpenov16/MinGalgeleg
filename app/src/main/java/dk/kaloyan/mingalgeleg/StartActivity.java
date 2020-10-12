@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import dk.kaloyan.fsm.HangGameFSM;
+import dk.kaloyan.fsm.HangGameFSMImpl;
+
 public class StartActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
 

@@ -1,7 +1,7 @@
 package dk.kaloyan.fsm;
 
-public abstract class TurnstileFSM {
-    private TurnstileState state;
+public abstract class HangGameFSM {
+    private HangGameState state;
     public void start() {
         state.start(this);
     }
@@ -11,7 +11,7 @@ public abstract class TurnstileFSM {
     public void back(){
         state.back(this);
     }
-    public void setState(TurnstileState state){
+    public void setState(HangGameState state){
         this.state = state;
     }
 
