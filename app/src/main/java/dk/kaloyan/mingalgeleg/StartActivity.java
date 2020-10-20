@@ -2,6 +2,8 @@ package dk.kaloyan.mingalgeleg;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,10 +19,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener{//, HangGameState {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
+    public static final String PREF_SCORES = "dk.kaloyan.mingalgeleg.StartActivity.PREF_SCORES";
 
     private ListView listViewScore;
     private TextView textViewListElement;
@@ -78,11 +83,35 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                playerName = intent.getStringExtra(MainActivity.PLAYER_NAME);
 
                updateScores();
+
+               updatePreferences();
+
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
             }
         }
+    }
+
+    private void updatePreferences() {
+         // create a reference to the shared preferences object
+        SharedPreferences sharedPreferences;
+
+        // obtain an editor to add data to my SharedPreferences object
+        SharedPreferences.Editor editor;
+
+        sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
+
+
+        // using this instance you can get any value saved.
+        //sharedPreferences.getInt("backColor", Color.BLACK); // default value is BLACK set here
+
+
+        editor = sharedPreferences.edit();
+        //edit and commit
+
+        editor.putStringSet("SCORES", new LinkedHashSet<>(new ArrayList<String>(scores)));
+        editor.commit(); //very imp.
     }
 
     private void initialize() {
@@ -99,6 +128,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+
+
         //fsm
         //HangGameStateBase.INIT.setContext(this);
         //fsm.setState(HangGameStateBase.INIT);
@@ -114,6 +145,10 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
             playerName = viewModelStart.playerName;
             scores = toArrayList(viewModelStart.scores);
+        }else if(activityNeedsSharedPreferences(savedInstanceState)){
+            SharedPreferences sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
+            Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet("SCORES", new LinkedHashSet<>()));
+            scores = new ArrayList<>(set);
         }
         initialize();
         updateScores();
@@ -130,6 +165,10 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     private boolean activityStateNeedToBeRestored(Bundle savedInstanceState) {
         return viewModelStart.isNewlyCreated && savedInstanceState != null;
+    }
+
+    private boolean activityNeedsSharedPreferences(Bundle savedInstanceState) {
+        return viewModelStart.isNewlyCreated && savedInstanceState == null;
     }
 
     @Override
