@@ -5,24 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-
-import dk.kaloyan.core.GameInteractorImpl;
-import dk.kaloyan.fsm.HangGameFSM;
-import dk.kaloyan.fsm.HangGameFSMImpl;
-import dk.kaloyan.fsm.HangGameState;
-import dk.kaloyan.fsm.HangGameStateBase;
-import dk.kaloyan.galgeleg.Galgelogik;
-import dk.kaloyan.galgeleg.MinGalgelogikImpl;
 
 public class MainActivity extends AppCompatActivity implements GameView, View.OnClickListener{//, HangGameState {
     /*
@@ -46,9 +33,16 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
 
     @Override
     public void show(GameViewModel viewModel) {
+        if(viewModel.isWon){
+            Intent intent = new Intent(MainActivity.this, WinGameActivity.class);
+            intent.putExtra(MainActivity.LAST_SCORE, viewModel.currentGuess);
+            intent.putExtra(MainActivity.PLAYER_NAME, viewModel.playerName);
 
-        textViewWordToGuess.setText(viewModel.currentGuess);
-        textViewPlayerName.setText(viewModel.playerName);
+            intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+            startActivity(intent);
+            finish();
+        }
+
         if(viewModel.wrongCount == 1)
             this.imageViewHangStatus.setImageResource(R.drawable.forkert1);
         else if(viewModel.wrongCount == 2)
@@ -62,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         else if(viewModel.wrongCount == 6){
 
             Intent intent = new Intent(MainActivity.this, EndGameActivity.class);
-            //intent.putExtra(MainActivity.PLAYER_NAME, playerName);
             intent.putExtra(MainActivity.LAST_SCORE, viewModel.currentGuess);
+            intent.putExtra(MainActivity.PLAYER_NAME, viewModel.playerName);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
             startActivity(intent);
@@ -71,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
             //startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
             //this.imageViewHangStatus.setImageResource(R.drawable.forkert6);
         }
+
+        textViewWordToGuess.setText(viewModel.currentGuess);
+        textViewPlayerName.setText(viewModel.playerName);
     }
 
     @Override
@@ -86,13 +83,59 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         inputWorker.play(((TextView)view).getText().toString().toLowerCase());
     }
 
+    //private HangGameFSM fsm = HangGameFSMImpl.getInstance();
     @Override
-    public void onBackPressed() {
-        Intent intent = new Intent();
-        intent.putExtra(MainActivity.LAST_SCORE, viewModel.currentGuess+"_back_pressed");
-        setResult(Activity.RESULT_OK, intent);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        super.onBackPressed();
+        //HangGameStateBase.PLAYING.setContext(this);
+
+        /*
+        if(savedInstanceState == null){
+            Fragment mainFragmet = new MainFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.frameLayoutMainFragment, mainFragmet)
+                    .commit();
+        }
+        */
+
+
+        initialize();
+
+        ViewModelProvider viewModelProvider = new ViewModelProvider(getViewModelStore(),
+                ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()));
+
+        viewModel = viewModelProvider.get( GameViewModel.class );
+
+        Bundle bundleFromStartActivity = getIntent().getExtras();
+        playerName = bundleFromStartActivity.getString(PLAYER_NAME);
+
+        ((ApplicationMain)getApplication()).gameInteractor.setOutputPort(new OutputWorkerImpl(this, viewModel));
+        inputWorker = new InputWorkerImpl(((ApplicationMain)getApplication()).gameInteractor);
+
+        inputWorker.setup(playerName);
+
+        /*
+        inputWorker = new InputWorkerImpl(
+                new GameInteractorImpl( new OutputWorkerImpl(this, viewModel), new MinGalgelogikImpl(new Galgelogik()))
+        );
+        */
+
+
+
+
+
+
+        // Kommentér ind for at hente ord fra et online regneark
+        /*
+        try {
+          spil.hentOrdFraRegneark("12");
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        */
     }
 
     private void initialize() {
@@ -134,51 +177,5 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
     protected <T extends View> T $(@IdRes int id) {
         return (T) super.findViewById(id);
     }
-
-    private HangGameFSM fsm = HangGameFSMImpl.getInstance();
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //HangGameStateBase.PLAYING.setContext(this);
-
-        /*
-        if(savedInstanceState == null){
-            Fragment mainFragmet = new MainFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.frameLayoutMainFragment, mainFragmet)
-                    .commit();
-        }
-        */
-
-
-        initialize();
-
-        ViewModelProvider viewModelProvider = new ViewModelProvider(getViewModelStore(),
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()));
-
-        viewModel = viewModelProvider.get( GameViewModel.class );
-
-        inputWorker = new InputWorkerImpl(
-                new GameInteractorImpl( new OutputWorkerImpl(this, viewModel), new MinGalgelogikImpl(new Galgelogik()))
-        );
-
-        Bundle bundleFromStartActivity = getIntent().getExtras();
-        playerName = bundleFromStartActivity.getString(PLAYER_NAME);
-
-
-        inputWorker.setup(playerName);
-
-        // Kommentér ind for at hente ord fra et online regneark
-        /*
-        try {
-          spil.hentOrdFraRegneark("12");
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        */
-  }
 
 }

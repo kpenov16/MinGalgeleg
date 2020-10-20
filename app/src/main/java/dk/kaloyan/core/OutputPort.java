@@ -2,9 +2,11 @@ package dk.kaloyan.core;
 
 import java.util.ArrayList;
 
-public interface OutputPort {
+import dk.kaloyan.entities.Game;
+import dk.kaloyan.entities.Player;
 
-    void presentResult(String playerName, String synligtOrd, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver);
+public interface OutputPort {
+    void presentResult(Game game);
 
     void presentWinGame(String ordet);
 

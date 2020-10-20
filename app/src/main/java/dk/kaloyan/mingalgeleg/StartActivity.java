@@ -19,11 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import dk.kaloyan.fsm.HangGameFSM;
-import dk.kaloyan.fsm.HangGameFSMImpl;
-import dk.kaloyan.fsm.HangGameState;
-import dk.kaloyan.fsm.HangGameStateBase;
-
 public class StartActivity extends AppCompatActivity implements View.OnClickListener{//, HangGameState {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
 
@@ -68,6 +63,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private String[] toStringArray(List<String> scores) {
         return scores.toArray(new String[scores.size()]);
     }
+    private ArrayList<String> toArrayList(String[] scoresArray) {
+        return new ArrayList<>( Arrays.asList(scoresArray) );
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
@@ -77,6 +75,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             if(resultCode == Activity.RESULT_OK){
 
                lastScore = intent.getStringExtra(MainActivity.LAST_SCORE);
+               playerName = intent.getStringExtra(MainActivity.PLAYER_NAME);
 
                updateScores();
             }
@@ -91,6 +90,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         textViewListElement = findViewById(R.id.textViewListElement);
         buttonStartGame = findViewById(R.id.buttonStartGame);
         editTextPlayerName = findViewById(R.id.editTextPlayerName);
+
+        buttonStartGame.setOnClickListener(this);
     }
 
     @Override
@@ -110,21 +111,17 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         if(activityStateNeedToBeRestored(savedInstanceState)){
             viewModelStart.restoreState(savedInstanceState);
+
             playerName = viewModelStart.playerName;
-            scores = new ArrayList<>( Arrays.asList(viewModelStart.scores) );
+            scores = toArrayList(viewModelStart.scores);
         }
-
         initialize();
-
-        //String[] scores = new String[]{"kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3","kaloyan: score 5","bob: score 3"};
         updateScores();
-
-        buttonStartGame.setOnClickListener(this);
     }
 
     private void updateScores() {
         if(lastScore != null)
-            scores.add(lastScore);
+            scores.add(playerName + "\n" + lastScore);
 
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(this, R.layout.highscore_list_element, R.id.textViewListElement, toStringArray(scores));

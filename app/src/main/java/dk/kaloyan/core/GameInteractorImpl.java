@@ -1,43 +1,69 @@
 package dk.kaloyan.core;
 
+import dk.kaloyan.entities.Game;
+import dk.kaloyan.entities.Player;
+
 public class GameInteractorImpl implements InputPort{
     private OutputPort outputPort;
-    public GalgelogikGateway game;
-    private String playerName;
-    public GameInteractorImpl(OutputPort outputPort, GalgelogikGateway game) {
+    public GalgelogikGateway gameLogicGateway;
+    private Game game;
+    /*public GameInteractorImpl(OutputPort outputPort, GalgelogikGateway game) {
         this.outputPort = outputPort;
         this.game = game;
+    }*/
+
+    public GameInteractorImpl() {
+
+    }
+    public void setGalgelogikGateway(GalgelogikGateway game) {
+        this.gameLogicGateway = game;
+    }
+    public GalgelogikGateway getGameLogicGateway() {
+        return gameLogicGateway;
+    }
+    public OutputPort getOutputPort() {
+        return outputPort;
+    }
+    public void setOutputPort(OutputPort outputPort) {
+        this.outputPort = outputPort;
     }
 
-    public void setup(String playerName){
-        this.playerName = playerName;
+    public void setup(Game game){
+        this.game = game;
 
-        game.nulstil();
+        gameLogicGateway.nulstil();
 
         try {
-            game.hentOrdFraDr();
+            gameLogicGateway.hentOrdFraDr();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        game.logStatus();
-
-        outputPort.presentResult(this.playerName, game.getSynligtOrd(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
+        gameLogicGateway.logStatus();
+        game.setWordToGuess(gameLogicGateway.getOrdet());
+        game.setWrongLettersCount(gameLogicGateway.getAntalForkerteBogstaver());
+        game.setUsedLetters(gameLogicGateway.getBrugteBogstaver());
+        outputPort.presentResult(game);
     }
 
     public void play(String guess) {
-        game.gætBogstav(guess);
-        game.logStatus();
+        gameLogicGateway.gætBogstav(guess);
+        gameLogicGateway.logStatus();
 
-        System.out.println(game.getAntalForkerteBogstaver());
-        System.out.println(game.getSynligtOrd());
+        System.out.println(gameLogicGateway.getAntalForkerteBogstaver());
+        System.out.println(gameLogicGateway.getSynligtOrd());
 
-        if (game.erSpilletSlut())
-            if(!game.erSpilletTabt())
-                outputPort.presentWinGame(game.getOrdet());
+        if (gameLogicGateway.erSpilletSlut())
+            if(!gameLogicGateway.erSpilletTabt())
+                outputPort.presentWinGame(gameLogicGateway.getOrdet());
             else
-                outputPort.presentLoseGame(game.getOrdet(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
-        else
-            outputPort.presentResult(this.playerName, game.getSynligtOrd(), game.getAntalForkerteBogstaver(), game.getBrugteBogstaver());
+                outputPort.presentLoseGame(gameLogicGateway.getOrdet(), gameLogicGateway.getAntalForkerteBogstaver(), gameLogicGateway.getBrugteBogstaver());
+        else{
+            game.setWrongLettersCount(gameLogicGateway.getAntalForkerteBogstaver());
+            game.setUsedLetters(gameLogicGateway.getBrugteBogstaver());
+            outputPort.presentResult(game);
+        }
     }
+
+
 }

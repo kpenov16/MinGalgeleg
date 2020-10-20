@@ -8,9 +8,11 @@ public class GameViewModel extends ViewModel {
     public String playerName;
     public String currentGuess;
     public int wrongCount;
+    public boolean isWon = false;
 
     public static final String KEY_CURRENT_GUESS = "dk.kaloyan.mingalgeleg.CURRENT_GUESS";
     public static final String KEY_WRONG_COUNT = "dk.kaloyan.mingalgeleg.WRONG_COUNT";
+
 
     public void saveState(Bundle outState) {
         outState.putString(KEY_CURRENT_GUESS, currentGuess);

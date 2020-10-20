@@ -14,7 +14,7 @@ public class StartViewModel extends ViewModel {
     public boolean isNewlyCreated = true;
     public String playerName;
     public String[] scores = new String[]{};
-    public HangGameFSM fsm = new HangGameFSMImpl();
+    public HangGameFSM fsm = HangGameFSMImpl.getInstance();
 
     public void restoreState(Bundle savedState) {
         playerName = savedState.getString(PLAYER_NAME);
@@ -26,4 +26,5 @@ public class StartViewModel extends ViewModel {
         outState.putString(PLAYER_NAME, playerName);
         outState.putStringArray(SCORES, scores);
     }
+
 }

@@ -7,8 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class EndGameActivity extends AppCompatActivity {
-
+public class WinGameActivity extends AppCompatActivity {
     private String lastScore;
     private TextView textViewResult;
     private String playerName;
@@ -16,7 +15,7 @@ public class EndGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_end_game);
+        setContentView(R.layout.activity_win_game);
 
         Bundle bundleFromStartActivity = getIntent().getExtras();
         lastScore = bundleFromStartActivity.getString(MainActivity.LAST_SCORE);
@@ -35,6 +34,4 @@ public class EndGameActivity extends AppCompatActivity {
         finish();
         //super.onBackPressed();
     }
-
-
 }
