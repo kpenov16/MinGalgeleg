@@ -1,12 +1,19 @@
 package dk.kaloyan.entities;
 
-import android.os.Build;
-
 public class Player {
-    public static class Builder{
+    private String nickname;
+    private Player(){}
+
+    public static PlayerBuilder Builder(){
+        return new PlayerBuilder();
+    }
+
+    public static class PlayerBuilder {
         private String nickname = "";
 
-        public Builder withNickname(String nickname) {
+        private PlayerBuilder(){}
+
+        public PlayerBuilder withNickname(String nickname) {
             this.nickname = nickname;
             return this;
         }
@@ -18,8 +25,6 @@ public class Player {
         }
     }
 
-    private String nickname;
-    private Player(){}
     public String getNickname() {
         return nickname;
     }

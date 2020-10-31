@@ -26,7 +26,7 @@ public class ExtractWords {
                 e.printStackTrace();
             }
             Iterator<String> keys = json.keys();
-            Word word = Word.newBuilder().build();
+            Word word = Word.Builder().build();
             while (keys.hasNext()) {
                 String key = keys.next();
                 try {

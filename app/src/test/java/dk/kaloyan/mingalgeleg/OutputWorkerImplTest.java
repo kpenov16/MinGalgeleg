@@ -25,7 +25,7 @@ public class OutputWorkerImplTest {
         OutputWorkerImpl outputWorker = new OutputWorkerImpl(new FakeGameView(), vm);
 
         //act
-        Game game = new Game.Builder()
+        Game game = new Game.GameBuilder()
                 .withUsedLetters(guessed)
                 .withWordToGuess(word)
                 .withWrongLettersCount(wrongGuesses)

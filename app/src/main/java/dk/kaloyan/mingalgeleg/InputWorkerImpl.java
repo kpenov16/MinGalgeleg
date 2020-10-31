@@ -12,8 +12,8 @@ public class InputWorkerImpl {
     }
 
     public void setup(String nickname) {
-        Player player = new Player.Builder().withNickname(nickname).build();
-        Game game = new Game.Builder().withPlayer(player).build();
+        Player player = Player.Builder().withNickname(nickname).build();
+        Game game = Game.Builder().withPlayer(player).build();
         inputPort.setup(game);
     }
 

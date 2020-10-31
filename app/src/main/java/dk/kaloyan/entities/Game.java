@@ -4,25 +4,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    public static class Builder{
+    private String wordToGuess = "";
+    private int wrongLettersCount = 0;
+    private List<String> usedLetters = new ArrayList<>();
+    private Player player = Player.Builder().build();
+
+    public static GameBuilder Builder(){
+        return new GameBuilder();
+    }
+
+    public static class GameBuilder {
         private String wordToGuess = "";
         private int wrongLettersCount = 0;
         private List<String> usedLetters = new ArrayList<>();
-        private Player player = new Player.Builder().build();
+        private Player player = Player.Builder().build();
 
-        public Game.Builder withWordToGuess(String wordToGuess) {
+        private GameBuilder(){}
+
+        public GameBuilder withWordToGuess(String wordToGuess) {
             this.wordToGuess = wordToGuess;
             return this;
         }
-        public Game.Builder withWrongLettersCount(int wrongLettersCount) {
+        public GameBuilder withWrongLettersCount(int wrongLettersCount) {
             this.wrongLettersCount = wrongLettersCount;
             return this;
         }
-        public Game.Builder withUsedLetters(List<String> usedLetters) {
+        public GameBuilder withUsedLetters(List<String> usedLetters) {
             this.usedLetters = usedLetters;
             return this;
         }
-        public Game.Builder withPlayer(Player player) {
+        public GameBuilder withPlayer(Player player) {
             this.player = player;
             return this;
         }
@@ -36,11 +47,6 @@ public class Game {
             return game;
         }
     }
-
-    private String wordToGuess = "";
-    private int wrongLettersCount = 0;
-    private List<String> usedLetters = new ArrayList<>();
-    private Player player = new Player.Builder().build();
 
     private Game(){}
 

@@ -5,7 +5,7 @@ public class Word {
     private String val = "";
     private Word(){}
 
-    public static WordBuilder newBuilder(){
+    public static WordBuilder Builder(){
         return new WordBuilder();
     }
 
