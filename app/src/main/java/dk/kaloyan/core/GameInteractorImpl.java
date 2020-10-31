@@ -5,28 +5,11 @@ import dk.kaloyan.entities.Player;
 
 public class GameInteractorImpl implements InputPort{
     private OutputPort outputPort;
-    public GalgelogikGateway gameLogicGateway;
+    private GalgelogikGateway gameLogicGateway;
     private Game game;
-    /*public GameInteractorImpl(OutputPort outputPort, GalgelogikGateway game) {
-        this.outputPort = outputPort;
-        this.game = game;
-    }*/
+    private WordsGateway wordsGateway;
 
-    public GameInteractorImpl() {
-
-    }
-    public void setGalgelogikGateway(GalgelogikGateway game) {
-        this.gameLogicGateway = game;
-    }
-    public GalgelogikGateway getGameLogicGateway() {
-        return gameLogicGateway;
-    }
-    public OutputPort getOutputPort() {
-        return outputPort;
-    }
-    public void setOutputPort(OutputPort outputPort) {
-        this.outputPort = outputPort;
-    }
+    public GameInteractorImpl() { }
 
     public void setup(Game game){
         this.game = game;
@@ -63,6 +46,39 @@ public class GameInteractorImpl implements InputPort{
             game.setUsedLetters(gameLogicGateway.getBrugteBogstaver());
             outputPort.presentResult(game);
         }
+    }
+
+    public void setGalgelogikGateway(GalgelogikGateway game) {
+        this.gameLogicGateway = game;
+    }
+    public GalgelogikGateway getGameLogicGateway() {
+        return gameLogicGateway;
+    }
+
+    public void setWordsGateway(WordsGateway wordsGateway) {
+        this.wordsGateway = wordsGateway;
+    }
+    public OutputPort getOutputPort() {
+        return outputPort;
+    }
+    public void setOutputPort(OutputPort outputPort) {
+        this.outputPort = outputPort;
+    }
+
+    public void setGameLogicGateway(GalgelogikGateway gameLogicGateway) {
+        this.gameLogicGateway = gameLogicGateway;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public WordsGateway getWordsGateway() {
+        return wordsGateway;
     }
 
 

@@ -7,16 +7,7 @@
     android:layout_height="match_parent">
 
 
-    <EditText
-        android:id="@+id/editTextPlayerName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:hint="player name"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <Button
         android:id="@+id/buttonStartGame"
@@ -26,14 +17,30 @@
         android:text="Start Game"
         app:layout_constraintEnd_toEndOf="@+id/editTextPlayerName"
         app:layout_constraintStart_toStartOf="@+id/editTextPlayerName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPlayerName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPlayerName"
+        android:clickable="false"/>
+
 
     <ListView
         android:id="@+id/listViewScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="@+id/buttonStartGame"
+        app:layout_constraintHorizontal_bias="0.331"
         app:layout_constraintStart_toStartOf="@+id/buttonStartGame"
         app:layout_constraintTop_toBottomOf="@+id/buttonStartGame" />
+
+    <EditText
+        android:id="@+id/editTextPlayerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:hint="player name"
+
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

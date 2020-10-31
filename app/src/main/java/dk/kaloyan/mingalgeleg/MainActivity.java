@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import dk.kaloyan.gateways.GuessWordGateway;
 
 public class MainActivity extends AppCompatActivity implements GameView, View.OnClickListener{//, HangGameState {
     /*
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //HangGameStateBase.PLAYING.setContext(this);
 

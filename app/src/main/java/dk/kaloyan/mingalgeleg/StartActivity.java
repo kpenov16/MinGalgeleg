@@ -1,29 +1,52 @@
 package dk.kaloyan.mingalgeleg;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public class StartActivity extends AppCompatActivity implements View.OnClickListener{//, HangGameState {
+import dk.kaloyan.async.LongRunningTask;
+import dk.kaloyan.async.TaskRunner;
+import dk.kaloyan.core.WordsGateway;
+import dk.kaloyan.entities.Word;
+import dk.kaloyan.gateways.GuessWordGateway;
+
+public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable {//, HangGameState {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
     public static final String PREF_SCORES = "dk.kaloyan.mingalgeleg.StartActivity.PREF_SCORES";
 
@@ -46,6 +69,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             viewModelStart.scores = toStringArray(scores);
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             intent.putExtra(MainActivity.PLAYER_NAME, playerName);
+
             startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
             //fsm.start();
         }
@@ -120,8 +144,30 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         buttonStartGame = findViewById(R.id.buttonStartGame);
         editTextPlayerName = findViewById(R.id.editTextPlayerName);
 
+
+
         buttonStartGame.setOnClickListener(this);
     }
+
+    List<Word> words = new ArrayList<>();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        new GuessWordGateway().getRandomWords(10, this::consume);
+
+    }
+
+    @Override
+    public void consume(List<Word> result) {
+        words = result;
+
+        Log.i("on consume: ", result.toString());
+
+        buttonStartGame.setClickable(true);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +175,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_start);
 
 
+
+        //GuessWordGateway gateway = new GuessWordGateway();
+        //Toast.makeText(this, gateway.getRandomWordsAsStr(handler), Toast.LENGTH_LONG).show();
 
         //fsm
         //HangGameStateBase.INIT.setContext(this);
@@ -178,8 +227,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             viewModelStart.saveState(outState);
         }
     }
-
-
 
 
 }
