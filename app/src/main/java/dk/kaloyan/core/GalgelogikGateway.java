@@ -21,7 +21,6 @@ public interface GalgelogikGateway {
     void gætBogstav(String bogstav);
     void logStatus();
     String hentUrl(String url) throws IOException;
-    void hentOrdFraDr() throws Exception;
     void hentOrdFraRegneark(String sværhedsgrader) throws Exception ;
 
 

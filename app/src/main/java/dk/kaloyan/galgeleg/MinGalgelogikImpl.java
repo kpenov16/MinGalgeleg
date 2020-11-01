@@ -72,10 +72,7 @@ public class MinGalgelogikImpl implements GalgelogikGateway {
         return Galgelogik.hentUrl(url);
     }
 
-    @Override
-    public void hentOrdFraDr() throws Exception {
-        galgelogik.hentOrdFraDr();
-    }
+
 
     @Override
     public void hentOrdFraRegneark(String sværhedsgrader) throws Exception {

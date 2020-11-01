@@ -145,7 +145,7 @@ public class Galgelogik {
   /**
    * Hent ord fra DRs forside (https://dr.dk)
    */
-  public void hentOrdFraDr() throws Exception {
+  /*public void hentOrdFraDr() throws Exception {
     String data = hentUrl("https://dr.dk");
     //System.out.println("data = " + data);
 
@@ -169,6 +169,7 @@ public class Galgelogik {
     System.out.println("muligeOrd = " + muligeOrd);
     nulstil();
   }
+  */
 
 
   /**
