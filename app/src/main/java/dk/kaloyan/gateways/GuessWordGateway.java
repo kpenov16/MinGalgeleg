@@ -39,4 +39,9 @@ public class GuessWordGateway implements WordsGateway {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<String> getWords() {
+        return null;
+    }
 }

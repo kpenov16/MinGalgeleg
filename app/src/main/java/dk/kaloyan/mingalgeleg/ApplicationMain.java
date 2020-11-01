@@ -5,6 +5,7 @@ import android.app.Application;
 import dk.kaloyan.core.GameInteractorImpl;
 import dk.kaloyan.galgeleg.Galgelogik;
 import dk.kaloyan.galgeleg.MinGalgelogikImpl;
+import dk.kaloyan.gateways.DRWordsGatewayImpl;
 
 public class ApplicationMain extends Application {
     public GameInteractorImpl gameInteractor;
@@ -22,6 +23,12 @@ public class ApplicationMain extends Application {
     private void initialize() {
         gameInteractor = new GameInteractorImpl();
         gameInteractor.setGalgelogikGateway(new MinGalgelogikImpl(new Galgelogik()));
+
+        //the specific DRWordsGatewayImpl implements the generic WordsGateway
+        //we move step by step the logic away from the Galgelogik so we can achieve SOLID
+        //here the call is still holding the main thread but the gateway has the single responsibility to deliver the words
+        //and by implementing the interface the dependency is inverted letting the interactor free of a specific dependency
+        gameInteractor.setWordsGateway(new DRWordsGatewayImpl());
 
 
         /*inputWorker = new InputWorkerImpl(

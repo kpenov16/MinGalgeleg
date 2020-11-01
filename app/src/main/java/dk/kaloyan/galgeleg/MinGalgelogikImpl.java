@@ -2,6 +2,7 @@ package dk.kaloyan.galgeleg;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import dk.kaloyan.core.GalgelogikGateway;
 
@@ -79,5 +80,10 @@ public class MinGalgelogikImpl implements GalgelogikGateway {
     @Override
     public void hentOrdFraRegneark(String sværhedsgrader) throws Exception {
         galgelogik.hentOrdFraRegneark(sværhedsgrader);
+    }
+
+    @Override
+    public void setWords(List<String> words) {
+        galgelogik.setWords((ArrayList<String>) words);
     }
 }

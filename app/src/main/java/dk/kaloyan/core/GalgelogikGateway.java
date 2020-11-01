@@ -2,6 +2,7 @@ package dk.kaloyan.core;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import dk.kaloyan.galgeleg.Galgelogik;
 import dk.kaloyan.galgeleg.MinGalgelogikImpl;
@@ -22,4 +23,7 @@ public interface GalgelogikGateway {
     String hentUrl(String url) throws IOException;
     void hentOrdFraDr() throws Exception;
     void hentOrdFraRegneark(String sværhedsgrader) throws Exception ;
+
+
+    void setWords(List<String> words);
 }

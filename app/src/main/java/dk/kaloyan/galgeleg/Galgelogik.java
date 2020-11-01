@@ -32,7 +32,9 @@ public class Galgelogik {
     muligeOrd.add("nitten");
     nulstil();
   }
-
+  void setWords(ArrayList<String> words){
+    this.muligeOrd = words;
+  }
 
   public ArrayList<String> getBrugteBogstaver() {
     return brugteBogstaver;
@@ -127,6 +129,7 @@ public class Galgelogik {
   }
 
 
+
   public static String hentUrl(String url) throws IOException {
     System.out.println("Henter data fra " + url);
     BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
@@ -138,7 +141,6 @@ public class Galgelogik {
     }
     return sb.toString();
   }
-
 
   /**
    * Hent ord fra DRs forside (https://dr.dk)

@@ -1,7 +1,13 @@
 package dk.kaloyan.core;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import dk.kaloyan.entities.Game;
 import dk.kaloyan.entities.Player;
+import dk.kaloyan.entities.Word;
 
 public class GameInteractorImpl implements InputPort{
     private OutputPort outputPort;
@@ -10,17 +16,33 @@ public class GameInteractorImpl implements InputPort{
     private WordsGateway wordsGateway;
 
     public GameInteractorImpl() { }
+    List<String> words = new ArrayList<String>();
+
 
     public void setup(Game game){
         this.game = game;
 
-        gameLogicGateway.nulstil();
 
+        /*
+        gameLogicGateway.nulstil();
         try {
             gameLogicGateway.hentOrdFraDr();
         } catch (Exception e) {
             e.printStackTrace();
+        }*/
+
+        //new
+        try {
+            gameLogicGateway.nulstil();
+            gameLogicGateway.setWords( wordsGateway.getWords() );
+        } catch (Exception e) {
+            e.printStackTrace();
+            gameLogicGateway.setWords( new ArrayList<String>(){{add("error");}} );
+        }finally {
+            gameLogicGateway.nulstil();
         }
+
+
 
         gameLogicGateway.logStatus();
         game.setWordToGuess(gameLogicGateway.getOrdet());
@@ -80,6 +102,7 @@ public class GameInteractorImpl implements InputPort{
     public WordsGateway getWordsGateway() {
         return wordsGateway;
     }
+
 
 
 }
