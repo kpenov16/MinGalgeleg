@@ -1,17 +1,5 @@
 package dk.kaloyan.core;
 
-import org.junit.Test;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import dk.kaloyan.entities.Player;
-import dk.kaloyan.galgeleg.Galgelogik;
-import dk.kaloyan.galgeleg.MinGalgelogikImpl;
-import dk.kaloyan.mingalgeleg.GameView;
-import dk.kaloyan.mingalgeleg.GameViewModel;
-import dk.kaloyan.mingalgeleg.OutputWorkerImpl;
-
 import static org.junit.Assert.assertEquals;
 
 public class GameInteractorImplUnitTest {
