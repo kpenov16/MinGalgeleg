@@ -12,6 +12,8 @@ public class EndGameActivity extends AppCompatActivity {
     private String lastScore;
     private TextView textViewResult;
     private String playerName;
+    private ViewablePlayer viewablePlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,7 @@ public class EndGameActivity extends AppCompatActivity {
         Bundle bundleFromStartActivity = getIntent().getExtras();
         lastScore = bundleFromStartActivity.getString(MainActivity.LAST_SCORE);
         playerName = bundleFromStartActivity.getString(MainActivity.PLAYER_NAME);
+        viewablePlayer = bundleFromStartActivity.getParcelable(ViewablePlayer.VIEWABLE_PLAYER);
 
         textViewResult = findViewById(R.id.textViewResult);
         textViewResult.setText(playerName + "\n" + lastScore);
@@ -31,6 +34,8 @@ public class EndGameActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.putExtra(MainActivity.LAST_SCORE, lastScore);
         intent.putExtra(MainActivity.PLAYER_NAME, playerName);
+        intent.putExtra(ViewablePlayer.VIEWABLE_PLAYER, viewablePlayer);
+
         setResult(Activity.RESULT_OK, intent);
         finish();
         //super.onBackPressed();

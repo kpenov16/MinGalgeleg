@@ -2,8 +2,6 @@ package dk.kaloyan.gateways;
 
 import org.junit.Test;
 
-import dk.kaloyan.core.WordsGateway;
-
 import static org.junit.Assert.assertEquals;
 
 public class GuessWordGatewayTest {

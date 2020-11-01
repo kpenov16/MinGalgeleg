@@ -9,6 +9,7 @@ public class GameViewModel extends ViewModel {
     public String currentGuess;
     public int wrongCount;
     public boolean isWon = false;
+    public ViewablePlayer viewablePlayer;
 
     public static final String KEY_CURRENT_GUESS = "dk.kaloyan.mingalgeleg.CURRENT_GUESS";
     public static final String KEY_WRONG_COUNT = "dk.kaloyan.mingalgeleg.WRONG_COUNT";

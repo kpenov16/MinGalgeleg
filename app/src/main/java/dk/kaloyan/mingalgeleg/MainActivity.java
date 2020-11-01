@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
             Intent intent = new Intent(MainActivity.this, WinGameActivity.class);
             intent.putExtra(MainActivity.LAST_SCORE, viewModel.currentGuess);
             intent.putExtra(MainActivity.PLAYER_NAME, viewModel.playerName);
+            intent.putExtra(ViewablePlayer.VIEWABLE_PLAYER, viewModel.viewablePlayer);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
             startActivity(intent);
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
             Intent intent = new Intent(MainActivity.this, EndGameActivity.class);
             intent.putExtra(MainActivity.LAST_SCORE, viewModel.currentGuess);
             intent.putExtra(MainActivity.PLAYER_NAME, viewModel.playerName);
+            intent.putExtra(ViewablePlayer.VIEWABLE_PLAYER, viewModel.viewablePlayer);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
             startActivity(intent);
@@ -94,9 +96,7 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         //HangGameStateBase.PLAYING.setContext(this);
-
         /*
         if(savedInstanceState == null){
             Fragment mainFragmet = new MainFragment();
@@ -127,20 +127,6 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         inputWorker = new InputWorkerImpl(
                 new GameInteractorImpl( new OutputWorkerImpl(this, viewModel), new MinGalgelogikImpl(new Galgelogik()))
         );
-        */
-
-
-
-
-
-
-        // Kommentér ind for at hente ord fra et online regneark
-        /*
-        try {
-          spil.hentOrdFraRegneark("12");
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
         */
     }
 

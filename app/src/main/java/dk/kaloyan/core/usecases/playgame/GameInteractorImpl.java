@@ -1,6 +1,5 @@
-package dk.kaloyan.core;
+package dk.kaloyan.core.usecases.playgame;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

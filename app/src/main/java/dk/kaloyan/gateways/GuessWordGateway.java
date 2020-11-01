@@ -1,29 +1,13 @@
 package dk.kaloyan.gateways;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import dk.kaloyan.async.LongRunningTask;
 import dk.kaloyan.async.TaskRunner;
-import dk.kaloyan.core.WordsGateway;
-import dk.kaloyan.entities.Word;
+import dk.kaloyan.core.usecases.playgame.WordsGateway;
 
 public class GuessWordGateway implements WordsGateway {
     @Override

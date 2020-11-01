@@ -15,11 +15,11 @@ public class StartViewModel extends ViewModel {
     public String playerName;
     public String[] scores = new String[]{};
     public HangGameFSM fsm = HangGameFSMImpl.getInstance();
+    public ViewablePlayer[] viewablePlayers = new ViewablePlayer[]{};
 
     public void restoreState(Bundle savedState) {
         playerName = savedState.getString(PLAYER_NAME);
         scores = savedState.getStringArray(SCORES);
-        ;
     }
 
     public void saveState(Bundle outState) {

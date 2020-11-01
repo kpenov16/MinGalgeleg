@@ -2,7 +2,7 @@ package dk.kaloyan.mingalgeleg;
 
 import android.app.Application;
 
-import dk.kaloyan.core.GameInteractorImpl;
+import dk.kaloyan.core.usecases.playgame.GameInteractorImpl;
 import dk.kaloyan.gateways.DRWordsGatewayImpl;
 import dk.kaloyan.gateways.OneWordHangGameLogicImpl;
 
@@ -21,7 +21,6 @@ public class ApplicationMain extends Application {
 
     private void initialize() {
         gameInteractor = new GameInteractorImpl();
-        //gameInteractor.setGalgelogikGateway(new MinGalgelogikImpl(new Galgelogik()));
         gameInteractor.setGalgelogikGateway(new OneWordHangGameLogicImpl());
 
         //the specific DRWordsGatewayImpl implements the generic WordsGateway

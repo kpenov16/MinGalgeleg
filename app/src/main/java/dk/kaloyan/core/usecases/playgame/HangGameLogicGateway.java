@@ -1,11 +1,9 @@
-package dk.kaloyan.core;
+package dk.kaloyan.core.usecases.playgame;
 
 import java.util.ArrayList;
 
 
 public interface HangGameLogicGateway {
-    void hentOrdFraRegneark(String sværhedsgrader) throws Exception ;
-
     void setup(String wordToGuess);
     void tearDown();
     void guess(String letter);

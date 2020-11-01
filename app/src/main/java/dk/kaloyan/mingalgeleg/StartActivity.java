@@ -1,49 +1,35 @@
 package dk.kaloyan.mingalgeleg;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-import dk.kaloyan.async.LongRunningTask;
-import dk.kaloyan.async.TaskRunner;
-import dk.kaloyan.core.WordsGateway;
+import dk.kaloyan.core.usecases.playgame.WordsGateway;
 import dk.kaloyan.entities.Word;
 import dk.kaloyan.gateways.GuessWordGateway;
 
@@ -59,9 +45,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private String playerName;
     private List<String> scores = new ArrayList<>();
     private String lastScore;
-
+    private ViewablePlayer viewablePlayer;
     //private HangGameFSM fsm = HangGameFSMImpl.getInstance();
-
 
     @Override
     public void onClick(View view) {
@@ -108,6 +93,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
                lastScore = intent.getStringExtra(MainActivity.LAST_SCORE);
                playerName = intent.getStringExtra(MainActivity.PLAYER_NAME);
+               viewablePlayer = intent.getParcelableExtra(ViewablePlayer.VIEWABLE_PLAYER);
 
                updateScores();
 
@@ -147,8 +133,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         buttonStartGame = findViewById(R.id.buttonStartGame);
         editTextPlayerName = findViewById(R.id.editTextPlayerName);
 
-
-
         buttonStartGame.setOnClickListener(this);
     }
 
@@ -176,8 +160,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
-
 
         //GuessWordGateway gateway = new GuessWordGateway();
         //Toast.makeText(this, gateway.getRandomWordsAsStr(handler), Toast.LENGTH_LONG).show();
@@ -207,9 +189,33 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void updateScores() {
-        if(lastScore != null)
-            scores.add(playerName + "\n" + lastScore);
 
+        if(lastScore != null) {
+            viewablePlayers.put(viewablePlayer.getNickname(), viewablePlayer);
+            List<ViewablePlayer> l = new ArrayList<>(viewablePlayers.values());
+            Collections.sort(l, (p1,p2)->p1.compareTo(p2));
+            scores = new ArrayList<>();
+            for(ViewablePlayer vp : l){
+                scores.add(String.format("%s wins: %d losses: %d", vp.getNickname(), vp.getWins(), vp.getLoses()));
+            }
+
+            String jsonObj = "default";
+            try {
+                jsonObj = new ObjectMapper().writeValueAsString(viewablePlayer);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            ViewablePlayer vp = null;
+            try {
+                vp = new ObjectMapper().readValue(jsonObj,ViewablePlayer.class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            //System.out.println("ViewablePlayer::" + vp.getNickname() + vp.getWins() + vp.getLoses());
+            //System.out.println("jsonObj::" + jsonObj);
+
+            //scores.add(playerName + "\n" + lastScore);
+        }
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(this, R.layout.highscore_list_element, R.id.textViewListElement, toStringArray(scores));
         listViewScore.setAdapter(adapter);
@@ -230,6 +236,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             viewModelStart.saveState(outState);
         }
     }
+
+    private Map<String, ViewablePlayer> viewablePlayers = new HashMap<>();
 
 
 }

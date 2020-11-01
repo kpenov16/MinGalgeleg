@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import dk.kaloyan.core.WordsGateway;
+import dk.kaloyan.core.usecases.playgame.WordsGateway;
 
 public class DRWordsGatewayImpl implements WordsGateway {
     private  ExecutorService executor = Executors.newSingleThreadExecutor();

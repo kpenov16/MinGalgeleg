@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import dk.kaloyan.core.OutputPort;
+import dk.kaloyan.core.usecases.playgame.OutputPort;
 import dk.kaloyan.entities.Game;
 
 public class OutputWorkerImpl implements OutputPort {
@@ -20,7 +20,10 @@ public class OutputWorkerImpl implements OutputPort {
 
     @Override
     public void presentResult(Game game) {
-        viewModel.playerName = "Nickname: " + game.getPlayer().getNickname();
+        final String nickname = game.getPlayer().getNickname();
+        if(viewModel.viewablePlayer == null)
+            viewModel.viewablePlayer = new ViewablePlayer(nickname, 0 , 0);
+        viewModel.playerName = "Nickname: " + nickname;
         viewModel.wrongCount = game.getWrongLettersCount();
 
         viewModel.currentGuess = String.format(CURRENT_GUESS_PLAY_GAME, hideNotGuessed(game.getWordToGuess(), game.getUsedLetters(), '*'), game.getWrongLettersCount(), game.getUsedLetters().toString());
@@ -32,6 +35,7 @@ public class OutputWorkerImpl implements OutputPort {
     public void presentWinGame(String ordet) {
         viewModel.currentGuess = "You WIN!!!\nOrdet var: " + ordet;
         viewModel.isWon = true;
+        viewModel.viewablePlayer.setWins(viewModel.viewablePlayer.getWins() + 1);
         view.show(viewModel);
     }
 
@@ -39,6 +43,7 @@ public class OutputWorkerImpl implements OutputPort {
     public void presentLoseGame(String ordet, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver) {
         viewModel.wrongCount = antalForkerteBogstaver;
         viewModel.currentGuess = String.format(CURRENT_GUESS_LOSE_GAME, ordet, antalForkerteBogstaver, brugteBogstaver.toString());
+        viewModel.viewablePlayer.setLoses(viewModel.viewablePlayer.getLoses() + 1);
         view.show(viewModel);
     }
 
