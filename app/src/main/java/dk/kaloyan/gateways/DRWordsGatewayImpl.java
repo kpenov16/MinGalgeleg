@@ -12,13 +12,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import dk.kaloyan.core.WordsGateway;
-import dk.kaloyan.entities.Word;
 
 public class DRWordsGatewayImpl implements WordsGateway {
     private  ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -52,7 +50,7 @@ public class DRWordsGatewayImpl implements WordsGateway {
     public List<String> getWords() throws Exception {
         executor = Executors.newSingleThreadExecutor();
         executor.execute(()->{
-            String data = "error";
+            String data = "bil computer programmering motorvej busrute gangsti skovsnegl solsort nitten";
             try {
                 data = getPageAsString("https://dr.dk");
             } catch (IOException e) {

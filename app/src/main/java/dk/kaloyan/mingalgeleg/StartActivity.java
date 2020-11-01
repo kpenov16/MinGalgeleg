@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +59,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private String playerName;
     private List<String> scores = new ArrayList<>();
     private String lastScore;
+
     //private HangGameFSM fsm = HangGameFSMImpl.getInstance();
+
 
     @Override
     public void onClick(View view) {

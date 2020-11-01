@@ -39,7 +39,7 @@ public class GameInteractorImpl implements InputPort{
             e.printStackTrace();
             gameLogicGateway.setWords( new ArrayList<String>(){{add("error");}} );
         }finally {
-            gameLogicGateway.nulstil();
+            //gameLogicGateway.nulstil();
         }
 
 

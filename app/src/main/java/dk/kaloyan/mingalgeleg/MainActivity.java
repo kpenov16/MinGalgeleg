@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
     @Override
     public void onClick(View view) {
         //Toast.makeText(this, "Key: " + ((TextView)view).getText(), Toast.LENGTH_LONG).show();
+        view.setClickable(false);
+        view.setEnabled(false);
         inputWorker.play(((TextView)view).getText().toString().toLowerCase());
     }
 
