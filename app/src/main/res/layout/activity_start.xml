@@ -15,7 +15,8 @@
         app:layout_constraintEnd_toEndOf="@+id/editTextPlayerName"
         app:layout_constraintStart_toStartOf="@+id/editTextPlayerName"
         app:layout_constraintTop_toBottomOf="@+id/editTextPlayerName"
-        android:clickable="false"/>
+        android:clickable="false"
+        android:enabled="false"/>
 
 
     <ListView

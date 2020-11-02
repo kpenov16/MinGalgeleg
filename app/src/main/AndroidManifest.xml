@@ -15,8 +15,8 @@
         <activity android:name=".WinGameActivity"></activity>
         <activity android:name=".EndGameActivity" />
         <activity
-            android:name=".StartActivity"
-            android:label="@string/title_activity_start">
+            android:name=".StartActivity">
+            <!--android:label="@string/title_activity_start">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

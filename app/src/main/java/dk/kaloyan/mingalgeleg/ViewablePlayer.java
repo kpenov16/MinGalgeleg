@@ -78,6 +78,9 @@ public class ViewablePlayer implements Parcelable, Comparable<ViewablePlayer> {
 
     @Override
     public int compareTo(ViewablePlayer otherPlayer) {
-        return Integer.compare(this.wins, otherPlayer.getWins());
+        if(Integer.compare(this.wins, otherPlayer.getWins()) != 0)
+            return Integer.compare(this.wins, otherPlayer.getWins());
+        else
+            return Integer.compare(this.loses, otherPlayer.getLoses())*(-1);
     }
 }

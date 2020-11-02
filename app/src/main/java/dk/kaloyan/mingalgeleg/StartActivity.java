@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,9 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,7 +31,6 @@ import java.util.stream.Collectors;
 
 import dk.kaloyan.core.usecases.playgame.WordsGateway;
 import dk.kaloyan.entities.Word;
-import dk.kaloyan.gateways.GuessWordGateway;
 import dk.kaloyan.utils.JsonWorker;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable {//, HangGameState {
@@ -58,6 +56,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
             viewModelStart.playerName = playerName;
             viewModelStart.scores = toStringArray(scores);
+            viewModelStart.viewablePlayers = new ArrayList<>(viewablePlayers.values());
+
             Intent intent = new Intent(StartActivity.this, MainActivity.class);
             intent.putExtra(MainActivity.PLAYER_NAME, playerName);
 
@@ -130,10 +130,10 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         buttonStartGame = findViewById(R.id.buttonStartGame);
         editTextPlayerName = findViewById(R.id.editTextPlayerName);
 
+
+        editTextPlayerName.addTextChangedListener(getTextWatcherForEditTextPlayerName());
         buttonStartGame.setOnClickListener(this);
     }
-
-
 
     @Override
     protected void onResume() {
@@ -141,11 +141,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         //I wanted to show a ProcessBar while fetching words from my rest endpoint,
         //as I use the free tier at heroku the dino kills itself after some time and it takes time to wake up again
+        //so this is a good case for the process bar I think, I will start work on it after finishing the saving top score as a json story
         //new GuessWordGateway().getRandomWords(10, this::consume);
     }
 
     List<Word> words = new ArrayList<>();
-
     @Override
     synchronized public void consume(List<Word> result) {
         words = result;
@@ -177,6 +177,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
             playerName = viewModelStart.playerName;
             scores = toArrayList(viewModelStart.scores);
+
+            viewablePlayers = viewModelStart.viewablePlayers.stream().collect(Collectors.toMap(ViewablePlayer::getNickname,vp->vp));
         }else if(activityNeedsSharedPreferences(savedInstanceState)){
             SharedPreferences sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
             Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet("SCORES", new LinkedHashSet<>()));
@@ -214,23 +216,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             for(ViewablePlayer vp : l){
                 scores.add(String.format("%s wins: %d losses: %d", vp.getNickname(), vp.getWins(), vp.getLoses()));
             }
-
-            String jsonObj = "default";
-            try {
-                jsonObj = new ObjectMapper().writeValueAsString(viewablePlayer);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            ViewablePlayer vp = null;
-            try {
-                vp = new ObjectMapper().readValue(jsonObj,ViewablePlayer.class);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            //System.out.println("ViewablePlayer::" + vp.getNickname() + vp.getWins() + vp.getLoses());
-            //System.out.println("jsonObj::" + jsonObj);
-
-            //scores.add(playerName + "\n" + lastScore);
         }
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(this, R.layout.highscore_list_element, R.id.textViewListElement, toStringArray(scores));
@@ -253,6 +238,19 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
+    private TextWatcher getTextWatcherForEditTextPlayerName(){
+        return new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                buttonStartGame.setEnabled( !editTextPlayerName.getText().toString().trim().isEmpty() );
+            }
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        };
+    }
 
 }
