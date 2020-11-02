@@ -6,7 +6,9 @@ import org.json.JSONArray;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Callable;
 
 import dk.kaloyan.entities.Word;
@@ -21,16 +23,23 @@ public class LongRunningTask implements Callable<List<Word>> {
     }
 
     @Override
-    public List<Word> call() throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
-        StringBuilder sb = new StringBuilder();
-        String linje = br.readLine();
-        while (linje != null) {
-            sb.append(linje);
-            linje = br.readLine();
+    public List<Word> call(){
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
+            StringBuilder sb = new StringBuilder();
+            String linje = br.readLine();
+            while (linje != null) {
+                sb.append(linje);
+                linje = br.readLine();
+            }
+            br.close();
+            JSONArray jsonArray = new JSONArray(sb.toString());
+            return new ExtractWords(jsonArray).extract();
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ArrayList<Word>(){{add(Word.Builder().withVal( "activate internet").build()); }};
         }
-        br.close();
-        JSONArray jsonArray = new JSONArray(sb.toString());
-        return new ExtractWords(jsonArray).extract();
     }
+
+
 }

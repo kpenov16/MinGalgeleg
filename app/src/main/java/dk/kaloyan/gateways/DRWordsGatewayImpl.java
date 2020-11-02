@@ -53,24 +53,25 @@ public class DRWordsGatewayImpl implements WordsGateway {
             String data = "bil computer programmering motorvej busrute gangsti skovsnegl solsort nitten";
             try {
                 data = getPageAsString("https://dr.dk");
+                data = data.substring(data.indexOf("<body")). // fjern headere
+                        replaceAll("<.+?>", " ").toLowerCase(). // fjern tags
+                        replaceAll("&#198;", "æ"). // erstat HTML-tegn
+                        replaceAll("&#230;", "æ"). // erstat HTML-tegn
+                        replaceAll("&#216;", "ø"). // erstat HTML-tegn
+                        replaceAll("&#248;", "ø"). // erstat HTML-tegn
+                        replaceAll("&oslash;", "ø"). // erstat HTML-tegn
+                        replaceAll("&#229;", "å"). // erstat HTML-tegn
+                        replaceAll("[^a-zæøå]", " "). // fjern tegn der ikke er bogstaver
+                        replaceAll(" [a-zæøå] "," "). // fjern 1-bogstavsord
+                        replaceAll(" [a-zæøå][a-zæøå] "," "); // fjern 2-bogstavsord
+
+                setWords(new HashSet<String>(Arrays.asList(data.split(" "))));
             } catch (IOException e) {
                 e.printStackTrace();
+                setWords(new HashSet<String>(){{add("activate internet");}});
             }
-            data = data.substring(data.indexOf("<body")). // fjern headere
-                    replaceAll("<.+?>", " ").toLowerCase(). // fjern tags
-                    replaceAll("&#198;", "æ"). // erstat HTML-tegn
-                    replaceAll("&#230;", "æ"). // erstat HTML-tegn
-                    replaceAll("&#216;", "ø"). // erstat HTML-tegn
-                    replaceAll("&#248;", "ø"). // erstat HTML-tegn
-                    replaceAll("&oslash;", "ø"). // erstat HTML-tegn
-                    replaceAll("&#229;", "å"). // erstat HTML-tegn
-                    replaceAll("[^a-zæøå]", " "). // fjern tegn der ikke er bogstaver
-                    replaceAll(" [a-zæøå] "," "). // fjern 1-bogstavsord
-                    replaceAll(" [a-zæøå][a-zæøå] "," "); // fjern 2-bogstavsord
 
-            setWords(new HashSet<String>(Arrays.asList(data.split(" "))));
-            //words.clear();
-            //words.addAll(new HashSet<String>(Arrays.asList(data.split(" "))));
+
 
         });
         executor.shutdown();

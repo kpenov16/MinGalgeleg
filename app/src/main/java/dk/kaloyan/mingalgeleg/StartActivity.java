@@ -40,6 +40,7 @@ import dk.kaloyan.utils.JsonWorker;
 public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable, CompoundButton.OnCheckedChangeListener {//, HangGameState {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
     public static final String PREF_SCORES = "dk.kaloyan.mingalgeleg.StartActivity.PREF_SCORES";
+    public static final String SCORES = "dk.kaloyan.mingalgeleg.StartActivity.SCORES";
 
     private ListView listViewScore;
     private TextView textViewListElement;
@@ -125,7 +126,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         Set<String> jsonPlayers = new JsonWorker<ViewablePlayer>().toStringSet(new ArrayList<>(viewablePlayers.values()));
 
-        editor.putStringSet("SCORES", new LinkedHashSet<>(new ArrayList<String>(jsonPlayers)));
+        editor.putStringSet(StartActivity.SCORES, new LinkedHashSet<>(new ArrayList<String>(jsonPlayers)));
         editor.commit();
     }
 
@@ -180,7 +181,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             viewablePlayers = viewModelStart.viewablePlayers.stream().collect(Collectors.toMap(ViewablePlayer::getNickname,vp->vp));
         }else if(activityNeedsSharedPreferences(savedInstanceState)){
             SharedPreferences sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
-            Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet("SCORES", new LinkedHashSet<>()));
+            Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet(StartActivity.SCORES, new LinkedHashSet<>()));
 
             List<ViewablePlayer> list = new JsonWorker<ViewablePlayer>().toList(set, ViewablePlayer.class);
             viewablePlayers = list.stream().collect(Collectors.toMap(ViewablePlayer::getNickname,vp->vp));
