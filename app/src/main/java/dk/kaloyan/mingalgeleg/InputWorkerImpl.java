@@ -1,6 +1,7 @@
 package dk.kaloyan.mingalgeleg;
 
 import dk.kaloyan.core.usecases.playgame.InputPort;
+import dk.kaloyan.core.usecases.playgame.WordsGateway;
 import dk.kaloyan.entities.Game;
 import dk.kaloyan.entities.Player;
 

@@ -68,8 +68,9 @@ public class DRWordsGatewayImpl implements WordsGateway {
                     replaceAll(" [a-zæøå] "," "). // fjern 1-bogstavsord
                     replaceAll(" [a-zæøå][a-zæøå] "," "); // fjern 2-bogstavsord
 
-            words.clear();
-            words.addAll(new HashSet<String>(Arrays.asList(data.split(" "))));
+            setWords(new HashSet<String>(Arrays.asList(data.split(" "))));
+            //words.clear();
+            //words.addAll(new HashSet<String>(Arrays.asList(data.split(" "))));
 
         });
         executor.shutdown();
@@ -78,6 +79,11 @@ public class DRWordsGatewayImpl implements WordsGateway {
 
 
         return words;
+    }
+
+    synchronized private void setWords(HashSet<String> newWords){
+        words.clear();
+        words.addAll(newWords);
     }
 
 }

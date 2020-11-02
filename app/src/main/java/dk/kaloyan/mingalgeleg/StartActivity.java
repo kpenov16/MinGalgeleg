@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,9 +33,11 @@ import java.util.stream.Collectors;
 
 import dk.kaloyan.core.usecases.playgame.WordsGateway;
 import dk.kaloyan.entities.Word;
+import dk.kaloyan.gateways.DRWordsGatewayImpl;
+import dk.kaloyan.gateways.GuessWordGateway;
 import dk.kaloyan.utils.JsonWorker;
 
-public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable {//, HangGameState {
+public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable, CompoundButton.OnCheckedChangeListener {//, HangGameState {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
     public static final String PREF_SCORES = "dk.kaloyan.mingalgeleg.StartActivity.PREF_SCORES";
 
@@ -47,6 +51,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private String lastScore;
     private ViewablePlayer viewablePlayer;
     private Map<String, ViewablePlayer> viewablePlayers = new HashMap<>();
+    private CheckBox checkBoxWordsFromDR;
     //private HangGameFSM fsm = HangGameFSMImpl.getInstance();
 
     @Override
@@ -129,8 +134,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         textViewListElement = findViewById(R.id.textViewListElement);
         buttonStartGame = findViewById(R.id.buttonStartGame);
         editTextPlayerName = findViewById(R.id.editTextPlayerName);
+        checkBoxWordsFromDR = findViewById(R.id.checkBoxWordsFromDR);
 
-
+        checkBoxWordsFromDR.setOnCheckedChangeListener(this);
         editTextPlayerName.addTextChangedListener(getTextWatcherForEditTextPlayerName());
         buttonStartGame.setOnClickListener(this);
     }
@@ -145,13 +151,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         //new GuessWordGateway().getRandomWords(10, this::consume);
     }
 
-    List<Word> words = new ArrayList<>();
-    @Override
-    synchronized public void consume(List<Word> result) {
-        words = result;
-        Log.i("on consume: ", result.toString());
-        buttonStartGame.setClickable(true);
-    }
 
 
     @Override
@@ -253,4 +252,32 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         };
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+        if(compoundButton.getId() == R.id.checkBoxWordsFromDR){
+            if(!isChecked){
+                new GuessWordGateway().getRandomWords(10, this::consume);
+            }else {
+                ((ApplicationMain)getApplication()).gameInteractor.setWordsGateway(new DRWordsGatewayImpl());
+            }
+        }
+    }
+
+    //private List<Word> words = new ArrayList<>();
+    @Override
+    synchronized public void consume(List<Word> result) {
+        //words = result;
+        Log.i("on consume: ", result.toString());
+        ((ApplicationMain)getApplication()).gameInteractor.setWordsGateway(new WordsGateway() {
+            @Override
+            public void getRandomWords(int numberOfWords, Consumable consumable) {
+
+            }
+
+            @Override
+            public List<String> getWords() throws Exception {
+                return result.stream().map(w->w.getVal()).collect(Collectors.toList());
+            }
+        });
+    }
 }
