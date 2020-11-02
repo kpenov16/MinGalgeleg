@@ -28,6 +28,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import dk.kaloyan.core.usecases.playgame.WordsGateway;
 import dk.kaloyan.entities.Word;
@@ -146,8 +147,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
 
-        new GuessWordGateway().getRandomWords(10, this::consume);
-
+        //just experimenting with calling own rest api
+        //new GuessWordGateway().getRandomWords(10, this::consume);
     }
 
     @Override
@@ -187,16 +188,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             SharedPreferences sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
             Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet("SCORES", new LinkedHashSet<>()));
 
-            viewablePlayers = new HashMap<>();
-            for (String jsonObj : set){
-                ViewablePlayer vp = null;
-                try {
-                    vp = new ObjectMapper().readValue(jsonObj,ViewablePlayer.class);
-                    viewablePlayers.put(vp.getNickname(), vp);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-            }
+            List<ViewablePlayer> list = new JsonWorker<ViewablePlayer>().toList(set, ViewablePlayer.class);
+            viewablePlayers = list.stream().collect(Collectors.toMap(ViewablePlayer::getNickname,vp->vp));
 
             List<ViewablePlayer> l = new ArrayList<>(viewablePlayers.values());
             Collections.sort(l, (p1,p2)->p1.compareTo(p2));

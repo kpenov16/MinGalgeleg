@@ -3,8 +3,10 @@ package dk.kaloyan.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import dk.kaloyan.mingalgeleg.ViewablePlayer;
@@ -24,5 +26,17 @@ public class JsonWorker<T> {
             }
         }
         return jsonObjects;
+    }
+
+    public List<T> toList(Set<String> set, Class<T> c) {
+        List<T> objects = new ArrayList<>();
+        for (String jsonObj : set){
+            try {
+                objects.add(new ObjectMapper().readValue(jsonObj, c));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+        return objects;
     }
 }
