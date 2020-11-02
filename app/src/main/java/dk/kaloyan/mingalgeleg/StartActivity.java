@@ -124,20 +124,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         editor = sharedPreferences.edit();
         //edit and commit
 
-        List<ViewablePlayer> players = new ArrayList<>(viewablePlayers.values());
-        Set<String> jsonPlayers = new JsonWorker<ViewablePlayer>().toStringSet(players);
-        /*Set<String> jsonPlayers = new LinkedHashSet<>();
-        for(ViewablePlayer p : players){
-            String jsonObj = "default";
-            try {
-                jsonObj = new ObjectMapper().writeValueAsString(p);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                jsonObj = "JsonProcessingException::Player:" + p.getNickname();
-            }finally {
-                jsonPlayers.add(jsonObj);
-            }
-        }*/
+        Set<String> jsonPlayers = new JsonWorker<ViewablePlayer>().toStringSet(new ArrayList<>(viewablePlayers.values()));
 
         editor.putStringSet("SCORES", new LinkedHashSet<>(new ArrayList<String>(jsonPlayers)));
         //editor.putStringSet("SCORES", new LinkedHashSet<>(new ArrayList<String>(scores)));
@@ -199,7 +186,28 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }else if(activityNeedsSharedPreferences(savedInstanceState)){
             SharedPreferences sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
             Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet("SCORES", new LinkedHashSet<>()));
-            scores = new ArrayList<>(set);
+
+            viewablePlayers = new HashMap<>();
+            for (String jsonObj : set){
+                ViewablePlayer vp = null;
+                try {
+                    vp = new ObjectMapper().readValue(jsonObj,ViewablePlayer.class);
+                    viewablePlayers.put(vp.getNickname(), vp);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            List<ViewablePlayer> l = new ArrayList<>(viewablePlayers.values());
+            Collections.sort(l, (p1,p2)->p1.compareTo(p2));
+            Collections.sort(l,Collections.reverseOrder());
+            scores = new ArrayList<>();
+            for(ViewablePlayer vp : l){
+                scores.add(String.format("%s wins: %d losses: %d", vp.getNickname(), vp.getWins(), vp.getLoses()));
+            }
+
+            //make them presentable
+            //scores = new ArrayList<>(set);
         }
         initialize();
         updateScores();
@@ -218,6 +226,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
             List<ViewablePlayer> l = new ArrayList<>(viewablePlayers.values());
             Collections.sort(l, (p1,p2)->p1.compareTo(p2));
+            Collections.sort(l,Collections.reverseOrder());
             scores = new ArrayList<>();
             for(ViewablePlayer vp : l){
                 scores.add(String.format("%s wins: %d losses: %d", vp.getNickname(), vp.getWins(), vp.getLoses()));
