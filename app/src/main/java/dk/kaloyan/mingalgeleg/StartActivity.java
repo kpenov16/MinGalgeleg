@@ -48,6 +48,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private List<String> scores = new ArrayList<>();
     private String lastScore;
     private ViewablePlayer viewablePlayer;
+    private Map<String, ViewablePlayer> viewablePlayers = new HashMap<>();
     //private HangGameFSM fsm = HangGameFSMImpl.getInstance();
 
     @Override
@@ -109,27 +110,18 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void updatePreferences() {
-         // create a reference to the shared preferences object
         SharedPreferences sharedPreferences;
 
-        // obtain an editor to add data to my SharedPreferences object
         SharedPreferences.Editor editor;
 
         sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
 
-
-        // using this instance you can get any value saved.
-        //sharedPreferences.getInt("backColor", Color.BLACK); // default value is BLACK set here
-
-
         editor = sharedPreferences.edit();
-        //edit and commit
 
         Set<String> jsonPlayers = new JsonWorker<ViewablePlayer>().toStringSet(new ArrayList<>(viewablePlayers.values()));
 
         editor.putStringSet("SCORES", new LinkedHashSet<>(new ArrayList<String>(jsonPlayers)));
-        //editor.putStringSet("SCORES", new LinkedHashSet<>(new ArrayList<String>(scores)));
-        editor.commit(); //very imp.
+        editor.commit();
     }
 
     private void initialize() {
@@ -141,22 +133,23 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         buttonStartGame.setOnClickListener(this);
     }
 
-    List<Word> words = new ArrayList<>();
+
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        //just experimenting with calling own rest api
+        //I wanted to show a ProcessBar while fetching words from my rest endpoint,
+        //as I use the free tier at heroku the dino kills itself after some time and it takes time to wake up again
         //new GuessWordGateway().getRandomWords(10, this::consume);
     }
 
+    List<Word> words = new ArrayList<>();
+
     @Override
-    public void consume(List<Word> result) {
+    synchronized public void consume(List<Word> result) {
         words = result;
-
         Log.i("on consume: ", result.toString());
-
         buttonStartGame.setClickable(true);
     }
 
@@ -198,9 +191,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             for(ViewablePlayer vp : l){
                 scores.add(String.format("%s wins: %d losses: %d", vp.getNickname(), vp.getWins(), vp.getLoses()));
             }
-
-            //make them presentable
-            //scores = new ArrayList<>(set);
         }
         initialize();
         updateScores();
@@ -263,7 +253,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private Map<String, ViewablePlayer> viewablePlayers = new HashMap<>();
 
 
 }

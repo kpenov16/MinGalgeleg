@@ -6,7 +6,9 @@ import android.os.Looper;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
+//EpicPandaForce showed this example here https://stackoverflow.com/questions/58767733/android-asynctask-api-deprecating-in-android-11-what-are-the-alternatives
+//as an example of couping with that Android AsyncTask API deprecating in Android 11
+//I've modified it a bit
 public class TaskRunner {
     private final Executor executor = Executors.newSingleThreadExecutor();
     private final Handler handler = new Handler(Looper.getMainLooper());
