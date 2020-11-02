@@ -32,6 +32,7 @@ import java.util.Set;
 import dk.kaloyan.core.usecases.playgame.WordsGateway;
 import dk.kaloyan.entities.Word;
 import dk.kaloyan.gateways.GuessWordGateway;
+import dk.kaloyan.utils.JsonWorker;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable {//, HangGameState {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
@@ -123,7 +124,23 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         editor = sharedPreferences.edit();
         //edit and commit
 
-        editor.putStringSet("SCORES", new LinkedHashSet<>(new ArrayList<String>(scores)));
+        List<ViewablePlayer> players = new ArrayList<>(viewablePlayers.values());
+        Set<String> jsonPlayers = new JsonWorker<ViewablePlayer>().toStringSet(players);
+        /*Set<String> jsonPlayers = new LinkedHashSet<>();
+        for(ViewablePlayer p : players){
+            String jsonObj = "default";
+            try {
+                jsonObj = new ObjectMapper().writeValueAsString(p);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                jsonObj = "JsonProcessingException::Player:" + p.getNickname();
+            }finally {
+                jsonPlayers.add(jsonObj);
+            }
+        }*/
+
+        editor.putStringSet("SCORES", new LinkedHashSet<>(new ArrayList<String>(jsonPlayers)));
+        //editor.putStringSet("SCORES", new LinkedHashSet<>(new ArrayList<String>(scores)));
         editor.commit(); //very imp.
     }
 
@@ -191,7 +208,14 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private void updateScores() {
 
         if(lastScore != null) {
-            viewablePlayers.put(viewablePlayer.getNickname(), viewablePlayer);
+            if(viewablePlayers.get(viewablePlayer.getNickname()) != null){
+                ViewablePlayer oldPlayer = viewablePlayers.get(viewablePlayer.getNickname());
+                oldPlayer.setWins(viewablePlayer.getWins()+oldPlayer.getWins());
+                oldPlayer.setLoses(viewablePlayer.getLoses()+oldPlayer.getLoses());
+            }else {
+                viewablePlayers.put(viewablePlayer.getNickname(), viewablePlayer);
+            }
+
             List<ViewablePlayer> l = new ArrayList<>(viewablePlayers.values());
             Collections.sort(l, (p1,p2)->p1.compareTo(p2));
             scores = new ArrayList<>();
