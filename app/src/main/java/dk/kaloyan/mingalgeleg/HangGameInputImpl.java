@@ -1,14 +1,13 @@
 package dk.kaloyan.mingalgeleg;
 
-import dk.kaloyan.core.usecases.playgame.InputPort;
-import dk.kaloyan.core.usecases.playgame.WordsGateway;
+import dk.kaloyan.core.usecases.playgame.HangGameInputPort;
 import dk.kaloyan.entities.Game;
 import dk.kaloyan.entities.Player;
 
-public class InputWorkerImpl {
-    private InputPort inputPort;
+public class HangGameInputImpl {
+    private HangGameInputPort inputPort;
 
-    public InputWorkerImpl(InputPort inputPort) {
+    public HangGameInputImpl(HangGameInputPort inputPort) {
         this.inputPort = inputPort;
     }
 

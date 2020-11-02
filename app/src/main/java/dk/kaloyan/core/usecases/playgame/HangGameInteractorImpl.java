@@ -7,13 +7,13 @@ import java.util.Random;
 import dk.kaloyan.entities.Game;
 import dk.kaloyan.gateways.OneWordHangGameLogicImpl;
 
-public class GameInteractorImpl implements InputPort{
-    private OutputPort outputPort;
+public class HangGameInteractorImpl implements HangGameInputPort {
+    private HangGameOutputPort outputPort;
     private Game game;
     private WordsGateway wordsGateway;
     private HangGameLogicGateway gameLogic;
 
-    public GameInteractorImpl() { }
+    public HangGameInteractorImpl() { }
     List<String> words = new ArrayList<String>();
 
 
@@ -36,7 +36,7 @@ public class GameInteractorImpl implements InputPort{
         game.setWrongLettersCount(gameLogic.getCountWrongLetters());
         game.setUsedLetters(gameLogic.getUsedLetters());
 
-        outputPort.presentResult(game);
+        outputPort.present(game);
     }
 
     public void play(String guess) {
@@ -47,15 +47,15 @@ public class GameInteractorImpl implements InputPort{
 
         if (gameLogic.isGameLost() || gameLogic.isGameWon()) {
             if (!gameLogic.isGameLost() )
-                outputPort.presentWinGame(wordToGuess);
+                outputPort.presentWin(wordToGuess);
             else
-                outputPort.presentLoseGame(wordToGuess, countWrongLetters, usedLetters);
+                outputPort.presentLose(wordToGuess, countWrongLetters, usedLetters);
 
             gameLogic.tearDown();
         }else{
             game.setWrongLettersCount(countWrongLetters);
             game.setUsedLetters(usedLetters);
-            outputPort.presentResult(game);
+            outputPort.present(game);
         }
     }
 
@@ -69,10 +69,10 @@ public class GameInteractorImpl implements InputPort{
     public void setWordsGateway(WordsGateway wordsGateway) {
         this.wordsGateway = wordsGateway;
     }
-    public OutputPort getOutputPort() {
+    public HangGameOutputPort getOutputPort() {
         return outputPort;
     }
-    public void setOutputPort(OutputPort outputPort) {
+    public void setOutputPort(HangGameOutputPort outputPort) {
         this.outputPort = outputPort;
     }
 

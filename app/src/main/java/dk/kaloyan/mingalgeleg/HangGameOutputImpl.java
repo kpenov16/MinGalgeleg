@@ -5,21 +5,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import dk.kaloyan.core.usecases.playgame.OutputPort;
+import dk.kaloyan.core.usecases.playgame.HangGameOutputPort;
 import dk.kaloyan.entities.Game;
 
-public class OutputWorkerImpl implements OutputPort {
-    private GameView view;
-    private GameViewModel viewModel;
+public class HangGameOutputImpl implements HangGameOutputPort {
+    private HangGameView view;
+    private HangGameViewModel viewModel;
 
-    public OutputWorkerImpl(GameView view, GameViewModel viewModel) {
+    public HangGameOutputImpl(HangGameView view, HangGameViewModel viewModel) {
         this.view = view;
         this.viewModel = viewModel;
     }
 
 
     @Override
-    public void presentResult(Game game) {
+    public void present(Game game) {
         final String nickname = game.getPlayer().getNickname();
         if(viewModel.viewablePlayer == null)
             viewModel.viewablePlayer = new ViewablePlayer(nickname, 0 , 0);
@@ -32,7 +32,7 @@ public class OutputWorkerImpl implements OutputPort {
     }
 
     @Override
-    public void presentWinGame(String ordet) {
+    public void presentWin(String ordet) {
         viewModel.currentGuess = "You WIN!!!\nOrdet var: " + ordet;
         viewModel.isWon = true;
         viewModel.viewablePlayer.setWins(viewModel.viewablePlayer.getWins() + 1);
@@ -40,7 +40,7 @@ public class OutputWorkerImpl implements OutputPort {
     }
 
     @Override
-    public void presentLoseGame(String ordet, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver) {
+    public void presentLose(String ordet, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver) {
         viewModel.wrongCount = antalForkerteBogstaver;
         viewModel.currentGuess = String.format(CURRENT_GUESS_LOSE_GAME, ordet, antalForkerteBogstaver, brugteBogstaver.toString());
         viewModel.viewablePlayer.setLoses(viewModel.viewablePlayer.getLoses() + 1);
@@ -58,11 +58,11 @@ public class OutputWorkerImpl implements OutputPort {
         return visibleWord;
     }
 
-    protected GameViewModel getViewModel() {
+    protected HangGameViewModel getViewModel() {
         return viewModel;
     }
 
-    protected void setViewModel(GameViewModel viewModel) {
+    protected void setViewModel(HangGameViewModel viewModel) {
         this.viewModel = viewModel;
     }
 }

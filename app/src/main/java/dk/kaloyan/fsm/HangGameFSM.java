@@ -15,6 +15,8 @@ public abstract class HangGameFSM {
         this.state = state;
     }
 
+    //| hang game final state machine transition table          |
+    //|=========================================================|
     //| current state | event | new state |      action         |
     //|=========================================================|
     //|    init       | back  |     -     |         -           |

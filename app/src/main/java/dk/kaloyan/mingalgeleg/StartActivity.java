@@ -31,10 +31,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import dk.kaloyan.app.ApplicationMain;
 import dk.kaloyan.core.usecases.playgame.WordsGateway;
 import dk.kaloyan.entities.Word;
 import dk.kaloyan.gateways.DRWordsGatewayImpl;
-import dk.kaloyan.gateways.GuessWordGateway;
+import dk.kaloyan.gateways.HerokuWordsGatewayImpl;
 import dk.kaloyan.utils.JsonWorker;
 
 public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable, CompoundButton.OnCheckedChangeListener {//, HangGameState {
@@ -257,7 +258,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
         if(compoundButton.getId() == R.id.checkBoxWordsFromDR){
             if(!isChecked){
-                new GuessWordGateway().getRandomWords(10, this::consume);
+                new HerokuWordsGatewayImpl().getRandomWords(10, this::consume);
             }else {
                 ((ApplicationMain)getApplication()).gameInteractor.setWordsGateway(new DRWordsGatewayImpl());
             }

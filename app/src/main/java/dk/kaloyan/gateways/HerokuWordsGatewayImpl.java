@@ -9,7 +9,7 @@ import dk.kaloyan.async.LongRunningTask;
 import dk.kaloyan.async.TaskRunner;
 import dk.kaloyan.core.usecases.playgame.WordsGateway;
 
-public class GuessWordGateway implements WordsGateway {
+public class HerokuWordsGatewayImpl implements WordsGateway {
 
     @Override
     public void getRandomWords(int numberOfWords, Consumable consumable) {
