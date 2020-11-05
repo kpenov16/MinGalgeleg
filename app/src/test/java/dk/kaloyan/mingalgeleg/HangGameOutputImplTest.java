@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class OutputWorkerImplTest {
+public class HangGameOutputImplTest {
     @Test
     public void givenWrongGuessWithCorrectGuesses_returnFormattedStringShowingOnlyTheGuessedLetters() {
         //setup
@@ -21,16 +21,16 @@ public class OutputWorkerImplTest {
         ArrayList<String> guessed = new ArrayList<String>(){{add("a"); add("b");}};
         String visibleWord = "";
         int wrongGuesses = 2;
-        GameViewModel vm = new GameViewModel();
-        OutputWorkerImpl outputWorker = new OutputWorkerImpl(new FakeGameView(), vm);
+        HangGameViewModel vm = new HangGameViewModel();
+        HangGameOutputImpl outputWorker = new HangGameOutputImpl(new FakeHangGameView(), vm);
 
         //act
-        Game game = new Game.GameBuilder()
+        Game game = Game.Builder()
                 .withUsedLetters(guessed)
                 .withWordToGuess(word)
                 .withWrongLettersCount(wrongGuesses)
                 .build();
-        outputWorker.presentResult(game);
+        outputWorker.present(game);
 
         //assert
         assertEquals(
@@ -38,9 +38,9 @@ public class OutputWorkerImplTest {
                 vm.currentGuess);
     }
 
-    class FakeGameView implements GameView{
+    class FakeHangGameView implements HangGameView {
         @Override
-        public void show(GameViewModel viewModel) {
+        public void show(HangGameViewModel viewModel) {
 
         }
     }

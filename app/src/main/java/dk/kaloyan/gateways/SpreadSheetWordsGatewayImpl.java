@@ -8,8 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import dk.kaloyan.core.usecases.playgame.WordsGateway;
+
 //yet another way to get words TODO: one sunny day
-public class SpreadSheetWordsGatewayImpl {
+public class SpreadSheetWordsGatewayImpl implements WordsGateway {
+    @Override
+    public void getRandomWords(int numberOfWords, Consumable consumable) {
+
+    }
+
+    @Override
+    public List<String> getWords() throws Exception {
+        return null;
+    }
     /**
      * Hent ord og sværhedsgrad fra et online regneark. Du kan redigere i regnearket, på adressen
      * https://docs.google.com/spreadsheets/d/1RnwU9KATJB94Rhr7nurvjxfg09wAHMZPYB3uySBPO6M/edit?usp=sharing

@@ -8,7 +8,7 @@ public class GuessWordGatewayTest {
 
     @Test
     public void givenRequestNumberOfWords_returnNumberOfWords(){
-        GuessWordGateway gateway = new GuessWordGateway();
+        HerokuWordsGatewayImpl gateway = new HerokuWordsGatewayImpl();
         int numberOfWords = 5;
         //assertEquals("numberOfWords", gateway.getRandomWordsAsStr(numberOfWords));
     }

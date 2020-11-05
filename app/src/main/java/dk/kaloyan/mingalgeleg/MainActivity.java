@@ -10,11 +10,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import dk.kaloyan.gateways.GuessWordGateway;
+import dk.kaloyan.app.ApplicationMain;
 
-public class MainActivity extends AppCompatActivity implements GameView, View.OnClickListener{//, HangGameState {
+public class MainActivity extends AppCompatActivity implements HangGameView, View.OnClickListener{//, HangGameState {
     /*
     @Override
     public void start(HangGameFSM fsm) {}
@@ -27,15 +26,15 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
     public static String PLAYER_NAME = "dk.kaloyan.mingalgeleg.MainActivity.PLAYER_NAME";
     public static String LAST_SCORE = "dk.kaloyan.mingalgeleg.MainActivity.LAST_SCORE";
 
-    private InputWorkerImpl inputWorker;
-    private GameViewModel viewModel;
+    private HangGameInputImpl inputWorker;
+    private HangGameViewModel viewModel;
     private TextView textViewWordToGuess;
     private ImageView imageViewHangStatus;
     private String playerName;
     private TextView textViewPlayerName;
 
     @Override
-    public void show(GameViewModel viewModel) {
+    public void show(HangGameViewModel viewModel) {
         if(viewModel.isWon){
             Intent intent = new Intent(MainActivity.this, WinGameActivity.class);
             intent.putExtra(MainActivity.LAST_SCORE, viewModel.currentGuess);
@@ -113,13 +112,13 @@ public class MainActivity extends AppCompatActivity implements GameView, View.On
         ViewModelProvider viewModelProvider = new ViewModelProvider(getViewModelStore(),
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()));
 
-        viewModel = viewModelProvider.get( GameViewModel.class );
+        viewModel = viewModelProvider.get( HangGameViewModel.class );
 
         Bundle bundleFromStartActivity = getIntent().getExtras();
         playerName = bundleFromStartActivity.getString(PLAYER_NAME);
 
-        ((ApplicationMain)getApplication()).gameInteractor.setOutputPort(new OutputWorkerImpl(this, viewModel));
-        inputWorker = new InputWorkerImpl(((ApplicationMain)getApplication()).gameInteractor);
+        ((ApplicationMain)getApplication()).gameInteractor.setOutputPort(new HangGameOutputImpl(this, viewModel));
+        inputWorker = new HangGameInputImpl(((ApplicationMain)getApplication()).gameInteractor);
 
         inputWorker.setup(playerName);
 

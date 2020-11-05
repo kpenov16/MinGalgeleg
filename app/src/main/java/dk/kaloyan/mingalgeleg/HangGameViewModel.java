@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.lifecycle.ViewModel;
 
-public class GameViewModel extends ViewModel {
+public class HangGameViewModel extends ViewModel {
     public String playerName;
     public String currentGuess;
     public int wrongCount;
