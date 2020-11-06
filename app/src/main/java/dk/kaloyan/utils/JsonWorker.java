@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import dk.kaloyan.mingalgeleg.ViewablePlayer;
 
 public class JsonWorker<T> {
     public Set<String> toStringSet(List<T> toParse){

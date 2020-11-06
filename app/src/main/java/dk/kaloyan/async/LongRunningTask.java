@@ -8,11 +8,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Callable;
 
 import dk.kaloyan.entities.Word;
-import dk.kaloyan.mingalgeleg.ExtractWords;
 
 public class LongRunningTask implements Callable<List<Word>> {
     private String url;

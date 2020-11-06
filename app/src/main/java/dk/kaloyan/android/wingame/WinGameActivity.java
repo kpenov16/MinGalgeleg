@@ -1,4 +1,4 @@
-package dk.kaloyan.mingalgeleg;
+package dk.kaloyan.android.wingame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,18 +7,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class EndGameActivity extends AppCompatActivity {
+import dk.kaloyan.android.R;
+import dk.kaloyan.android.ViewablePlayer;
+import dk.kaloyan.android.playgame.MainActivity;
 
+public class WinGameActivity extends AppCompatActivity {
     private String lastScore;
     private TextView textViewResult;
     private String playerName;
     private ViewablePlayer viewablePlayer;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_end_game);
+        setContentView(R.layout.activity_win_game);
 
         Bundle bundleFromStartActivity = getIntent().getExtras();
         lastScore = bundleFromStartActivity.getString(MainActivity.LAST_SCORE);
@@ -40,6 +42,4 @@ public class EndGameActivity extends AppCompatActivity {
         finish();
         //super.onBackPressed();
     }
-
-
 }

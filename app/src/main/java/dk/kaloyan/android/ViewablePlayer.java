@@ -1,9 +1,7 @@
-package dk.kaloyan.mingalgeleg;
+package dk.kaloyan.android;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import dk.kaloyan.entities.Player;
 
 public class ViewablePlayer implements Parcelable, Comparable<ViewablePlayer> {
 

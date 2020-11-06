@@ -1,4 +1,4 @@
-package dk.kaloyan.mingalgeleg;
+package dk.kaloyan.android;
 
 import android.content.Context;
 

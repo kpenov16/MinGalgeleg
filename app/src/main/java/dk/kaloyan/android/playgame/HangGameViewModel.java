@@ -1,8 +1,10 @@
-package dk.kaloyan.mingalgeleg;
+package dk.kaloyan.android.playgame;
 
 import android.os.Bundle;
 
 import androidx.lifecycle.ViewModel;
+
+import dk.kaloyan.android.ViewablePlayer;
 
 public class HangGameViewModel extends ViewModel {
     public String playerName;

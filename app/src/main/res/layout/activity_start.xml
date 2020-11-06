@@ -52,4 +52,23 @@
         app:layout_constraintStart_toEndOf="@+id/buttonStartGame"
         app:layout_constraintTop_toTopOf="@+id/buttonStartGame" />
 
+    <Spinner
+        android:id="@+id/spinnerWordsSource"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonStartGame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonStartGame"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxWordsFromDR" />
+
+    <TextView
+        android:id="@+id/textViewMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/buttonStartGame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPlayerName" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

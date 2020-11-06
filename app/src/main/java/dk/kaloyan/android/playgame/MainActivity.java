@@ -1,4 +1,4 @@
-package dk.kaloyan.mingalgeleg;
+package dk.kaloyan.android.playgame;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
@@ -11,6 +11,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import dk.kaloyan.android.losegame.LoseGameActivity;
+import dk.kaloyan.android.R;
+import dk.kaloyan.android.ViewablePlayer;
+import dk.kaloyan.android.wingame.WinGameActivity;
+import dk.kaloyan.android.startgame.CanStartActivity;
 import dk.kaloyan.app.ApplicationMain;
 
 public class MainActivity extends AppCompatActivity implements HangGameView, View.OnClickListener{//, HangGameState {
@@ -58,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements HangGameView, Vie
             this.imageViewHangStatus.setImageResource(R.drawable.forkert5);
         else if(viewModel.wrongCount == 6){
 
-            Intent intent = new Intent(MainActivity.this, EndGameActivity.class);
+            Intent intent = new Intent(MainActivity.this, LoseGameActivity.class);
             intent.putExtra(MainActivity.LAST_SCORE, viewModel.currentGuess);
             intent.putExtra(MainActivity.PLAYER_NAME, viewModel.playerName);
             intent.putExtra(ViewablePlayer.VIEWABLE_PLAYER, viewModel.viewablePlayer);
@@ -77,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements HangGameView, Vie
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        setResult(StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
+        setResult(CanStartActivity.RESULT_FROM_END_GAME_ACTIVITY);
         finish();
     }
 

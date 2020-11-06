@@ -1,4 +1,4 @@
-package dk.kaloyan.mingalgeleg;
+package dk.kaloyan.async;
 
 import org.json.JSONArray;
 import org.json.JSONException;

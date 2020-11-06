@@ -1,10 +1,11 @@
-package dk.kaloyan.mingalgeleg;
+package dk.kaloyan.android.playgame;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import dk.kaloyan.android.ViewablePlayer;
 import dk.kaloyan.core.usecases.playgame.HangGameOutputPort;
 import dk.kaloyan.entities.Game;
 
@@ -47,8 +48,8 @@ public class HangGameOutputImpl implements HangGameOutputPort {
         view.show(viewModel);
     }
 
-    protected final String CURRENT_GUESS_LOSE_GAME = "You LOSE!!!\nOrdet var: %s\nForkerte gæt: %d\nBrugte bogstaver: %s";
-    protected final String CURRENT_GUESS_PLAY_GAME = "Ord: %s\nForkerte gæt: %d\nBrugte bogstaver: %s";
+    public final String CURRENT_GUESS_LOSE_GAME = "You LOSE!!!\nOrdet var: %s\nForkerte gæt: %d\nBrugte bogstaver: %s";
+    public final String CURRENT_GUESS_PLAY_GAME = "Ord: %s\nForkerte gæt: %d\nBrugte bogstaver: %s";
 
     private String hideNotGuessed(String word, List<String> visible, char replaceWith) {
         final Map<String,String> map = visible.stream().distinct().collect(Collectors.toMap(s->s, s->s));

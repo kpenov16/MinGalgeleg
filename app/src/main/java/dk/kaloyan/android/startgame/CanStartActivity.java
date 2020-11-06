@@ -1,4 +1,4 @@
-package dk.kaloyan.mingalgeleg;
+package dk.kaloyan.android.startgame;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,12 +8,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,14 +33,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import dk.kaloyan.android.playgame.MainActivity;
+import dk.kaloyan.android.R;
+import dk.kaloyan.android.ViewablePlayer;
 import dk.kaloyan.app.ApplicationMain;
 import dk.kaloyan.core.usecases.playgame.WordsGateway;
+import dk.kaloyan.core.usecases.startgame.StartGameUseCaseImpl;
+import dk.kaloyan.core.usecases.startgame.StartInputPort;
+import dk.kaloyan.core.usecases.startgame.StartOutputPort;
 import dk.kaloyan.entities.Word;
 import dk.kaloyan.gateways.DRWordsGatewayImpl;
 import dk.kaloyan.gateways.HerokuWordsGatewayImpl;
 import dk.kaloyan.utils.JsonWorker;
 
-public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable, CompoundButton.OnCheckedChangeListener {//, HangGameState {
+public class CanStartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable, CompoundButton.OnCheckedChangeListener, StartView, AdapterView.OnItemSelectedListener, StartViewModel.UserCanStartGameListener {//, HangGameState {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
     public static final String PREF_SCORES = "dk.kaloyan.mingalgeleg.StartActivity.PREF_SCORES";
     public static final String SCORES = "dk.kaloyan.mingalgeleg.StartActivity.SCORES";
@@ -54,6 +62,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private ViewablePlayer viewablePlayer;
     private Map<String, ViewablePlayer> viewablePlayers = new HashMap<>();
     private CheckBox checkBoxWordsFromDR;
+    private TextView textViewMessage;
+    private Spinner spinnerWordsSource;
     //private HangGameFSM fsm = HangGameFSMImpl.getInstance();
 
     @Override
@@ -61,14 +71,14 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         if(view.getId() == buttonStartGame.getId()){
             playerName = editTextPlayerName.getText().toString();
 
-            viewModelStart.playerName = playerName;
+            viewModelStart.setPlayerName(playerName);
             viewModelStart.scores = toStringArray(scores);
             viewModelStart.viewablePlayers = new ArrayList<>(viewablePlayers.values());
 
-            Intent intent = new Intent(StartActivity.this, MainActivity.class);
+            Intent intent = new Intent(CanStartActivity.this, MainActivity.class);
             intent.putExtra(MainActivity.PLAYER_NAME, playerName);
 
-            startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
+            startActivityForResult(intent, CanStartActivity.RESULT_FROM_END_GAME_ACTIVITY);
             //fsm.start();
         }
     }
@@ -98,7 +108,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (requestCode == StartActivity.RESULT_FROM_END_GAME_ACTIVITY) {
+        if (requestCode == CanStartActivity.RESULT_FROM_END_GAME_ACTIVITY) {
             if(resultCode == Activity.RESULT_OK){
 
                lastScore = intent.getStringExtra(MainActivity.LAST_SCORE);
@@ -121,13 +131,13 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         SharedPreferences.Editor editor;
 
-        sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(CanStartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
 
         editor = sharedPreferences.edit();
 
         Set<String> jsonPlayers = new JsonWorker<ViewablePlayer>().toStringSet(new ArrayList<>(viewablePlayers.values()));
 
-        editor.putStringSet(StartActivity.SCORES, new LinkedHashSet<>(new ArrayList<String>(jsonPlayers)));
+        editor.putStringSet(CanStartActivity.SCORES, new LinkedHashSet<>(new ArrayList<String>(jsonPlayers)));
         editor.commit();
     }
 
@@ -137,6 +147,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         buttonStartGame = findViewById(R.id.buttonStartGame);
         editTextPlayerName = findViewById(R.id.editTextPlayerName);
         checkBoxWordsFromDR = findViewById(R.id.checkBoxWordsFromDR);
+
+        textViewMessage = findViewById(R.id.textViewMessage);
+        spinnerWordsSource = findViewById(R.id.spinnerWordsSource);
 
         checkBoxWordsFromDR.setOnCheckedChangeListener(this);
         editTextPlayerName.addTextChangedListener(getTextWatcherForEditTextPlayerName());
@@ -153,12 +166,76 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         //new GuessWordGateway().getRandomWords(10, this::consume);
     }
 
+    //start setup use case
+    private StartViewModel startViewModel;
+    @Override
+    public void showChooseWordSource(StartViewModel newStartViewModel) {
+        startViewModel = newStartViewModel;
+        startViewModel.subscribeToUserCanStartGameHasChanged(this);
 
+
+        buttonStartGame.setEnabled(false);
+        textViewMessage.setEnabled(true);
+        textViewMessage.setText(startViewModel.chooseWordSourceMessage);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CanStartActivity.this, android.R.layout.simple_spinner_item, startViewModel.wordSources);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerWordsSource.setAdapter(adapter);
+        spinnerWordsSource.setOnItemSelectedListener(this);
+        
+    }
+
+    @Override
+    public void userCanStartGameHasChanged(boolean canStart) {
+        if(canStart){ // && startViewModel.isUserNameChosen()
+            buttonStartGame.setEnabled(true);
+            textViewMessage.setVisibility(View.INVISIBLE);
+        }else {
+            buttonStartGame.setEnabled(false);
+            textViewMessage.setVisibility(View.VISIBLE);
+            textViewMessage.setText(startViewModel.chooseWordSourceMessage);
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(position == 0){
+            startViewModel.setWordSourceChosen(false);
+        }else if(position == 1 || position == 2){
+            startViewModel.setWordSourceChosen(true);
+        }else {
+            //not known option
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+    //end setup use case
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+
+        //start setup the start usecase
+        initialize();
+
+        StartOutputPortImpl startOutputPortImpl = new StartOutputPortImpl();
+        startOutputPortImpl.setStartView(this);
+        StartOutputPort startOutputPort = startOutputPortImpl;
+
+
+        StartGameUseCaseImpl startUseCase = new StartGameUseCaseImpl();
+        startUseCase.setOutputPort(startOutputPort);
+
+        StartInputPort inputPort = startUseCase;
+        inputPort.setup();
+        //end //setup the start usecase
+
 
         //GuessWordGateway gateway = new GuessWordGateway();
         //Toast.makeText(this, gateway.getRandomWordsAsStr(handler), Toast.LENGTH_LONG).show();
@@ -176,13 +253,13 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         if(activityStateNeedToBeRestored(savedInstanceState)){
             viewModelStart.restoreState(savedInstanceState);
 
-            playerName = viewModelStart.playerName;
+            playerName = viewModelStart.getPlayerName();
             scores = toArrayList(viewModelStart.scores);
 
             viewablePlayers = viewModelStart.viewablePlayers.stream().collect(Collectors.toMap(ViewablePlayer::getNickname,vp->vp));
         }else if(activityNeedsSharedPreferences(savedInstanceState)){
-            SharedPreferences sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
-            Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet(StartActivity.SCORES, new LinkedHashSet<>()));
+            SharedPreferences sharedPreferences = getSharedPreferences(CanStartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
+            Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet(CanStartActivity.SCORES, new LinkedHashSet<>()));
 
             List<ViewablePlayer> list = new JsonWorker<ViewablePlayer>().toList(set, ViewablePlayer.class);
             viewablePlayers = list.stream().collect(Collectors.toMap(ViewablePlayer::getNickname,vp->vp));
@@ -195,8 +272,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 scores.add(String.format("%s wins: %d losses: %d", vp.getNickname(), vp.getWins(), vp.getLoses()));
             }
         }
-        initialize();
+        //initialize();
         updateScores();
+
+
+
     }
 
     private void updateScores() {
@@ -282,4 +362,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
+
+
 }

@@ -1,4 +1,4 @@
-package dk.kaloyan.mingalgeleg;
+package dk.kaloyan.android.playgame;
 
 import dk.kaloyan.core.usecases.playgame.HangGameInputPort;
 import dk.kaloyan.entities.Game;
