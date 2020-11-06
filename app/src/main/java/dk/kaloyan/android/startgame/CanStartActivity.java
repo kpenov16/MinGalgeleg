@@ -202,9 +202,12 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position == 0){
             startViewModel.setWordSourceChosen(false);
-        }else if(position == 1 || position == 2){
+        }else if(position == 1){
             startViewModel.setWordSourceChosen(true);
-        }else {
+        }else if(position == 2){
+            startViewModel.setWordSourceChosen(true);
+        }
+        else {
             //not known option
         }
     }
@@ -323,7 +326,7 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
         return new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                buttonStartGame.setEnabled( !editTextPlayerName.getText().toString().trim().isEmpty() );
+                startViewModel.setPlayerName(editTextPlayerName.getText().toString().trim());
             }
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
