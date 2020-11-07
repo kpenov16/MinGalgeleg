@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dk.kaloyan.android.ViewablePlayer;
+import dk.kaloyan.core.usecases.startgame.WordSource;
 import dk.kaloyan.fsm.HangGameFSM;
 import dk.kaloyan.fsm.HangGameFSMImpl;
 
@@ -41,6 +42,14 @@ public class StartViewModel extends ViewModel {
     public void setWordSourceChosen(boolean wordSourceChosen) {
         isWordSourceChosen = wordSourceChosen;
         notifyUserCanStartGameSubscribers();
+    }
+    private WordSource wordSource;
+    public void setWordSource(WordSource wordSource) {
+        this.wordSource = wordSource;
+    }
+
+    public WordSource getWordSource() {
+        return wordSource;
     }
 
     interface UserCanStartGameListener {

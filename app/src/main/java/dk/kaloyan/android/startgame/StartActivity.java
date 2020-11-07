@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,14 +26,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import dk.kaloyan.android.playgame.MainActivity;
@@ -41,12 +52,13 @@ import dk.kaloyan.core.usecases.playgame.WordsGateway;
 import dk.kaloyan.core.usecases.startgame.StartGameUseCaseImpl;
 import dk.kaloyan.core.usecases.startgame.StartInputPort;
 import dk.kaloyan.core.usecases.startgame.StartOutputPort;
+import dk.kaloyan.core.usecases.startgame.WordSource;
 import dk.kaloyan.entities.Word;
 import dk.kaloyan.gateways.DRWordsGatewayImpl;
 import dk.kaloyan.gateways.HerokuWordsGatewayImpl;
 import dk.kaloyan.utils.JsonWorker;
 
-public class CanStartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable, CompoundButton.OnCheckedChangeListener, StartView, AdapterView.OnItemSelectedListener, StartViewModel.UserCanStartGameListener {//, HangGameState {
+public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable, CompoundButton.OnCheckedChangeListener, StartView, AdapterView.OnItemSelectedListener, StartViewModel.UserCanStartGameListener{//, HangGameState {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
     public static final String PREF_SCORES = "dk.kaloyan.mingalgeleg.StartActivity.PREF_SCORES";
     public static final String SCORES = "dk.kaloyan.mingalgeleg.StartActivity.SCORES";
@@ -64,6 +76,7 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
     private CheckBox checkBoxWordsFromDR;
     private TextView textViewMessage;
     private Spinner spinnerWordsSource;
+    private ProgressBar progressBarGetWords;
     //private HangGameFSM fsm = HangGameFSMImpl.getInstance();
 
     @Override
@@ -75,10 +88,10 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
             viewModelStart.scores = toStringArray(scores);
             viewModelStart.viewablePlayers = new ArrayList<>(viewablePlayers.values());
 
-            Intent intent = new Intent(CanStartActivity.this, MainActivity.class);
+            Intent intent = new Intent(StartActivity.this, MainActivity.class);
             intent.putExtra(MainActivity.PLAYER_NAME, playerName);
 
-            startActivityForResult(intent, CanStartActivity.RESULT_FROM_END_GAME_ACTIVITY);
+            startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
             //fsm.start();
         }
     }
@@ -108,7 +121,7 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if (requestCode == CanStartActivity.RESULT_FROM_END_GAME_ACTIVITY) {
+        if (requestCode == StartActivity.RESULT_FROM_END_GAME_ACTIVITY) {
             if(resultCode == Activity.RESULT_OK){
 
                lastScore = intent.getStringExtra(MainActivity.LAST_SCORE);
@@ -131,13 +144,13 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
 
         SharedPreferences.Editor editor;
 
-        sharedPreferences = getSharedPreferences(CanStartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
 
         editor = sharedPreferences.edit();
 
         Set<String> jsonPlayers = new JsonWorker<ViewablePlayer>().toStringSet(new ArrayList<>(viewablePlayers.values()));
 
-        editor.putStringSet(CanStartActivity.SCORES, new LinkedHashSet<>(new ArrayList<String>(jsonPlayers)));
+        editor.putStringSet(StartActivity.SCORES, new LinkedHashSet<>(new ArrayList<String>(jsonPlayers)));
         editor.commit();
     }
 
@@ -150,6 +163,7 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
 
         textViewMessage = findViewById(R.id.textViewMessage);
         spinnerWordsSource = findViewById(R.id.spinnerWordsSource);
+        progressBarGetWords = findViewById(R.id.progressBarGetWords);
 
         checkBoxWordsFromDR.setOnCheckedChangeListener(this);
         editTextPlayerName.addTextChangedListener(getTextWatcherForEditTextPlayerName());
@@ -178,7 +192,7 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
         textViewMessage.setEnabled(true);
         textViewMessage.setText(startViewModel.chooseWordSourceMessage);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CanStartActivity.this, android.R.layout.simple_spinner_item, startViewModel.wordSources);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(StartActivity.this, android.R.layout.simple_spinner_item, startViewModel.wordSources);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerWordsSource.setAdapter(adapter);
@@ -198,13 +212,45 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+
+
+
+
+
+
+
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position == 0){
             startViewModel.setWordSourceChosen(false);
         }else if(position == 1){
-            startViewModel.setWordSourceChosen(true);
+            //new DRWordsGatewayImpl().getWords();
+            DRWordsDownloader downloader = new DRWordsDownloader();
+            downloader.addProcessObserver(new ProcessObserver() {
+                public void starting() {
+                    progressBarGetWords.setVisibility(View.VISIBLE);
+                    progressBarGetWords.setProgress(1);
+                }
+                @Override
+                public void pending() {
+                    progressBarGetWords.setProgress(3);
+                }
+                @Override
+                public void processed(ArrayList<String> words) {
+                    System.out.println("words: " + words);
+                    progressBarGetWords.setProgress(4);
+                    startViewModel.setWordSource(WordSource.DR);
+                    startViewModel.setWordSourceChosen(true);
+                    new Handler().postDelayed(()->{
+                        progressBarGetWords.setVisibility(View.GONE);
+                    },500);
+                }
+            });
+            downloader.execute();
+
         }else if(position == 2){
+            startViewModel.setWordSource(WordSource.DR);
             startViewModel.setWordSourceChosen(true);
         }
         else {
@@ -214,7 +260,7 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-
+        startViewModel.setWordSourceChosen(false);
     }
     //end setup use case
 
@@ -261,8 +307,8 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
 
             viewablePlayers = viewModelStart.viewablePlayers.stream().collect(Collectors.toMap(ViewablePlayer::getNickname,vp->vp));
         }else if(activityNeedsSharedPreferences(savedInstanceState)){
-            SharedPreferences sharedPreferences = getSharedPreferences(CanStartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
-            Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet(CanStartActivity.SCORES, new LinkedHashSet<>()));
+            SharedPreferences sharedPreferences = getSharedPreferences(StartActivity.PREF_SCORES, Activity.MODE_PRIVATE);
+            Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet(StartActivity.SCORES, new LinkedHashSet<>()));
 
             List<ViewablePlayer> list = new JsonWorker<ViewablePlayer>().toList(set, ViewablePlayer.class);
             viewablePlayers = list.stream().collect(Collectors.toMap(ViewablePlayer::getNickname,vp->vp));
@@ -366,6 +412,87 @@ public class CanStartActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+}
 
+class DRWordsDownloader {
+    private  ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private ArrayList<String> words = new ArrayList<String>();
+
+    public String getPageAsString(String url) throws IOException {
+        InputStream inputStream = new URL(url).openStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder sb = new StringBuilder();
+        String linje = br.readLine();
+        while (linje != null) {
+            sb.append(linje + "\n");
+            linje = br.readLine();
+        }
+        String str = sb.toString();
+        inputStream.close();
+        return str;
+    }
+
+    public void execute() {
+        executor = Executors.newSingleThreadExecutor();
+        executor.execute(()->{
+            for (ProcessObserver o : observers){
+                new Handler(Looper.getMainLooper()).post(()->o.starting());
+            }
+            String data = "bil computer programmering motorvej busrute gangsti skovsnegl solsort nitten";
+            try {
+                data = getPageAsString("https://dr.dk");
+
+                for (ProcessObserver o : observers){
+                    new Handler(Looper.getMainLooper()).post(()->o.pending());
+                }
+
+                data = data.substring(data.indexOf("<body")). // fjern headere
+                        replaceAll("<.+?>", " ").toLowerCase(). // fjern tags
+                        replaceAll("&#198;", "æ"). // erstat HTML-tegn
+                        replaceAll("&#230;", "æ"). // erstat HTML-tegn
+                        replaceAll("&#216;", "ø"). // erstat HTML-tegn
+                        replaceAll("&#248;", "ø"). // erstat HTML-tegn
+                        replaceAll("&oslash;", "ø"). // erstat HTML-tegn
+                        replaceAll("&#229;", "å"). // erstat HTML-tegn
+                        replaceAll("[^a-zæøå]", " "). // fjern tegn der ikke er bogstaver
+                        replaceAll(" [a-zæøå] "," "). // fjern 1-bogstavsord
+                        replaceAll(" [a-zæøå][a-zæøå] "," "); // fjern 2-bogstavsord
+
+                setWords(new HashSet<String>(Arrays.asList(data.split(" "))));
+            } catch (IOException e) {
+                e.printStackTrace();
+                setWords(new HashSet<String>(){{add("activate internet");}});
+            }
+
+        });
+        executor.shutdown();
+        //executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+    }
+
+    synchronized private void setWords(HashSet<String> newWords){
+        words.clear();
+        words.addAll(newWords);
+        for (ProcessObserver o : observers){
+            new Handler(Looper.getMainLooper()).post(()->o.processed(words));
+        }
+    }
+
+    List<ProcessObserver> observers = new ArrayList<>();
+    void addProcessObserver(ProcessObserver observer){
+        observers.add(observer);
+    }
+    void removeProcessObserver(ProcessObserver observer){
+        observers.remove(observer);
+    }
+}
+
+interface ProcessObserver {
+    void starting();
+    void pending();
+    void processed(ArrayList<String> words);
 }

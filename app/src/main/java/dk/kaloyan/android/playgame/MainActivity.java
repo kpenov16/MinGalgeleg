@@ -15,7 +15,7 @@ import dk.kaloyan.android.losegame.LoseGameActivity;
 import dk.kaloyan.android.R;
 import dk.kaloyan.android.ViewablePlayer;
 import dk.kaloyan.android.wingame.WinGameActivity;
-import dk.kaloyan.android.startgame.CanStartActivity;
+import dk.kaloyan.android.startgame.StartActivity;
 import dk.kaloyan.app.ApplicationMain;
 
 public class MainActivity extends AppCompatActivity implements HangGameView, View.OnClickListener{//, HangGameState {
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements HangGameView, Vie
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        setResult(CanStartActivity.RESULT_FROM_END_GAME_ACTIVITY);
+        setResult(StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
         finish();
     }
 
