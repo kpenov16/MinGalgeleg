@@ -26,16 +26,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +54,7 @@ import dk.kaloyan.android.playgame.MainActivity;
 import dk.kaloyan.android.R;
 import dk.kaloyan.android.ViewablePlayer;
 import dk.kaloyan.app.ApplicationMain;
+import dk.kaloyan.async.ExtractWords;
 import dk.kaloyan.core.usecases.playgame.WordsGateway;
 import dk.kaloyan.core.usecases.startgame.StartGameUseCaseImpl;
 import dk.kaloyan.core.usecases.startgame.StartInputPort;
@@ -219,7 +226,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
 
 
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position == 0){
@@ -250,8 +256,28 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             downloader.execute();
 
         }else if(position == 2){
-            startViewModel.setWordSource(WordSource.DR);
-            startViewModel.setWordSourceChosen(true);
+            WordsDownloader downloader = new HEROKUWordsDownloader();
+            downloader.addProcessObserver(new ProcessObserver() {
+                public void starting() {
+                    progressBarGetWords.setVisibility(View.VISIBLE);
+                    progressBarGetWords.setProgress(1);
+                }
+                @Override
+                public void pending() {
+                    progressBarGetWords.setProgress(3);
+                }
+                @Override
+                public void processed(ArrayList<String> words) {
+                    System.out.println("words: " + words);
+                    progressBarGetWords.setProgress(4);
+                    startViewModel.setWordSource(WordSource.HEROKU);
+                    startViewModel.setWordSourceChosen(true);
+                    new Handler().postDelayed(()->{
+                        progressBarGetWords.setVisibility(View.GONE);
+                    },500);
+                }
+            });
+            downloader.execute();
         }
         else {
             //not known option
@@ -416,6 +442,79 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+}
+class HEROKUWordsDownloader implements WordsDownloader {
+    private  ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private ArrayList<String> words = new ArrayList<String>();
+
+    private List<Word> extractWords(JSONArray jsonArray) {
+        List<Word> responseWords = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject json = null;
+            try {
+                json = jsonArray.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Iterator<String> keys = json.keys();
+            Word word = Word.Builder().build();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                try {
+                    //System.out.println("Key :" + key + "  Value :" + json.get(key));
+                    if(key.equalsIgnoreCase("id"))
+                        word.setId((String) json.get(key));
+                    else if(key.equalsIgnoreCase("val"))
+                        word.setVal((String) json.get(key));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            responseWords.add(word);
+        }
+        return responseWords;
+    }
+
+    @Override
+    public void execute() {
+        executor.execute( ()->{
+            observers.stream().forEach(o-> new Handler(Looper.getMainLooper()).post( ()-> o.starting()));
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL("https://kpv-events.herokuapp.com/guesswords/rand/10").openStream()))) {
+                observers.stream().forEach( o-> new Handler(Looper.getMainLooper()).post( ()-> o.pending() ) );
+                String str = br.lines().collect(Collectors.joining());
+                /*
+                StringBuilder sb = new StringBuilder();
+                String linje = br.readLine();
+                while (linje != null) {
+                    sb.append(linje);
+                    linje = br.readLine();
+                }
+                extractWords(new JSONArray(sb.toString()));
+                */
+                List<String> words = extractWords(new JSONArray(str)).stream().map(w->w.getVal()).collect(Collectors.toList());
+                observers.stream().forEach( o-> new Handler(Looper.getMainLooper()).post( ()-> o.processed(new ArrayList<String>(words))) );
+            } catch (Exception e) {
+                e.printStackTrace();
+                new ArrayList<Word>(){{add(Word.Builder().withVal( "activate internet").build()); }};
+            }
+                            }
+        );
+        executor.shutdown();
+        //executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+    }
+
+    List<ProcessObserver> observers = new ArrayList<>();
+    @Override
+    public void addProcessObserver(ProcessObserver observer){
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeProcessObserver(ProcessObserver observer){
+        observers.remove(observer);
+    }
 }
 
 class DRWordsDownloader implements WordsDownloader{
@@ -464,7 +563,7 @@ class DRWordsDownloader implements WordsDownloader{
                         replaceAll(" [a-zæøå] "," "). // fjern 1-bogstavsord
                         replaceAll(" [a-zæøå][a-zæøå] "," "); // fjern 2-bogstavsord
 
-                setWords(new HashSet<String>(Arrays.asList(data.split(" "))));
+                setWords(new HashSet<String>( Arrays.asList(data.split(" ")).stream().filter(w->w.length()>4).collect(Collectors.toList()) ));
             } catch (IOException e) {
                 e.printStackTrace();
                 setWords(new HashSet<String>(){{add("activate internet");}});
