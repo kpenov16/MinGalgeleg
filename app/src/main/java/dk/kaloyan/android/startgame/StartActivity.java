@@ -259,22 +259,28 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             WordsDownloader downloader = new HEROKUWordsDownloader();
             downloader.addProcessObserver(new ProcessObserver() {
                 public void starting() {
-                    progressBarGetWords.setVisibility(View.VISIBLE);
-                    progressBarGetWords.setProgress(1);
+                    new Handler(Looper.getMainLooper()).post(()->{
+                        progressBarGetWords.setVisibility(View.VISIBLE);
+                        progressBarGetWords.setProgress(1);
+                    });
                 }
                 @Override
                 public void pending() {
-                    progressBarGetWords.setProgress(3);
+                    new Handler(Looper.getMainLooper()).post(()->{
+                        progressBarGetWords.setProgress(3);
+                    });
                 }
                 @Override
                 public void processed(ArrayList<String> words) {
-                    System.out.println("words: " + words);
-                    progressBarGetWords.setProgress(4);
-                    startViewModel.setWordSource(WordSource.HEROKU);
-                    startViewModel.setWordSourceChosen(true);
-                    new Handler().postDelayed(()->{
-                        progressBarGetWords.setVisibility(View.GONE);
-                    },500);
+                    new Handler(Looper.getMainLooper()).post(()->{
+                        System.out.println("words: " + words);
+                        progressBarGetWords.setProgress(4);
+                        startViewModel.setWordSource(WordSource.HEROKU);
+                        startViewModel.setWordSourceChosen(true);
+                        new Handler().postDelayed(()->{
+                            progressBarGetWords.setVisibility(View.GONE);
+                        },500);
+                    });
                 }
             });
             downloader.execute();
@@ -446,8 +452,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 }
 class HEROKUWordsDownloader implements WordsDownloader {
     private  ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Handler handler = new Handler(Looper.getMainLooper());
-    private ArrayList<String> words = new ArrayList<String>();
 
     private List<Word> extractWords(JSONArray jsonArray) {
         List<Word> responseWords = new ArrayList<>();
@@ -480,21 +484,15 @@ class HEROKUWordsDownloader implements WordsDownloader {
     @Override
     public void execute() {
         executor.execute( ()->{
-            observers.stream().forEach(o-> new Handler(Looper.getMainLooper()).post( ()-> o.starting()));
+            observers.stream().forEach(o-> o.starting());
+
             try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL("https://kpv-events.herokuapp.com/guesswords/rand/10").openStream()))) {
-                observers.stream().forEach( o-> new Handler(Looper.getMainLooper()).post( ()-> o.pending() ) );
-                String str = br.lines().collect(Collectors.joining());
-                /*
-                StringBuilder sb = new StringBuilder();
-                String linje = br.readLine();
-                while (linje != null) {
-                    sb.append(linje);
-                    linje = br.readLine();
-                }
-                extractWords(new JSONArray(sb.toString()));
-                */
-                List<String> words = extractWords(new JSONArray(str)).stream().map(w->w.getVal()).collect(Collectors.toList());
-                observers.stream().forEach( o-> new Handler(Looper.getMainLooper()).post( ()-> o.processed(new ArrayList<String>(words))) );
+
+                observers.stream().forEach( o-> o.pending() );
+
+                List<String> words = extractWords(new JSONArray( br.lines().collect(Collectors.joining()) )).stream().map(w->w.getVal()).collect(Collectors.toList());
+
+                observers.stream().forEach( o-> o.processed(new ArrayList<String>(words)) );
             } catch (Exception e) {
                 e.printStackTrace();
                 new ArrayList<Word>(){{add(Word.Builder().withVal( "activate internet").build()); }};
