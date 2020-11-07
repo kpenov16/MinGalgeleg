@@ -59,11 +59,14 @@ import dk.kaloyan.core.usecases.startgame.StartInputPort;
 import dk.kaloyan.core.usecases.startgame.StartOutputPort;
 import dk.kaloyan.core.usecases.startgame.WordSource;
 import dk.kaloyan.entities.Word;
+import dk.kaloyan.fsm.start.SimpleStartGameFSM;
+import dk.kaloyan.fsm.start.StartGameFSM;
+import dk.kaloyan.fsm.start.StartGameFSMFacade;
 import dk.kaloyan.gateways.DRWordsGatewayImpl;
 import dk.kaloyan.gateways.HerokuWordsGatewayImpl;
 import dk.kaloyan.utils.JsonWorker;
 
-public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable, CompoundButton.OnCheckedChangeListener, StartView, AdapterView.OnItemSelectedListener, StartViewModel.UserCanStartGameListener{//, HangGameState {
+public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable, CompoundButton.OnCheckedChangeListener, StartView, AdapterView.OnItemSelectedListener, StartViewModel.UserCanStartGameListener, StartGameFSMFacade {//, HangGameState {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
     public static final String PREF_SCORES = "dk.kaloyan.mingalgeleg.StartActivity.PREF_SCORES";
     public static final String SCORES = "dk.kaloyan.mingalgeleg.StartActivity.SCORES";
@@ -305,8 +308,43 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void onNothingSelected(AdapterView<?> adapterView) {
         startViewModel.setWordSourceChosen(false);
     }
-    //end setup use case
 
+    @Override
+    public void DoCategoryAndNameProvided() {
+
+    }
+
+    @Override
+    public void DoCategoryAndNameNeeded() {
+
+    }
+
+    @Override
+    public void DoCategoryAndNameLoading() {
+
+    }
+
+    @Override
+    public void DoGameStarting() {
+
+    }
+/*
+    @Override
+    public void startPressed(StartGameFSM fsm) {
+
+    }
+
+    @Override
+    public void categoryAndNameProvided(StartGameFSM fsm) {
+
+    }
+
+    @Override
+    public void categoryOrNameRemoved(StartGameFSM fsm) {
+
+    }*/
+    //end setup use case
+    SimpleStartGameFSM simpleStartGameFSM = new SimpleStartGameFSM();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -315,6 +353,14 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         //start setup the start usecase
         initialize();
+
+
+        simpleStartGameFSM.thisFSM = this;
+        simpleStartGameFSM.setState(StartGameFSM.SimpleStartGameState.StartNeedNameAndCategoryState);
+        simpleStartGameFSM.categoryOrNameRemoved();
+        //simpleStartGameFSM.startPressed();
+        //simpleStartGameFSM.categoryAndNameProvided();
+        //simpleStartGameFSM.categoryOrNameRemoved();
 
         StartOutputPortImpl startOutputPortImpl = new StartOutputPortImpl();
         startOutputPortImpl.setStartView(this);
@@ -459,6 +505,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+
+
 
 }
 class HEROKUWordsDownloader implements WordsDownloader {
