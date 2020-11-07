@@ -34,7 +34,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +53,6 @@ import dk.kaloyan.android.playgame.MainActivity;
 import dk.kaloyan.android.R;
 import dk.kaloyan.android.ViewablePlayer;
 import dk.kaloyan.app.ApplicationMain;
-import dk.kaloyan.async.ExtractWords;
 import dk.kaloyan.core.usecases.playgame.WordsGateway;
 import dk.kaloyan.core.usecases.startgame.StartGameUseCaseImpl;
 import dk.kaloyan.core.usecases.startgame.StartInputPort;
@@ -84,6 +82,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private TextView textViewMessage;
     private Spinner spinnerWordsSource;
     private ProgressBar progressBarGetWords;
+
+    public static WordsDownloaderFactory wordsDownloaderFactory;
     //private HangGameFSM fsm = HangGameFSMImpl.getInstance();
 
     @Override
@@ -172,6 +172,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         spinnerWordsSource = findViewById(R.id.spinnerWordsSource);
         progressBarGetWords = findViewById(R.id.progressBarGetWords);
 
+
+
         checkBoxWordsFromDR.setOnCheckedChangeListener(this);
         editTextPlayerName.addTextChangedListener(getTextWatcherForEditTextPlayerName());
         buttonStartGame.setOnClickListener(this);
@@ -199,12 +201,17 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         textViewMessage.setEnabled(true);
         textViewMessage.setText(startViewModel.chooseWordSourceMessage);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(StartActivity.this, android.R.layout.simple_spinner_item, startViewModel.wordSources);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(StartActivity.this, android.R.layout.simple_spinner_item, startViewModel.wordCategories);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerWordsSource.setAdapter(adapter);
         spinnerWordsSource.setOnItemSelectedListener(this);
         
+    }
+
+    @Override
+    public List<String> getCategories() {
+        return wordsDownloaderFactory.getCategories();
     }
 
     @Override
@@ -232,31 +239,36 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             startViewModel.setWordSourceChosen(false);
         }else if(position == 1){
             //new DRWordsGatewayImpl().getWords();
-            WordsDownloader downloader = new DRWordsDownloader();
+            WordsDownloader downloader = wordsDownloaderFactory.make(wordsDownloaderFactory.getCategories().get(position-1));
             downloader.addProcessObserver(new ProcessObserver() {
                 public void starting() {
-                    progressBarGetWords.setVisibility(View.VISIBLE);
-                    progressBarGetWords.setProgress(1);
+                    new Handler(Looper.getMainLooper()).post(()->{
+                        progressBarGetWords.setVisibility(View.VISIBLE);
+                        progressBarGetWords.setProgress(1);
+                    });
                 }
                 @Override
                 public void pending() {
-                    progressBarGetWords.setProgress(3);
+                    new Handler(Looper.getMainLooper()).post(()->{
+                        progressBarGetWords.setProgress(3);
+                    });
                 }
                 @Override
                 public void processed(ArrayList<String> words) {
-                    System.out.println("words: " + words);
-                    progressBarGetWords.setProgress(4);
-                    startViewModel.setWordSource(WordSource.DR);
-                    startViewModel.setWordSourceChosen(true);
-                    new Handler().postDelayed(()->{
-                        progressBarGetWords.setVisibility(View.GONE);
-                    },500);
+                    new Handler(Looper.getMainLooper()).post(()->{
+                        System.out.println("words: " + words);
+                        progressBarGetWords.setProgress(4);
+                        startViewModel.setWordSource(WordSource.DR);
+                        startViewModel.setWordSourceChosen(true);
+                        new Handler().postDelayed(()->{
+                            progressBarGetWords.setVisibility(View.GONE);
+                        },500);
+                    });
                 }
             });
             downloader.execute();
-
         }else if(position == 2){
-            WordsDownloader downloader = new HEROKUWordsDownloader();
+            WordsDownloader downloader = wordsDownloaderFactory.make(wordsDownloaderFactory.getCategories().get(position-1));
             downloader.addProcessObserver(new ProcessObserver() {
                 public void starting() {
                     new Handler(Looper.getMainLooper()).post(()->{
@@ -283,8 +295,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                     });
                 }
             });
-            downloader.execute();
-        }
+            downloader.execute();        }
         else {
             //not known option
         }
@@ -604,3 +615,12 @@ interface ProcessObservable{
     void addProcessObserver(ProcessObserver observer);
     void removeProcessObserver(ProcessObserver observer);
 }
+interface WordsDownloaderFactory{
+    WordsDownloader make(String category);
+    List<String> getCategories();
+}
+
+
+
+
+

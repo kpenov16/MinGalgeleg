@@ -2,6 +2,8 @@ package dk.kaloyan.app;
 
 import android.app.Application;
 
+import dk.kaloyan.android.startgame.StartActivity;
+import dk.kaloyan.android.startgame.WordsDownloaderFactoryImpl;
 import dk.kaloyan.core.usecases.playgame.HangGameInteractorImpl;
 import dk.kaloyan.gateways.DRWordsGatewayImpl;
 import dk.kaloyan.gateways.OneWordHangGameLogicImpl;
@@ -20,6 +22,10 @@ public class ApplicationMain extends Application {
     }
 
     private void initialize() {
+        StartActivity.wordsDownloaderFactory = new WordsDownloaderFactoryImpl();
+
+
+
         gameInteractor = new HangGameInteractorImpl();
         gameInteractor.setGalgelogikGateway(new OneWordHangGameLogicImpl());
 

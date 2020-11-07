@@ -1,5 +1,7 @@
 package dk.kaloyan.android.startgame;
 
+import java.util.ArrayList;
+
 import dk.kaloyan.core.usecases.startgame.StartOutputPort;
 
 public class StartOutputPortImpl implements StartOutputPort {
@@ -9,7 +11,7 @@ public class StartOutputPortImpl implements StartOutputPort {
         StartViewModel startViewModel = new StartViewModel();
         startViewModel.setWordSourceChosen(false);
         startViewModel.chooseWordSourceMessage = "Choose words source and player name before start";
-        startViewModel.wordSources = new String[]{"choose source", "From DR", "From Heroku"};
+        startViewModel.wordCategories = new ArrayList<String>(){{add("choose category"); addAll(startView.getCategories());}}; //String[]{"choose source", "From DR", "From Heroku"};
 
         startView.showChooseWordSource(startViewModel);
     }

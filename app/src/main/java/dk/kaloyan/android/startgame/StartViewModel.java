@@ -24,7 +24,7 @@ public class StartViewModel extends ViewModel {
     public ArrayList<ViewablePlayer> viewablePlayers = new ArrayList<>();
     private boolean isWordSourceChosen = false;
     public String chooseWordSourceMessage = "";
-    public String[] wordSources = new String[]{"none"};
+    public List<String> wordCategories = new ArrayList(){{add("none");}};
 
     public void restoreState(Bundle savedState) {
         playerName = savedState.getString(PLAYER_NAME);
