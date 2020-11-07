@@ -226,7 +226,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             startViewModel.setWordSourceChosen(false);
         }else if(position == 1){
             //new DRWordsGatewayImpl().getWords();
-            DRWordsDownloader downloader = new DRWordsDownloader();
+            WordsDownloader downloader = new DRWordsDownloader();
             downloader.addProcessObserver(new ProcessObserver() {
                 public void starting() {
                     progressBarGetWords.setVisibility(View.VISIBLE);
@@ -418,12 +418,12 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     }
 }
 
-class DRWordsDownloader {
+class DRWordsDownloader implements WordsDownloader{
     private  ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler handler = new Handler(Looper.getMainLooper());
     private ArrayList<String> words = new ArrayList<String>();
 
-    public String getPageAsString(String url) throws IOException {
+    private String getPageAsString(String url) throws IOException {
         InputStream inputStream = new URL(url).openStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder sb = new StringBuilder();
@@ -437,6 +437,7 @@ class DRWordsDownloader {
         return str;
     }
 
+    @Override
     public void execute() {
         executor = Executors.newSingleThreadExecutor();
         executor.execute(()->{
@@ -483,10 +484,13 @@ class DRWordsDownloader {
     }
 
     List<ProcessObserver> observers = new ArrayList<>();
-    void addProcessObserver(ProcessObserver observer){
+    @Override
+    public void addProcessObserver(ProcessObserver observer){
         observers.add(observer);
     }
-    void removeProcessObserver(ProcessObserver observer){
+
+    @Override
+    public void removeProcessObserver(ProcessObserver observer){
         observers.remove(observer);
     }
 }
@@ -495,4 +499,11 @@ interface ProcessObserver {
     void starting();
     void pending();
     void processed(ArrayList<String> words);
+}
+interface WordsDownloader extends ProcessObservable{
+    void execute();
+}
+interface ProcessObservable{
+    void addProcessObserver(ProcessObserver observer);
+    void removeProcessObserver(ProcessObserver observer);
 }
