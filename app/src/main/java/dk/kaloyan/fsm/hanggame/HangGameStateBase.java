@@ -1,4 +1,4 @@
-package dk.kaloyan.fsm;
+package dk.kaloyan.fsm.hanggame;
 
 public abstract class HangGameStateBase implements HangGameState {
     public static InitState INIT = new InitState();

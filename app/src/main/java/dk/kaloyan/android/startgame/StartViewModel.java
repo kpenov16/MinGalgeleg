@@ -9,8 +9,8 @@ import java.util.List;
 
 import dk.kaloyan.android.ViewablePlayer;
 import dk.kaloyan.core.usecases.startgame.WordSource;
-import dk.kaloyan.fsm.HangGameFSM;
-import dk.kaloyan.fsm.HangGameFSMImpl;
+import dk.kaloyan.fsm.hanggame.HangGameFSM;
+import dk.kaloyan.fsm.hanggame.HangGameFSMImpl;
 
 public class StartViewModel extends ViewModel {
     public static String PLAYER_NAME = "dk.kaloyan.mingalgeleg.StartViewModel.PLAYER_NAME";

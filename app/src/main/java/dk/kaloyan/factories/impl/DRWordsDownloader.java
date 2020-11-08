@@ -1,4 +1,4 @@
-package dk.kaloyan.gateways;
+package dk.kaloyan.factories.impl;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -14,17 +14,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
-import dk.kaloyan.core.usecases.playgame.WordsGateway;
+import dk.kaloyan.factories.ProcessObserver;
+import dk.kaloyan.factories.WordsDownloader;
 
-public class DRWordsGatewayImpl implements WordsGateway {
-    private  ExecutorService executor = Executors.newSingleThreadExecutor();
+public class DRWordsDownloader implements WordsDownloader {
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler handler = new Handler(Looper.getMainLooper());
-
     private ArrayList<String> words = new ArrayList<String>();
 
-    public String getPageAsString(String url) throws IOException {
+    private String getPageAsString(String url) throws IOException {
         InputStream inputStream = new URL(url).openStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder sb = new StringBuilder();
@@ -38,21 +38,21 @@ public class DRWordsGatewayImpl implements WordsGateway {
         return str;
     }
 
-
     @Override
-    public void getRandomWords(int numberOfWords, Consumable consumable) {
-
-    }
-
-    /**
-     * Hent ord fra DRs forside (https://dr.dk)
-     */
-    public List<String> getWords() throws Exception {
+    public void execute() {
         executor = Executors.newSingleThreadExecutor();
         executor.execute(()->{
+            for (ProcessObserver o : observers){
+                new Handler(Looper.getMainLooper()).post(()->o.starting());
+            }
             String data = "bil computer programmering motorvej busrute gangsti skovsnegl solsort nitten";
             try {
                 data = getPageAsString("https://dr.dk");
+
+                for (ProcessObserver o : observers){
+                    new Handler(Looper.getMainLooper()).post(()->o.pending());
+                }
+
                 data = data.substring(data.indexOf("<body")). // fjern headere
                         replaceAll("<.+?>", " ").toLowerCase(). // fjern tags
                         replaceAll("&#198;", "æ"). // erstat HTML-tegn
@@ -65,26 +65,34 @@ public class DRWordsGatewayImpl implements WordsGateway {
                         replaceAll(" [a-zæøå] "," "). // fjern 1-bogstavsord
                         replaceAll(" [a-zæøå][a-zæøå] "," "); // fjern 2-bogstavsord
 
-                setWords(new HashSet<String>(Arrays.asList(data.split(" "))));
+                setWords(new HashSet<String>( Arrays.asList(data.split(" ")).stream().filter(w->w.length()>4).collect(Collectors.toList()) ));
             } catch (IOException e) {
                 e.printStackTrace();
                 setWords(new HashSet<String>(){{add("activate internet");}});
             }
 
-
-
         });
         executor.shutdown();
-        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-
-
-
-        return words;
+        //executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
     }
 
     synchronized private void setWords(HashSet<String> newWords){
         words.clear();
         words.addAll(newWords);
+        for (ProcessObserver o : observers){
+            new Handler(Looper.getMainLooper()).post(()->o.processed(words));
+        }
     }
 
+    List<ProcessObserver> observers = new ArrayList<>();
+    @Override
+    public void addProcessObserver(ProcessObserver observer){
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeProcessObserver(ProcessObserver observer){
+        observers.remove(observer);
+    }
 }
+

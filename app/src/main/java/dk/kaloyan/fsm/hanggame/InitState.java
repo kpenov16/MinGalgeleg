@@ -1,6 +1,10 @@
-package dk.kaloyan.fsm;
+package dk.kaloyan.fsm.hanggame;
 
-public class InitState extends HangGameStateBase{
+import dk.kaloyan.fsm.hanggame.HangGameFSM;
+import dk.kaloyan.fsm.hanggame.HangGameState;
+import dk.kaloyan.fsm.hanggame.HangGameStateBase;
+
+public class InitState extends HangGameStateBase {
     HangGameState context;
     @Override
     public void setContext(HangGameState context) {

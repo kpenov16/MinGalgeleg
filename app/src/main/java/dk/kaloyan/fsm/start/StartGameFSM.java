@@ -41,6 +41,7 @@ public abstract class StartGameFSM {
     }
     private static class YesNameYesCategory extends SimpleStartGameState{
         @Override public void startPressed(StartGameFSM fsm) {
+            fsm.DoDisableStart();
             fsm.DoGameStarting();
         }
         @Override public void yesName(StartGameFSM fsm) {

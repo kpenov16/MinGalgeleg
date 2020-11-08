@@ -6,4 +6,6 @@ public interface HangGameInputPort {
     void setup(Game game);
 
     void play(String guess);
+
+
 }

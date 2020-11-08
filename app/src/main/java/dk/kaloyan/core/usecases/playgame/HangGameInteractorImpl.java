@@ -19,8 +19,6 @@ public class HangGameInteractorImpl implements HangGameInputPort {
 
     public void setup(Game game){
         this.game = game;
-
-        gameLogic = new OneWordHangGameLogicImpl();
         try {
             List<String> wordsToGuess = wordsGateway.getWords();
 
@@ -52,6 +50,7 @@ public class HangGameInteractorImpl implements HangGameInputPort {
                 outputPort.presentLose(wordToGuess, countWrongLetters, usedLetters);
 
             gameLogic.tearDown();
+            //setup(game);
         }else{
             game.setWrongLettersCount(countWrongLetters);
             game.setUsedLetters(usedLetters);
@@ -59,13 +58,15 @@ public class HangGameInteractorImpl implements HangGameInputPort {
         }
     }
 
-    public void setGalgelogikGateway(HangGameLogicGateway gameLogic) {
-        this.gameLogic = gameLogic;
-    }
     public HangGameLogicGateway getGameLogicGateway() {
         return gameLogic;
     }
-
+    public void setGameLogicGateway(HangGameLogicGateway gameLogic) {
+        this.gameLogic = gameLogic;
+    }
+    public WordsGateway getWordsGateway() {
+        return wordsGateway;
+    }
     public void setWordsGateway(WordsGateway wordsGateway) {
         this.wordsGateway = wordsGateway;
     }
@@ -75,22 +76,13 @@ public class HangGameInteractorImpl implements HangGameInputPort {
     public void setOutputPort(HangGameOutputPort outputPort) {
         this.outputPort = outputPort;
     }
-
-    public void setGameLogicGateway(HangGameLogicGateway gameLogic) {
-        this.gameLogic = gameLogic;
-    }
-
     public Game getGame() {
         return game;
     }
-
     public void setGame(Game game) {
         this.game = game;
     }
 
-    public WordsGateway getWordsGateway() {
-        return wordsGateway;
-    }
 
 
 

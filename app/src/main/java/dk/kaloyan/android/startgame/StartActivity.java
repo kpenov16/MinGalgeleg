@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -26,27 +25,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import dk.kaloyan.android.playgame.MainActivity;
@@ -59,14 +45,16 @@ import dk.kaloyan.core.usecases.startgame.StartInputPort;
 import dk.kaloyan.core.usecases.startgame.StartOutputPort;
 import dk.kaloyan.core.usecases.startgame.WordSource;
 import dk.kaloyan.entities.Word;
+import dk.kaloyan.factories.ProcessObserver;
+import dk.kaloyan.factories.WordsDownloader;
+import dk.kaloyan.factories.WordsDownloaderFactory;
 import dk.kaloyan.fsm.start.SimpleStartGameFSM;
 import dk.kaloyan.fsm.start.StartGameFSM;
 import dk.kaloyan.fsm.start.StartGameFSMFacade;
-import dk.kaloyan.gateways.DRWordsGatewayImpl;
-import dk.kaloyan.gateways.HerokuWordsGatewayImpl;
+import dk.kaloyan.gateways.OneWordHangGameLogicImpl;
 import dk.kaloyan.utils.JsonWorker;
 
-public class StartActivity extends AppCompatActivity implements View.OnClickListener, WordsGateway.Consumable, CompoundButton.OnCheckedChangeListener, StartView, AdapterView.OnItemSelectedListener, StartViewModel.UserCanStartGameListener, StartGameFSMFacade {//, HangGameState {
+public class StartActivity extends AppCompatActivity implements View.OnClickListener, StartView, AdapterView.OnItemSelectedListener, StartViewModel.UserCanStartGameListener, StartGameFSMFacade {
     public static final int RESULT_FROM_END_GAME_ACTIVITY = 0;
     public static final String PREF_SCORES = "dk.kaloyan.mingalgeleg.StartActivity.PREF_SCORES";
     public static final String SCORES = "dk.kaloyan.mingalgeleg.StartActivity.SCORES";
@@ -81,48 +69,19 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private String lastScore;
     private ViewablePlayer viewablePlayer;
     private Map<String, ViewablePlayer> viewablePlayers = new HashMap<>();
-    private CheckBox checkBoxWordsFromDR;
     private TextView textViewMessage;
     private Spinner spinnerWordsSource;
     private ProgressBar progressBarGetWords;
 
     public static WordsDownloaderFactory wordsDownloaderFactory;
-    //private HangGameFSM fsm = HangGameFSMImpl.getInstance();
 
     @Override
     public void onClick(View view) {
         if(view.getId() == buttonStartGame.getId()){
             simpleStartGameFSM.startPressed();
-            /*
-            playerName = editTextPlayerName.getText().toString();
-
-            viewModelStart.setPlayerName(playerName);
-            viewModelStart.scores = toStringArray(scores);
-            viewModelStart.viewablePlayers = new ArrayList<>(viewablePlayers.values());
-
-            Intent intent = new Intent(StartActivity.this, MainActivity.class);
-            intent.putExtra(MainActivity.PLAYER_NAME, playerName);
-
-            startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
-            */
-            //fsm.start();
         }
     }
-    /*
-    @Override
-    public void start(HangGameFSM fsm) {
-        playerName = editTextPlayerName.getText().toString();
-        viewModelStart.playerName = playerName;
-        viewModelStart.scores = toStringArray(scores);
-        Intent intent = new Intent(StartActivity.this, MainActivity.class);
-        intent.putExtra(MainActivity.PLAYER_NAME, playerName);
-        startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
-    }
-    @Override
-    public void guess(HangGameFSM fsm) {}
-    @Override
-    public void back(HangGameFSM fsm) {}
-    */
+
     private String[] toStringArray(List<String> scores) {
         return scores.toArray(new String[scores.size()]);
     }
@@ -150,6 +109,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 //Write your code if there's no result
             }
         }
+        ((ApplicationMain)getApplication()).gameInteractor.setGameLogicGateway(new OneWordHangGameLogicImpl());
+        //simpleStartGameFSM.setState(StartGameFSM.SimpleStartGameState.YesNameYesCategory);
+        DoEnableStart();
     }
 
     private void updatePreferences() {
@@ -172,15 +134,15 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         textViewListElement = findViewById(R.id.textViewListElement);
         buttonStartGame = findViewById(R.id.buttonStartGame);
         editTextPlayerName = findViewById(R.id.editTextPlayerName);
-        checkBoxWordsFromDR = findViewById(R.id.checkBoxWordsFromDR);
+
 
         textViewMessage = findViewById(R.id.textViewMessage);
+
         spinnerWordsSource = findViewById(R.id.spinnerWordsSource);
+
         progressBarGetWords = findViewById(R.id.progressBarGetWords);
 
 
-
-        checkBoxWordsFromDR.setOnCheckedChangeListener(this);
         editTextPlayerName.addTextChangedListener(getTextWatcherForEditTextPlayerName());
         buttonStartGame.setOnClickListener(this);
     }
@@ -188,11 +150,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-
-        //I wanted to show a ProcessBar while fetching words from my rest endpoint,
-        //as I use the free tier at heroku the dino kills itself after some time and it takes time to wake up again
-        //so this is a good case for the process bar I think, I will start work on it after finishing the saving top score as a json story
-        //new GuessWordGateway().getRandomWords(10, this::consume);
     }
 
     //start setup use case
@@ -212,6 +169,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerWordsSource.setAdapter(adapter);
         spinnerWordsSource.setOnItemSelectedListener(this);
+
+
         
     }
 
@@ -222,20 +181,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void userCanStartGameHasChanged(boolean canStart) {
-        if(canStart){ // && startViewModel.isUserNameChosen()
-            //buttonStartGame.setEnabled(true);
-            //textViewMessage.setVisibility(View.INVISIBLE);
 
-            //simpleStartGameFSM.categoryAndNameProvided();
-
-        }else {
-
-            //simpleStartGameFSM.categoryOrNameRemoved();
-
-            //buttonStartGame.setEnabled(false);
-            //textViewMessage.setVisibility(View.VISIBLE);
-            //textViewMessage.setText(startViewModel.chooseWordSourceMessage);
-        }
     }
 
 
@@ -243,7 +189,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position == 0){
-            //startViewModel.setWordCategoryChosen(false);
             simpleStartGameFSM.noCategory();
         }else if(position == 1){
             simpleStartGameFSM.yesCategory();
@@ -254,6 +199,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             //not known option
         }
     }
+
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         //startViewModel.setWordCategoryChosen(false);
@@ -273,9 +219,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     }
     private void updatePlayerName(String name){
         this.playerName = editTextPlayerName.getText().toString();
-        //viewModelStart.setPlayerName(playerName);
-        //viewablePlayer.setNickname(playerName);
-        //startViewModel.setPlayerName(playerName);
     }
 
     @Override
@@ -287,7 +230,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void DoCategoryRemoved() {
         textViewMessage.setVisibility(View.VISIBLE);
         textViewMessage.setText(startViewModel.chooseWordSourceMessage);
-        //buttonStartGame.setEnabled(false);
     }
 
     @Override
@@ -314,12 +256,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                         System.out.println("words: " + words);
                         ((ApplicationMain)getApplication()).gameInteractor.setWordsGateway(new WordsGateway() {
                             @Override
-                            public void getRandomWords(int numberOfWords, Consumable consumable) {
-
-                            }
-
-                            @Override
-                            public List<String> getWords() throws Exception {
+                            public List<String> getWords(){
                                 return words;
                             }
                         });
@@ -337,6 +274,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             });
             downloader.execute();
         }else if(position == 2){
+            //as I use the free tier at heroku the dino kills itself after some time and it takes time to wake up again
+            //so this is a good case for the process bar I think. At this position I get the heroku endpoint
             WordsDownloader downloader = wordsDownloaderFactory.make(wordsDownloaderFactory.getCategories().get(position-1));
             downloader.addProcessObserver(new ProcessObserver() {
                 public void starting() {
@@ -357,12 +296,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                         System.out.println("words: " + words);
                         ((ApplicationMain)getApplication()).gameInteractor.setWordsGateway(new WordsGateway() {
                             @Override
-                            public void getRandomWords(int numberOfWords, Consumable consumable) {
-
-                            }
-
-                            @Override
-                            public List<String> getWords() throws Exception {
+                            public List<String> getWords() {
                                 return words;
                             }
                         });
@@ -412,6 +346,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
 
     //end setup use case
+
     SimpleStartGameFSM simpleStartGameFSM = new SimpleStartGameFSM();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -425,10 +360,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         simpleStartGameFSM.thisFSM = this;
         simpleStartGameFSM.setState(StartGameFSM.SimpleStartGameState.NoNameNoCategoryState);
-        //simpleStartGameFSM.categoryOrNameRemoved();
-        //simpleStartGameFSM.startPressed();
-        //simpleStartGameFSM.categoryAndNameProvided();
-        //simpleStartGameFSM.categoryOrNameRemoved();
+
 
         StartOutputPortImpl startOutputPortImpl = new StartOutputPortImpl();
         startOutputPortImpl.setStartView(this);
@@ -440,11 +372,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
         StartInputPort inputPort = startUseCase;
         inputPort.setup();
+
         //end //setup the start usecase
 
-
-        //GuessWordGateway gateway = new GuessWordGateway();
-        //Toast.makeText(this, gateway.getRandomWordsAsStr(handler), Toast.LENGTH_LONG).show();
 
         //fsm
         //HangGameStateBase.INIT.setContext(this);
@@ -480,8 +410,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }
         //initialize();
         updateScores();
-
-
 
     }
 
@@ -548,200 +476,14 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        if(compoundButton.getId() == R.id.checkBoxWordsFromDR){
-            if(!isChecked){
-                new HerokuWordsGatewayImpl().getRandomWords(10, this::consume);
-            }else {
-                ((ApplicationMain)getApplication()).gameInteractor.setWordsGateway(new DRWordsGatewayImpl());
-            }
-        }
-    }
-
-    //private List<Word> words = new ArrayList<>();
-    @Override
-    synchronized public void consume(List<Word> result) {
-        //words = result;
-        Log.i("on consume: ", result.toString());
-        ((ApplicationMain)getApplication()).gameInteractor.setWordsGateway(new WordsGateway() {
-            @Override
-            public void getRandomWords(int numberOfWords, Consumable consumable) {
-
-            }
-
-            @Override
-            public List<String> getWords() throws Exception {
-                return result.stream().map(w->w.getVal()).collect(Collectors.toList());
-            }
-        });
-    }
-
-    @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-
-
-
-}
-class HEROKUWordsDownloader implements WordsDownloader {
-    private  ExecutorService executor = Executors.newSingleThreadExecutor();
-
-    private List<Word> extractWords(JSONArray jsonArray) {
-        List<Word> responseWords = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject json = null;
-            try {
-                json = jsonArray.getJSONObject(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            Iterator<String> keys = json.keys();
-            Word word = Word.Builder().build();
-            while (keys.hasNext()) {
-                String key = keys.next();
-                try {
-                    //System.out.println("Key :" + key + "  Value :" + json.get(key));
-                    if(key.equalsIgnoreCase("id"))
-                        word.setId((String) json.get(key));
-                    else if(key.equalsIgnoreCase("val"))
-                        word.setVal((String) json.get(key));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            responseWords.add(word);
-        }
-        return responseWords;
-    }
-
-    @Override
-    public void execute() {
-        executor.execute( ()->{
-            observers.stream().forEach(o-> o.starting());
-
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL("https://kpv-events.herokuapp.com/guesswords/rand/10").openStream()))) {
-
-                observers.stream().forEach( o-> o.pending() );
-
-                List<String> words = extractWords(new JSONArray( br.lines().collect(Collectors.joining()) )).stream().map(w->w.getVal()).collect(Collectors.toList());
-
-                observers.stream().forEach( o-> o.processed(new ArrayList<String>(words)) );
-            } catch (Exception e) {
-                e.printStackTrace();
-                new ArrayList<Word>(){{add(Word.Builder().withVal( "activate internet").build()); }};
-            }
-                            }
-        );
-        executor.shutdown();
-        //executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-    }
-
-    List<ProcessObserver> observers = new ArrayList<>();
-    @Override
-    public void addProcessObserver(ProcessObserver observer){
-        observers.add(observer);
-    }
-
-    @Override
-    public void removeProcessObserver(ProcessObserver observer){
-        observers.remove(observer);
     }
 }
 
-class DRWordsDownloader implements WordsDownloader{
-    private  ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Handler handler = new Handler(Looper.getMainLooper());
-    private ArrayList<String> words = new ArrayList<String>();
 
-    private String getPageAsString(String url) throws IOException {
-        InputStream inputStream = new URL(url).openStream();
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder sb = new StringBuilder();
-        String linje = br.readLine();
-        while (linje != null) {
-            sb.append(linje + "\n");
-            linje = br.readLine();
-        }
-        String str = sb.toString();
-        inputStream.close();
-        return str;
-    }
 
-    @Override
-    public void execute() {
-        executor = Executors.newSingleThreadExecutor();
-        executor.execute(()->{
-            for (ProcessObserver o : observers){
-                new Handler(Looper.getMainLooper()).post(()->o.starting());
-            }
-            String data = "bil computer programmering motorvej busrute gangsti skovsnegl solsort nitten";
-            try {
-                data = getPageAsString("https://dr.dk");
 
-                for (ProcessObserver o : observers){
-                    new Handler(Looper.getMainLooper()).post(()->o.pending());
-                }
 
-                data = data.substring(data.indexOf("<body")). // fjern headere
-                        replaceAll("<.+?>", " ").toLowerCase(). // fjern tags
-                        replaceAll("&#198;", "æ"). // erstat HTML-tegn
-                        replaceAll("&#230;", "æ"). // erstat HTML-tegn
-                        replaceAll("&#216;", "ø"). // erstat HTML-tegn
-                        replaceAll("&#248;", "ø"). // erstat HTML-tegn
-                        replaceAll("&oslash;", "ø"). // erstat HTML-tegn
-                        replaceAll("&#229;", "å"). // erstat HTML-tegn
-                        replaceAll("[^a-zæøå]", " "). // fjern tegn der ikke er bogstaver
-                        replaceAll(" [a-zæøå] "," "). // fjern 1-bogstavsord
-                        replaceAll(" [a-zæøå][a-zæøå] "," "); // fjern 2-bogstavsord
-
-                setWords(new HashSet<String>( Arrays.asList(data.split(" ")).stream().filter(w->w.length()>4).collect(Collectors.toList()) ));
-            } catch (IOException e) {
-                e.printStackTrace();
-                setWords(new HashSet<String>(){{add("activate internet");}});
-            }
-
-        });
-        executor.shutdown();
-        //executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-    }
-
-    synchronized private void setWords(HashSet<String> newWords){
-        words.clear();
-        words.addAll(newWords);
-        for (ProcessObserver o : observers){
-            new Handler(Looper.getMainLooper()).post(()->o.processed(words));
-        }
-    }
-
-    List<ProcessObserver> observers = new ArrayList<>();
-    @Override
-    public void addProcessObserver(ProcessObserver observer){
-        observers.add(observer);
-    }
-
-    @Override
-    public void removeProcessObserver(ProcessObserver observer){
-        observers.remove(observer);
-    }
-}
-
-interface ProcessObserver {
-    void starting();
-    void pending();
-    void processed(ArrayList<String> words);
-}
-interface WordsDownloader extends ProcessObservable{
-    void execute();
-}
-interface ProcessObservable{
-    void addProcessObserver(ProcessObserver observer);
-    void removeProcessObserver(ProcessObserver observer);
-}
-interface WordsDownloaderFactory{
-    WordsDownloader make(String category);
-    List<String> getCategories();
-}
 
 
 

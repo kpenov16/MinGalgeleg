@@ -19,8 +19,11 @@ public class OneWordHangGameLogicImpl implements HangGameLogicGateway {
     }
 
     public void tearDown(){
-        this.wordToGuess = null;
-        this.usedLetters.clear();
+        wordToGuess = null;
+        usedLetters.clear();
+        //countWrongLetters = 0;
+        //gameIsLost = false;
+        //gameIsWon = false;
     }
 
     public void guess(String letter) {
@@ -30,9 +33,9 @@ public class OneWordHangGameLogicImpl implements HangGameLogicGateway {
 
         usedLetters.add(letter);
 
-        if (wordToGuess.contains(letter)) {
+        if (wordToGuess.toLowerCase().contains(letter.toLowerCase())) {
             if(correctCount < wordToGuess.length())
-                correctCount = correctCount + wordToGuess.chars().filter(c->c==letter.charAt(0)).count();
+                correctCount = correctCount + wordToGuess.chars().filter(c-> Character.toLowerCase(c) == Character.toLowerCase( letter.charAt(0)) ).count();
         } else {
             ++countWrongLetters;
             if (countWrongLetters >= maxWrongLetters) {
