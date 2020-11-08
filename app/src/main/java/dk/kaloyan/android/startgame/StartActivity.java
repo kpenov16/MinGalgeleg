@@ -92,6 +92,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         if(view.getId() == buttonStartGame.getId()){
+            simpleStartGameFSM.startPressed();
+            /*
             playerName = editTextPlayerName.getText().toString();
 
             viewModelStart.setPlayerName(playerName);
@@ -102,6 +104,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             intent.putExtra(MainActivity.PLAYER_NAME, playerName);
 
             startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
+            */
             //fsm.start();
         }
     }
@@ -220,28 +223,94 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void userCanStartGameHasChanged(boolean canStart) {
         if(canStart){ // && startViewModel.isUserNameChosen()
-            buttonStartGame.setEnabled(true);
-            textViewMessage.setVisibility(View.INVISIBLE);
+            //buttonStartGame.setEnabled(true);
+            //textViewMessage.setVisibility(View.INVISIBLE);
+
+            //simpleStartGameFSM.categoryAndNameProvided();
+
         }else {
-            buttonStartGame.setEnabled(false);
-            textViewMessage.setVisibility(View.VISIBLE);
-            textViewMessage.setText(startViewModel.chooseWordSourceMessage);
+
+            //simpleStartGameFSM.categoryOrNameRemoved();
+
+            //buttonStartGame.setEnabled(false);
+            //textViewMessage.setVisibility(View.VISIBLE);
+            //textViewMessage.setText(startViewModel.chooseWordSourceMessage);
         }
     }
-
-
-
-
-
 
 
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position == 0){
-            startViewModel.setWordSourceChosen(false);
+            //startViewModel.setWordCategoryChosen(false);
+            simpleStartGameFSM.noCategory();
         }else if(position == 1){
-            //new DRWordsGatewayImpl().getWords();
+            simpleStartGameFSM.yesCategory();
+        }else if(position == 2){
+            simpleStartGameFSM.yesCategory();
+        }else{
+            simpleStartGameFSM.noCategory();
+            //not known option
+        }
+    }
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        //startViewModel.setWordCategoryChosen(false);
+    }
+
+
+    @Override
+    public void DoNameProvided() {
+        updatePlayerName(editTextPlayerName.getText().toString());
+    }
+    @Override
+    public void DoNameRemoved() {
+        textViewMessage.setVisibility(View.VISIBLE);
+        textViewMessage.setText(startViewModel.chooseWordSourceMessage);
+        updatePlayerName(editTextPlayerName.getText().toString());
+        //buttonStartGame.setEnabled(false);
+    }
+    private void updatePlayerName(String name){
+        this.playerName = editTextPlayerName.getText().toString();
+        //viewModelStart.setPlayerName(playerName);
+        //viewablePlayer.setNickname(playerName);
+        //startViewModel.setPlayerName(playerName);
+    }
+
+    @Override
+    public void DoCategoryProvided() {
+
+    }
+
+    @Override
+    public void DoCategoryRemoved() {
+        textViewMessage.setVisibility(View.VISIBLE);
+        textViewMessage.setText(startViewModel.chooseWordSourceMessage);
+        //buttonStartGame.setEnabled(false);
+    }
+
+    @Override
+    public void DoGameStarting() {
+        loadWords();
+    }
+
+
+    @Override
+    public void DoEnableStart() {
+        buttonStartGame.setEnabled(true);
+        textViewMessage.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void DoDisableStart() {
+        buttonStartGame.setEnabled(false);
+        textViewMessage.setVisibility(View.VISIBLE);
+    }
+
+    private void loadWords() {
+        int position = spinnerWordsSource.getSelectedItemPosition();
+        if(position == 1){
             WordsDownloader downloader = wordsDownloaderFactory.make(wordsDownloaderFactory.getCategories().get(position-1));
             downloader.addProcessObserver(new ProcessObserver() {
                 public void starting() {
@@ -261,10 +330,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                     new Handler(Looper.getMainLooper()).post(()->{
                         System.out.println("words: " + words);
                         progressBarGetWords.setProgress(4);
-                        startViewModel.setWordSource(WordSource.DR);
-                        startViewModel.setWordSourceChosen(true);
+
                         new Handler().postDelayed(()->{
                             progressBarGetWords.setVisibility(View.GONE);
+                            startViewModel.setWordSource(WordSource.DR);
+                            startViewModel.setWordCategoryChosen(true);
                         },500);
                     });
                 }
@@ -290,59 +360,22 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                     new Handler(Looper.getMainLooper()).post(()->{
                         System.out.println("words: " + words);
                         progressBarGetWords.setProgress(4);
-                        startViewModel.setWordSource(WordSource.HEROKU);
-                        startViewModel.setWordSourceChosen(true);
                         new Handler().postDelayed(()->{
                             progressBarGetWords.setVisibility(View.GONE);
+
+                            startViewModel.setWordSource(WordSource.HEROKU);
+                            startViewModel.setWordCategoryChosen(true);
+
                         },500);
                     });
                 }
             });
-            downloader.execute();        }
-        else {
-            //not known option
+            downloader.execute();
         }
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        startViewModel.setWordSourceChosen(false);
-    }
 
-    @Override
-    public void DoCategoryAndNameProvided() {
 
-    }
-
-    @Override
-    public void DoCategoryAndNameNeeded() {
-
-    }
-
-    @Override
-    public void DoCategoryAndNameLoading() {
-
-    }
-
-    @Override
-    public void DoGameStarting() {
-
-    }
-/*
-    @Override
-    public void startPressed(StartGameFSM fsm) {
-
-    }
-
-    @Override
-    public void categoryAndNameProvided(StartGameFSM fsm) {
-
-    }
-
-    @Override
-    public void categoryOrNameRemoved(StartGameFSM fsm) {
-
-    }*/
     //end setup use case
     SimpleStartGameFSM simpleStartGameFSM = new SimpleStartGameFSM();
     @Override
@@ -356,8 +389,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
 
         simpleStartGameFSM.thisFSM = this;
-        simpleStartGameFSM.setState(StartGameFSM.SimpleStartGameState.StartNeedNameAndCategoryState);
-        simpleStartGameFSM.categoryOrNameRemoved();
+        simpleStartGameFSM.setState(StartGameFSM.SimpleStartGameState.NoNameNoCategoryState);
+        //simpleStartGameFSM.categoryOrNameRemoved();
         //simpleStartGameFSM.startPressed();
         //simpleStartGameFSM.categoryAndNameProvided();
         //simpleStartGameFSM.categoryOrNameRemoved();
@@ -461,13 +494,20 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         return new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                startViewModel.setPlayerName(editTextPlayerName.getText().toString().trim());
+                final String name = editTextPlayerName.getText().toString().trim();
+                if(name != null && !name.isEmpty()){
+                    simpleStartGameFSM.yesName();
+                }else {
+                    simpleStartGameFSM.noName();
+                }
+                //startViewModel.setPlayerName(editTextPlayerName.getText().toString().trim());
             }
             @Override
             public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
             }
             @Override
             public void afterTextChanged(Editable editable) {
+
             }
         };
     }

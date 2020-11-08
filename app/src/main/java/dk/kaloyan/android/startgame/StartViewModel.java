@@ -22,7 +22,7 @@ public class StartViewModel extends ViewModel {
     public String[] scores = new String[]{};
     public HangGameFSM fsm = HangGameFSMImpl.getInstance();
     public ArrayList<ViewablePlayer> viewablePlayers = new ArrayList<>();
-    private boolean isWordSourceChosen = false;
+    private boolean isWordCategoryChosen = false;
     public String chooseWordSourceMessage = "";
     public List<String> wordCategories = new ArrayList(){{add("none");}};
 
@@ -39,8 +39,8 @@ public class StartViewModel extends ViewModel {
     }
 
 
-    public void setWordSourceChosen(boolean wordSourceChosen) {
-        isWordSourceChosen = wordSourceChosen;
+    public void setWordCategoryChosen(boolean wordCategoryChosen) {
+        isWordCategoryChosen = wordCategoryChosen;
         notifyUserCanStartGameSubscribers();
     }
     private WordSource wordSource;
@@ -62,7 +62,7 @@ public class StartViewModel extends ViewModel {
     }
 
     private boolean gameCanStart() {
-        return isWordSourceChosen && (playerName != null && !playerName.isEmpty());
+        return isWordCategoryChosen && (playerName != null && !playerName.isEmpty());
     }
 
     private List<UserCanStartGameListener> userCanStartGameListeners = new ArrayList<>();

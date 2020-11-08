@@ -9,7 +9,7 @@ public class StartOutputPortImpl implements StartOutputPort {
     @Override
     public void presentSetup() {
         StartViewModel startViewModel = new StartViewModel();
-        startViewModel.setWordSourceChosen(false);
+        startViewModel.setWordCategoryChosen(false);
         startViewModel.chooseWordSourceMessage = "Choose words source and player name before start";
         startViewModel.wordCategories = new ArrayList<String>(){{add("choose category"); addAll(startView.getCategories());}}; //String[]{"choose source", "From DR", "From Heroku"};
 

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>192</x>
+      <y>408</y>
+      <w>152</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>NoNameNoCategory</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>568</x>
+      <y>408</y>
+      <w>256</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>YesNameNoCategory</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>568</x>
+      <y>672</y>
+      <w>248</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>NoNameYesCategory</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>984</x>
+      <y>400</y>
+      <w>336</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>YesNameYesCategory</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>424</y>
+      <w>248</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+yesName
+--
+DoNameProvided</panel_attributes>
+    <additional_attributes>10.0;20.0;290.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>352</y>
+      <w>128</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+yesName
+--
+DoNameProvided</panel_attributes>
+    <additional_attributes>140.0;70.0;140.0;20.0;10.0;20.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>352</y>
+      <w>104</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+noCategory
+--
+-</panel_attributes>
+    <additional_attributes>110.0;70.0;110.0;20.0;10.0;20.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>520</y>
+      <w>248</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+noName
+--
+DoNameRemoved</panel_attributes>
+    <additional_attributes>290.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>816</x>
+      <y>416</y>
+      <w>184</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+yesCategory
+--
+DoCategoryProvided
+DoEnableStart</panel_attributes>
+    <additional_attributes>10.0;20.0;210.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>808</x>
+      <y>776</y>
+      <w>192</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+noName
+--
+DoNameRemoved
+DoDisableStart</panel_attributes>
+    <additional_attributes>220.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>816</x>
+      <y>512</y>
+      <w>184</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+noCategory
+--
+DoCategoryRemoved
+DoDisableStart</panel_attributes>
+    <additional_attributes>210.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1192</x>
+      <y>280</y>
+      <w>128</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+yesName
+--
+DoNameProvided</panel_attributes>
+    <additional_attributes>140.0;150.0;140.0;20.0;10.0;20.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1040</x>
+      <y>280</y>
+      <w>160</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+yesCategory
+--
+DoCategoryProvided
+</panel_attributes>
+    <additional_attributes>180.0;150.0;180.0;20.0;10.0;20.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>808</x>
+      <y>688</y>
+      <w>192</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+yesName
+--
+DoNameProvided
+DoEnableStart</panel_attributes>
+    <additional_attributes>10.0;20.0;220.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>768</y>
+      <w>248</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+noCategory
+--
+DoCategoryRemoved</panel_attributes>
+    <additional_attributes>290.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>688</y>
+      <w>248</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+yesCategory
+--
+DoCategoryProvided</panel_attributes>
+    <additional_attributes>10.0;20.0;290.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>712</x>
+      <y>616</y>
+      <w>104</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+noName
+--
+-</panel_attributes>
+    <additional_attributes>110.0;70.0;110.0;20.0;10.0;20.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>616</y>
+      <w>144</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+yesCategory
+--
+DoCategoryProvided</panel_attributes>
+    <additional_attributes>160.0;70.0;160.0;20.0;10.0;20.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>952</x>
+      <y>24</y>
+      <w>168</w>
+      <h>392</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+startPressed
+--
+DoLoadCategory
+</panel_attributes>
+    <additional_attributes>80.0;470.0;80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>632</x>
+      <y>16</y>
+      <w>16</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>type=final</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>168</x>
+      <y>280</y>
+      <w>16</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>type=initial</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>176</x>
+      <y>272</y>
+      <w>160</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+-
+--
+DoNameRemoved
+DoCategoryRemoved
+DoDisableStart</panel_attributes>
+    <additional_attributes>10.0;20.0;180.0;20.0;180.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>832</x>
+      <y>0</y>
+      <w>128</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>CategoryLoaded</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>632</x>
+      <y>8</y>
+      <w>216</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+-
+--
+DoPlayGame</panel_attributes>
+    <additional_attributes>250.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+</diagram>

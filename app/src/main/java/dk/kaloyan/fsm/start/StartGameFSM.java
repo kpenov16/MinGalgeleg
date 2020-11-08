@@ -13,46 +13,126 @@ public abstract class StartGameFSM {
     public void startPressed(){
         state.startPressed(this);
     }
-    public void categoryAndNameProvided(){
-        state.categoryAndNameProvided(this);
+    public void yesName(){
+        state.yesName(this);
     }
-    public void categoryOrNameRemoved(){
-        state.categoryAndNameProvided(this);
+    public void noName(){ state.noName(this); }
+    public void yesCategory(){
+        state.yesCategory(this);
+    }
+    public void noCategory(){
+        state.noCategory(this);
     }
 
-    public abstract void DoCategoryAndNameProvided();
-    public abstract void DoCategoryAndNameNeeded();
-    public abstract void DoCategoryAndNameLoading();
+
+    public abstract void DoNameProvided();
+    public abstract void DoNameRemoved();
+    public abstract void DoCategoryProvided();
+    public abstract void DoCategoryRemoved();
     public abstract void DoGameStarting();
-
+    public abstract void DoEnableStart();
+    public abstract void DoDisableStart();
 
     public abstract static class SimpleStartGameState implements StartGameState{
-        public static StartReadyState StartReadyState = new StartReadyState();
-        public static StartNeedNameAndCategoryState StartNeedNameAndCategoryState = new StartNeedNameAndCategoryState();
+        public static YesNameYesCategory YesNameYesCategory = new YesNameYesCategory();
+        public static NoNameYesCategoryState NoNameYesCategoryState = new NoNameYesCategoryState();
+        public static YesNameNoCategoryState YesNameNoCategoryState = new YesNameNoCategoryState();
+        public static NoNameNoCategoryState NoNameNoCategoryState = new NoNameNoCategoryState();
     }
-    private static class StartReadyState extends SimpleStartGameState{
+    private static class YesNameYesCategory extends SimpleStartGameState{
         @Override public void startPressed(StartGameFSM fsm) {
             fsm.DoGameStarting();
         }
-        @Override public void categoryAndNameProvided(StartGameFSM fsm) {
+        @Override public void yesName(StartGameFSM fsm) {
             //stay in the same state and
-            fsm.DoCategoryAndNameProvided();
+            fsm.DoNameProvided();
         }
-        @Override public void categoryOrNameRemoved(StartGameFSM fsm) {
-            fsm.setState(StartNeedNameAndCategoryState);
-            fsm.DoCategoryAndNameNeeded();
+        @Override public void yesCategory(StartGameFSM fsm) {
+            //stay in the same state
+            fsm.DoCategoryProvided();
+        }
+        @Override
+        public void noName(StartGameFSM fsm) {
+            fsm.setState(NoNameYesCategoryState);
+            fsm.DoNameRemoved();
+            fsm.DoDisableStart();
+        }
+        @Override
+        public void noCategory(StartGameFSM fsm) {
+            fsm.setState(YesNameNoCategoryState);
+            fsm.DoCategoryRemoved();
+            fsm.DoDisableStart();
         }
     }
-    private static class StartNeedNameAndCategoryState extends SimpleStartGameState{
+    private static class NoNameYesCategoryState extends SimpleStartGameState{
         @Override public void startPressed(StartGameFSM fsm) {
             //cannot be done in this state
         }
-        @Override public void categoryAndNameProvided(StartGameFSM fsm) {
-            fsm.setState(StartReadyState);
-            fsm.DoCategoryAndNameLoading();
+        @Override public void yesName(StartGameFSM fsm) {
+            fsm.setState(YesNameYesCategory);
+            fsm.DoNameProvided();
+            fsm.DoEnableStart();
         }
-        @Override public void categoryOrNameRemoved(StartGameFSM fsm) {
-            //do nothing - stay in the same state
+        @Override public void yesCategory(StartGameFSM fsm) {
+            //stay in the same state, update the category
+            fsm.DoCategoryProvided();
+        }
+        @Override
+        public void noName(StartGameFSM fsm) {
+            //do nothing
+            fsm.DoNameRemoved();
+        }
+        @Override
+        public void noCategory(StartGameFSM fsm) {
+            fsm.setState(NoNameNoCategoryState);
+            fsm.DoCategoryRemoved();
+        }
+    }
+    private static class YesNameNoCategoryState extends SimpleStartGameState{
+        @Override public void startPressed(StartGameFSM fsm) {
+            //cannot be done in this state
+        }
+        @Override public void yesName(StartGameFSM fsm) {
+            //stay in the same state
+            fsm.DoNameProvided();
+        }
+        @Override public void yesCategory(StartGameFSM fsm) {
+            fsm.setState(YesNameYesCategory);
+            fsm.DoCategoryProvided();
+            fsm.DoEnableStart();
+        }
+        @Override
+        public void noName(StartGameFSM fsm) {
+            fsm.setState(NoNameNoCategoryState);
+            fsm.DoNameRemoved();
+        }
+        @Override
+        public void noCategory(StartGameFSM fsm) {
+            //stay in the same state
+            fsm.DoCategoryRemoved();
+        }
+    }
+    private static class NoNameNoCategoryState extends SimpleStartGameState{
+        @Override public void startPressed(StartGameFSM fsm) {
+            //cannot be done in this state
+        }
+        @Override public void yesName(StartGameFSM fsm) {
+            fsm.setState(YesNameNoCategoryState);
+            fsm.DoNameProvided();
+        }
+        @Override public void yesCategory(StartGameFSM fsm) {
+            fsm.setState(NoNameYesCategoryState);
+            fsm.DoCategoryProvided();
+        }
+        @Override
+        public void noName(StartGameFSM fsm) {
+            //stay in the same state
+            fsm.DoNameRemoved();
+        }
+        @Override
+        public void noCategory(StartGameFSM fsm) {
+            //stay in the same state
+            fsm.DoCategoryRemoved();
         }
     }
 
