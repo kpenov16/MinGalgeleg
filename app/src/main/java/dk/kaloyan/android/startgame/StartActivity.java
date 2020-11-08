@@ -292,23 +292,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void DoGameStarting() {
-        loadWords();
-    }
-
-
-    @Override
-    public void DoEnableStart() {
-        buttonStartGame.setEnabled(true);
-        textViewMessage.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void DoDisableStart() {
-        buttonStartGame.setEnabled(false);
-        textViewMessage.setVisibility(View.VISIBLE);
-    }
-
-    private void loadWords() {
         int position = spinnerWordsSource.getSelectedItemPosition();
         if(position == 1){
             WordsDownloader downloader = wordsDownloaderFactory.make(wordsDownloaderFactory.getCategories().get(position-1));
@@ -329,12 +312,25 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 public void processed(ArrayList<String> words) {
                     new Handler(Looper.getMainLooper()).post(()->{
                         System.out.println("words: " + words);
+                        ((ApplicationMain)getApplication()).gameInteractor.setWordsGateway(new WordsGateway() {
+                            @Override
+                            public void getRandomWords(int numberOfWords, Consumable consumable) {
+
+                            }
+
+                            @Override
+                            public List<String> getWords() throws Exception {
+                                return words;
+                            }
+                        });
                         progressBarGetWords.setProgress(4);
 
                         new Handler().postDelayed(()->{
                             progressBarGetWords.setVisibility(View.GONE);
                             startViewModel.setWordSource(WordSource.DR);
                             startViewModel.setWordCategoryChosen(true);
+
+                            startNextActivity();
                         },500);
                     });
                 }
@@ -359,6 +355,17 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 public void processed(ArrayList<String> words) {
                     new Handler(Looper.getMainLooper()).post(()->{
                         System.out.println("words: " + words);
+                        ((ApplicationMain)getApplication()).gameInteractor.setWordsGateway(new WordsGateway() {
+                            @Override
+                            public void getRandomWords(int numberOfWords, Consumable consumable) {
+
+                            }
+
+                            @Override
+                            public List<String> getWords() throws Exception {
+                                return words;
+                            }
+                        });
                         progressBarGetWords.setProgress(4);
                         new Handler().postDelayed(()->{
                             progressBarGetWords.setVisibility(View.GONE);
@@ -366,6 +373,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                             startViewModel.setWordSource(WordSource.HEROKU);
                             startViewModel.setWordCategoryChosen(true);
 
+                            startNextActivity();
                         },500);
                     });
                 }
@@ -373,6 +381,33 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             downloader.execute();
         }
     }
+
+
+    @Override
+    public void DoEnableStart() {
+        buttonStartGame.setEnabled(true);
+        textViewMessage.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void DoDisableStart() {
+        buttonStartGame.setEnabled(false);
+        textViewMessage.setVisibility(View.VISIBLE);
+    }
+
+    synchronized private void startNextActivity(){
+        playerName = editTextPlayerName.getText().toString();
+
+        viewModelStart.setPlayerName(playerName);
+        viewModelStart.scores = toStringArray(scores);
+        viewModelStart.viewablePlayers = new ArrayList<>(viewablePlayers.values());
+
+        Intent intent = new Intent(StartActivity.this, MainActivity.class);
+        intent.putExtra(MainActivity.PLAYER_NAME, playerName);
+
+        startActivityForResult(intent, StartActivity.RESULT_FROM_END_GAME_ACTIVITY);
+    }
+
 
 
 
