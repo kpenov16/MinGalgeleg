@@ -15,8 +15,8 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import dk.hanggame.entities.Word;
-import dk.kaloyan.factories.ProcessObserver;
-import dk.kaloyan.factories.WordsDownloader;
+import dk.hanggame.factories.ProcessObserver;
+import dk.hanggame.factories.WordsDownloader;
 
 public class HEROKUWordsDownloader implements WordsDownloader {
     private ExecutorService executor = Executors.newSingleThreadExecutor();

@@ -2,8 +2,9 @@ package dk.kaloyan.factories.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import dk.kaloyan.factories.WordsDownloader;
-import dk.kaloyan.factories.WordsDownloaderFactory;
+
+import dk.hanggame.factories.WordsDownloader;
+import dk.hanggame.factories.WordsDownloaderFactory;
 
 
 public class WordsDownloaderFactoryImpl implements WordsDownloaderFactory {

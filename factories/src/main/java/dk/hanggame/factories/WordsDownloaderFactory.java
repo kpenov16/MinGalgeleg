@@ -1,4 +1,4 @@
-package dk.kaloyan.factories;
+package dk.hanggame.factories;
 
 import java.util.List;
 

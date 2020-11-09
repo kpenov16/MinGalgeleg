@@ -1,4 +1,4 @@
-package dk.kaloyan.factories;
+package dk.hanggame.factories;
 
 public interface ProcessObservable{
     void addProcessObserver(ProcessObserver observer);
