@@ -7,6 +7,5 @@ import dk.hanggame.downloaders.WordsDownloader;
 public interface WordsDownloaderFactory{
     WordsDownloader make(String category);
     List<String> getCategories();
-
 }
 

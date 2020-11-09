@@ -13,7 +13,7 @@ public class StartOutputPortImpl implements StartOutputPort {
         startViewModel.chooseWordSourceMessage = "Choose words source and player name before start";
         startViewModel.wordCategories = new ArrayList<String>(){{add("choose"); addAll(startView.getCategories());}};
 
-        startView.showChooseWordSource(startViewModel);
+        startView.showChooseWordCategories(startViewModel);
     }
 
     public StartView getStartView() {

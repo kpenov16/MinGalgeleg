@@ -5,8 +5,8 @@ import java.util.List;
 
 import dk.hanggame.downloaders.WordsDownloader;
 import dk.hanggame.factories.WordsDownloaderFactory;
-import dk.hanggame.impl.downloaders.DRWordsDownloader;
-import dk.hanggame.impl.downloaders.HEROKUWordsDownloader;
+import dk.hanggame.impl.downloaders.RandomWordsDownloaderImpl;
+import dk.hanggame.impl.downloaders.CitiesWordsDownloaderImpl;
 
 public class WordsDownloaderFactoryImpl implements WordsDownloaderFactory {
     private final String CITIES = "Cities";
@@ -19,9 +19,9 @@ public class WordsDownloaderFactoryImpl implements WordsDownloaderFactory {
     @Override
     public WordsDownloader make(String category){//, HandlerWrapper wrapper) {
         if(category != null && category.equalsIgnoreCase(CITIES)){
-            return new HEROKUWordsDownloader();
+            return new CitiesWordsDownloaderImpl();
         }else if(category != null && category.equalsIgnoreCase(RANDOM)){
-            return new DRWordsDownloader();
+            return new RandomWordsDownloaderImpl();
         }else
             return null;
     }

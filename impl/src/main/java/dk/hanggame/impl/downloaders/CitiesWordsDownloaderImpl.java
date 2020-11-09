@@ -14,11 +14,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+import dk.hanggame.downloaders.ProcessObservable;
 import dk.hanggame.downloaders.ProcessObserver;
 import dk.hanggame.downloaders.WordsDownloader;
 import dk.hanggame.entities.Word;
 
-public class HEROKUWordsDownloader implements WordsDownloader {
+public class CitiesWordsDownloaderImpl implements WordsDownloader {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private List<Word> extractWords(JSONArray jsonArray) {

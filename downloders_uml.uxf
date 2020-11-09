@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>16</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>32</x>
+      <y>96</y>
+      <w>576</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>ProcessObservable&lt;I&gt;
+--
++addProcessObserver(observer: ProcessObserver)
++removeProcessObserver(observer: ProcessObserver)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>32</x>
+      <y>320</y>
+      <w>256</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>WordsDownloader&lt;I&gt;
+--
++execute():void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>144</x>
+      <y>192</y>
+      <w>48</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>320</x>
+      <y>272</y>
+      <w>400</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>ProcessObserver&lt;I&gt;
+--
++starting():void
++pending():void
++processed(words: ArrayList&lt;String&gt;)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>16</x>
+      <y>32</y>
+      <w>720</w>
+      <h>416</h>
+    </coordinates>
+    <panel_attributes>downloaders - module</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>656</x>
+      <y>480</y>
+      <w>832</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>factories - module</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>768</x>
+      <y>32</y>
+      <w>704</w>
+      <h>416</h>
+    </coordinates>
+    <panel_attributes>android app - module</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>672</x>
+      <y>624</y>
+      <w>432</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>WordsDownloaderFactory&lt;I&gt;
+--
++make(String category):WordsDownloader
++getCategories():List&lt;String&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>688</x>
+      <y>432</y>
+      <w>48</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>16</x>
+      <y>480</y>
+      <w>624</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>impl - module</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>96</x>
+      <y>576</y>
+      <w>512</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>RandomWordsDownloaderImpl&lt;C&gt;
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>160</x>
+      <y>400</y>
+      <w>48</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>32</x>
+      <y>640</y>
+      <w>336</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>CitiesWordsDownloaderImpl&lt;C&gt;
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>64</x>
+      <y>400</y>
+      <w>48</w>
+      <h>272</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>64</x>
+      <y>720</y>
+      <w>384</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>WordsDownloaderFactoryImpl&lt;C&gt;
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>720</y>
+      <w>272</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>150.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>320</x>
+      <y>672</y>
+      <w>48</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>400</x>
+      <y>608</y>
+      <w>48</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>400</y>
+      <w>144</w>
+      <h>208</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+-observers</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>320</x>
+      <y>400</y>
+      <w>144</w>
+      <h>272</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+-observers</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>320</y>
+      <w>640</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>StartActivity
+--
++DoGameStarting():void&lt;&lt;Overrides::StartGameFSMFacade&gt;&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1056</x>
+      <y>400</y>
+      <w>48</w>
+      <h>256</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>80</y>
+      <w>656</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>StartView&lt;I&gt;
+--
++showChooseWordCategories(startViewModel: StartViewModel)
++getCategories():List&lt;String&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1392</x>
+      <y>160</y>
+      <w>48</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1120</x>
+      <y>480</y>
+      <w>368</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>Se hvordan StartActivity 
+bruge getCategories til at
+hende de mulige categories
+og skaber dem uden at kende
+til klaserne men kun til
+den abstrakte interface 
+WordsDownloader, her får vi 
+deploye uafhængighed men 
+vi mister statiske type sikkerhed. 
+Vi kan dog opnå type sikkerhed 
+ved at skrive unit tests.
+Det er også IOC her, inversion
+of control, dvs. vi kan udskifte
+impl - module uden at StartActivity
+lægger mærke til det. </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>208</y>
+      <w>512</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>ApplicationMain (must be in another module)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>944</x>
+      <y>240</y>
+      <w>48</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>416</x>
+      <y>240</y>
+      <w>448</w>
+      <h>512</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;300.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>704</x>
+      <y>320</y>
+      <w>128</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+</diagram>

@@ -46,6 +46,7 @@ import dk.hanggame.usecases.startgame.StartInputPort;
 import dk.hanggame.usecases.startgame.StartOutputPort;
 import dk.kaloyan.core.usecases.startgame.WordSource;
 import dk.kaloyan.fsm.start.SimpleStartGameFSM;
+import dk.kaloyan.fsm.start.SimpleStartGameState;
 import dk.kaloyan.fsm.start.StartGameFSM;
 import dk.kaloyan.fsm.start.StartGameFSMFacade;
 import dk.kaloyan.gateways.OneWordHangGameLogicImpl;
@@ -152,7 +153,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     //start setup use case
     private StartViewModel startViewModel;
     @Override
-    public void showChooseWordSource(StartViewModel newStartViewModel) {
+    public void showChooseWordCategories(StartViewModel newStartViewModel) {
         startViewModel = newStartViewModel;
         startViewModel.subscribeToUserCanStartGameHasChanged(this);
 
@@ -356,7 +357,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
 
 
         simpleStartGameFSM.thisFSM = this;
-        simpleStartGameFSM.setState(StartGameFSM.SimpleStartGameState.NoNameNoCategoryState);
+        simpleStartGameFSM.setState(SimpleStartGameState.NoNameNoCategoryState);
 
 
         StartOutputPortImpl startOutputPortImpl = new StartOutputPortImpl();

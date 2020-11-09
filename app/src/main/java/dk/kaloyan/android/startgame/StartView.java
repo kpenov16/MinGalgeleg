@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface StartView {
-    void showChooseWordSource(StartViewModel startViewModel);
+    void showChooseWordCategories(StartViewModel startViewModel);
 
     List<String> getCategories();
 }

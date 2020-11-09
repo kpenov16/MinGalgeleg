@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>14</zoom_level>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>84</x>
+      <y>350</y>
+      <w>896</w>
+      <h>490</h>
+    </coordinates>
+    <panel_attributes>usecases.playgame module</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>182</x>
+      <y>532</y>
+      <w>392</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>HangGameInteractorImpl&lt;C&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>112</x>
+      <y>602</y>
+      <w>336</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>HangGameLogicGateway&lt;I&gt;
+--
+setup(wordToGuess:String)
+tearDown():void
+guess(letter:String):void
+getWordToGuess():String 
+getCountWrongLetters():int
+getUsedLetters():ArrayList&lt;String&gt; 
+isGameLost():bool 
+isGameWon():bool </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>532</x>
+      <y>392</y>
+      <w>238</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>HangGameInputPort&lt;I&gt;
+--
+setup(game:Game)
+play(guess:String)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>112</x>
+      <y>392</y>
+      <w>406</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>HangGameOutputPort&lt;I&gt;
+--
+present(game:Game)
+presentWin(word:String)
+presentLose(word,countWrong,usedLetters)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>546</x>
+      <y>476</y>
+      <w>42</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>644</x>
+      <y>504</y>
+      <w>266</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>WordsGateway&lt;I&gt;
+--
+getWords():List&lt;String&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>196</x>
+      <y>490</y>
+      <w>42</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>196</x>
+      <y>560</y>
+      <w>42</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>560</x>
+      <y>532</y>
+      <w>112</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>616</x>
+      <y>868</y>
+      <w>364</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>entities module with Builders</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>616</x>
+      <y>896</y>
+      <w>98</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>Word&lt;C&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>714</x>
+      <y>896</y>
+      <w>112</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>Player&lt;C&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>826</x>
+      <y>896</y>
+      <w>126</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>Game&lt;C&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>84</x>
+      <y>868</y>
+      <w>490</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>gateways module</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>252</x>
+      <y>882</y>
+      <w>308</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>OneWordHangGameLogicImpl&lt;C&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>392</x>
+      <y>812</y>
+      <w>42</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>84</x>
+      <y>14</y>
+      <w>896</w>
+      <h>322</h>
+    </coordinates>
+    <panel_attributes>app - modul (gui)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>448</x>
+      <y>294</y>
+      <w>252</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>HangGameInputImpl&lt;C&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>322</y>
+      <w>42</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>322</x>
+      <y>238</y>
+      <w>252</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>HangGameOutputImpl&lt;C&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>266</y>
+      <w>42</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>322</x>
+      <y>140</y>
+      <w>308</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>HangGameView&lt;I&gt;
+--
+show(vm:HangGameViewModel)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>448</x>
+      <y>196</y>
+      <w>42</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>420</x>
+      <y>42</y>
+      <w>266</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>MainActivity&lt;C&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>448</x>
+      <y>70</y>
+      <w>42</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>70</y>
+      <w>42</w>
+      <h>252</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>84</x>
+      <y>280</y>
+      <w>196</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>ApplicationMain&lt;C&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>84</x>
+      <y>322</y>
+      <w>42</w>
+      <h>574</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;390.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>98</x>
+      <y>42</y>
+      <w>224</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>HangGameViewModel</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>308</x>
+      <y>42</y>
+      <w>140</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>266</x>
+      <y>70</y>
+      <w>84</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0;40.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>126</x>
+      <y>112</y>
+      <w>238</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>*Model-View-Presenter 
+style used here</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>462</x>
+      <y>574</y>
+      <w>518</w>
+      <h>266</h>
+    </coordinates>
+    <panel_attributes>Dependency inversion applied here as the game interactor 
+high policy is not aware of the details of the concrete impl
+in gateways or game logic. The same apply for the output 
+port as the interactor is not aware of the lower level details
+in the concrete impl in gui as viewmodels, activities etc.. 
+Liskov is applied, se the WordsGataway. All interfaces are
+segregated.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>700</x>
+      <y>14</y>
+      <w>280</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>Single responsibility 
+principle is applied in 
+all classes as they have
+only one reason to change.
+Open-closed is also applied 
+as the interfaces are closed
+but the concrete implementing 
+them can be changed, 
+even hot swapped.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>70</y>
+      <w>280</w>
+      <h>462</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>180.0;310.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>868</x>
+      <y>826</y>
+      <w>42</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>

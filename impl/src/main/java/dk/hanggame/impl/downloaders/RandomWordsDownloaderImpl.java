@@ -13,11 +13,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+import dk.hanggame.downloaders.ProcessObservable;
 import dk.hanggame.downloaders.ProcessObserver;
 import dk.hanggame.downloaders.WordsDownloader;
 
 
-public class DRWordsDownloader implements WordsDownloader {
+public class RandomWordsDownloaderImpl implements WordsDownloader {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private ArrayList<String> words = new ArrayList<String>();
 

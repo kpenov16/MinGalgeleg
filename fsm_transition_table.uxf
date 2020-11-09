@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
-  <zoom_level>10</zoom_level>
+  <zoom_level>20</zoom_level>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>500</x>
+      <x>220</x>
       <y>200</y>
-      <w>530</w>
-      <h>270</h>
+      <w>1060</w>
+      <h>540</h>
     </coordinates>
     <panel_attributes>s133967 Kaloyan Penov
 

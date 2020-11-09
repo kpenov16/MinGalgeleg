@@ -1,7 +1,2 @@
-include ':downloaders'
-include ':impl'
-include ':factories'
-include ':entities'
-include ':usecases'
-include ':app'
+include ':app', ':downloaders', ':impl', ':factories', ':entities', ':usecases'
 rootProject.name = "MinGalgeleg"
