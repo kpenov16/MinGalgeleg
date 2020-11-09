@@ -109,6 +109,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }
         ((ApplicationMain)getApplication()).gameInteractor.setGameLogicGateway(new OneWordHangGameLogicImpl());
         //simpleStartGameFSM.setState(StartGameFSM.SimpleStartGameState.YesNameYesCategory);
+        editTextPlayerName.setEnabled(true);
+        spinnerWordsSource.setEnabled(true);
         DoEnableStart();
     }
 
@@ -234,6 +236,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void DoGameStarting() {
         int position = spinnerWordsSource.getSelectedItemPosition();
         if(position == 1){
+            editTextPlayerName.setEnabled(false);
+            spinnerWordsSource.setEnabled(false);
             WordsDownloader downloader = wordsDownloaderFactory.make(wordsDownloaderFactory.getCategories().get(position-1));
             downloader.addProcessObserver(new ProcessObserver() {
                 public void starting() {
@@ -272,6 +276,9 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             });
             downloader.execute();
         }else if(position == 2){
+            editTextPlayerName.setEnabled(false);
+            spinnerWordsSource.setEnabled(false);
+
             //as I use the free tier at heroku the dino kills itself after some time and it takes time to wake up again
             //so this is a good case for the process bar I think. At this position I get the heroku endpoint
             WordsDownloader downloader = wordsDownloaderFactory.make(wordsDownloaderFactory.getCategories().get(position-1));
