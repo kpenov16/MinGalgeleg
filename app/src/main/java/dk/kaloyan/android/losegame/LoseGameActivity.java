@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import java.util.Random;
 
 import dk.kaloyan.android.R;
 import dk.kaloyan.android.ViewablePlayer;
@@ -31,6 +34,8 @@ public class LoseGameActivity extends AppCompatActivity {
 
         textViewResult = findViewById(R.id.textViewResult);
         textViewResult.setText(playerName + "\n" + lastScore);
+
+        MediaPlayer.create(this, new Random().nextBoolean()?R.raw.you_lose:R.raw.dog_barking).start();
     }
 
     @Override

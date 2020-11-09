@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import dk.kaloyan.android.R;
 import dk.kaloyan.android.ViewablePlayer;
 import dk.kaloyan.android.playgame.MainActivity;
+import dk.kaloyan.entities.Player;
 
 public class WinGameActivity extends AppCompatActivity {
     private String lastScore;
@@ -29,6 +31,8 @@ public class WinGameActivity extends AppCompatActivity {
 
         textViewResult = findViewById(R.id.textViewResult);
         textViewResult.setText(playerName + "\n" + lastScore);
+
+        MediaPlayer.create(this,R.raw.game_win).start();
     }
 
     @Override
