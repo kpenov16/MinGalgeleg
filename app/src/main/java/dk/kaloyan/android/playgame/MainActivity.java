@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements HangGameView, Vie
         textViewWordToGuess = findViewById(R.id.textViewWordToGuess);
         imageViewHangStatus = findViewById(R.id.imageViewHangStatus);
 
+        https://stackoverflow.com/questions/21872150/android-custom-numeric-keyboard
         $(R.id.textViewA).setOnClickListener(this);
         $(R.id.textViewB).setOnClickListener(this);
         $(R.id.textViewC).setOnClickListener(this);

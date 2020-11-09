@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
+    <!--https://stackoverflow.com/questions/21872150/android-custom-numeric-keyboard-->
     <TableRow style="@style/keyboard_row">
         <TextView android:id="@+id/textViewQ" android:text="Q" style="@style/keyboard_button"/>
         <TextView android:id="@+id/textViewW" android:text="W" style="@style/keyboard_button"/>
