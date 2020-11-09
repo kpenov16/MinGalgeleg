@@ -10,6 +10,8 @@ import dk.kaloyan.core.usecases.playgame.HangGameOutputPort;
 import dk.kaloyan.entities.Game;
 
 public class HangGameOutputImpl implements HangGameOutputPort {
+    private static final String USED_LETTERS_SEPARATOR = ", ";
+    private static final Character HIDDEN_LETTERS_PLACEHOLDER = '*';
     private HangGameView view;
     private HangGameViewModel viewModel;
 
@@ -17,7 +19,6 @@ public class HangGameOutputImpl implements HangGameOutputPort {
         this.view = view;
         this.viewModel = viewModel;
     }
-
 
     @Override
     public void present(Game game) {
@@ -27,34 +28,43 @@ public class HangGameOutputImpl implements HangGameOutputPort {
         viewModel.playerName = "Nickname: " + nickname;
         viewModel.wrongCount = game.getWrongLettersCount();
 
-        viewModel.currentGuess = String.format(CURRENT_GUESS_PLAY_GAME, hideNotGuessed(game.getWordToGuess(), game.getUsedLetters(), '*'), game.getWrongLettersCount(), game.getUsedLetters().toString());
-        //"Ord: " + game.getWordToGuess() + "\nForkerte Bogstaver: " + game.getWrongLettersCount() + "\nBrugte Bogstaver: " + game.getUsedLetters().toString();
+        viewModel.currentGuess = String.format(
+                CURRENT_GUESS_PLAY_GAME,
+                hideNotGuessed(game.getWordToGuess(), game.getUsedLetters(), HIDDEN_LETTERS_PLACEHOLDER),
+                game.getWrongLettersCount(),
+                formatLetters(game.getUsedLetters(), USED_LETTERS_SEPARATOR) );
         view.show(viewModel);
     }
-
+    private String formatLetters(final List<String> letters, final String separator){
+        return letters.stream().collect(Collectors.joining(separator));
+    }
     @Override
-    public void presentWin(String ordet) {
-        viewModel.currentGuess = "You WIN!!!\nOrdet var: " + ordet;
+    public void presentWin(String word) {
+        viewModel.currentGuess = "You WIN!!!\nThe word was: " + word;
         viewModel.isWon = true;
         viewModel.viewablePlayer.setWins(viewModel.viewablePlayer.getWins() + 1);
         view.show(viewModel);
     }
 
     @Override
-    public void presentLose(String ordet, int antalForkerteBogstaver, ArrayList<String> brugteBogstaver) {
-        viewModel.wrongCount = antalForkerteBogstaver;
-        viewModel.currentGuess = String.format(CURRENT_GUESS_LOSE_GAME, ordet, antalForkerteBogstaver, brugteBogstaver.toString());
+    public void presentLose(String word, int countWrongLetters, ArrayList<String> usedLetters) {
+        viewModel.wrongCount = countWrongLetters;
+        viewModel.currentGuess = String.format(
+                CURRENT_GUESS_LOSE_GAME,
+                word,
+                countWrongLetters,
+                formatLetters(usedLetters, USED_LETTERS_SEPARATOR));
         viewModel.viewablePlayer.setLoses(viewModel.viewablePlayer.getLoses() + 1);
         view.show(viewModel);
     }
 
-    public final String CURRENT_GUESS_LOSE_GAME = "You LOSE!!!\nOrdet var: %s\nForkerte gæt: %d\nBrugte bogstaver: %s";
-    public final String CURRENT_GUESS_PLAY_GAME = "Ord: %s\nForkerte gæt: %d\nBrugte bogstaver: %s";
+    public final String CURRENT_GUESS_LOSE_GAME = "You LOSE!!!\nThe word was: %s\nWrong guesses: %d\nUsed letters: \n%s";
+    public final String CURRENT_GUESS_PLAY_GAME = "Word: %s\nWrong guesses: %d\nUsed letters: \n%s";
 
     private String hideNotGuessed(String word, List<String> visible, char replaceWith) {
-        final Map<String,String> map = visible.stream().distinct().collect(Collectors.toMap(s->s, s->s));
+        final Map<String,String> map = visible.stream().distinct().collect(Collectors.toMap(s->s.toLowerCase(), s->s));
         final String visibleWord = word.chars()
-                .map(c -> map.get(Character.toString((char)c)) != null ? c : replaceWith)
+                .map(c -> map.get(Character.toString((char)c).toLowerCase()) != null ? c : replaceWith)
                 .collect(StringBuilder::new, (sb,c) -> sb.append((char)c), StringBuilder::append).toString();
         return visibleWord;
     }
