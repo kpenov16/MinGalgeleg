@@ -2,8 +2,8 @@ package dk.hanggame.usecases.playgame;
 
 import java.util.ArrayList;
 
-import dk.hanggame.usecases.entities.Game;
-import dk.hanggame.usecases.entities.Player;
+import dk.hanggame.entities.Game;
+
 
 public interface HangGameOutputPort {
     void present(Game game);

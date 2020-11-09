@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import dk.kaloyan.android.ViewablePlayer;
 import dk.hanggame.usecases.playgame.HangGameOutputPort;
-import dk.hanggame.usecases.entities.Game;
+import dk.hanggame.entities.Game;
 
 public class HangGameOutputImpl implements HangGameOutputPort {
     private static final String USED_LETTERS_SEPARATOR = ", ";

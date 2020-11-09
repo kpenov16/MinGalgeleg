@@ -1,4 +1,4 @@
-package dk.hanggame.usecases.entities;
+package dk.hanggame.entities;
 
 
 

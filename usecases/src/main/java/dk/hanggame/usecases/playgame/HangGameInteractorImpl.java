@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import dk.hanggame.usecases.entities.Game;
+import dk.hanggame.entities.Game;
 
 
 public class HangGameInteractorImpl implements HangGameInputPort {

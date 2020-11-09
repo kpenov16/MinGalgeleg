@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import dk.hanggame.usecases.entities.Word;
+import dk.hanggame.entities.Word;
 import dk.kaloyan.factories.ProcessObserver;
 import dk.kaloyan.factories.WordsDownloader;
 
