@@ -1,4 +1,4 @@
-package dk.kaloyan.core.usecases.startgame;
+package dk.hanggame.usecases.startgame;
 
 public class StartGameUseCaseImpl implements StartInputPort {
     private StartOutputPort outputPort;

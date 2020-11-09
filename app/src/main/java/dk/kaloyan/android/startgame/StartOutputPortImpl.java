@@ -2,7 +2,7 @@ package dk.kaloyan.android.startgame;
 
 import java.util.ArrayList;
 
-import dk.kaloyan.core.usecases.startgame.StartOutputPort;
+import dk.hanggame.usecases.startgame.StartOutputPort;
 
 public class StartOutputPortImpl implements StartOutputPort {
     private StartView startView;
