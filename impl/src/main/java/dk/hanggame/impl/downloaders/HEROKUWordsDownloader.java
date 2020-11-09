@@ -1,4 +1,4 @@
-package dk.kaloyan.factories.impl;
+package dk.hanggame.impl.downloaders;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,9 +14,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+import dk.hanggame.downloaders.ProcessObserver;
+import dk.hanggame.downloaders.WordsDownloader;
 import dk.hanggame.entities.Word;
-import dk.hanggame.factories.ProcessObserver;
-import dk.hanggame.factories.WordsDownloader;
 
 public class HEROKUWordsDownloader implements WordsDownloader {
     private ExecutorService executor = Executors.newSingleThreadExecutor();

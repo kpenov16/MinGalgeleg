@@ -1,7 +1,4 @@
-package dk.kaloyan.factories.impl;
-
-import android.os.Handler;
-import android.os.Looper;
+package dk.hanggame.impl.downloaders;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,13 +13,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import dk.hanggame.factories.ProcessObserver;
-import dk.hanggame.factories.WordsDownloader;
+import dk.hanggame.downloaders.ProcessObserver;
+import dk.hanggame.downloaders.WordsDownloader;
 
 
 public class DRWordsDownloader implements WordsDownloader {
     private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Handler handler = new Handler(Looper.getMainLooper());
     private ArrayList<String> words = new ArrayList<String>();
 
     private String getPageAsString(String url) throws IOException {
@@ -43,16 +39,14 @@ public class DRWordsDownloader implements WordsDownloader {
     public void execute() {
         executor = Executors.newSingleThreadExecutor();
         executor.execute(()->{
-            for (ProcessObserver o : observers){
-                new Handler(Looper.getMainLooper()).post(()->o.starting());
-            }
+
+            observers.stream().forEach(o->o.starting());
+
             String data = "bil computer programmering motorvej busrute gangsti skovsnegl solsort nitten";
             try {
                 data = getPageAsString("https://dr.dk");
 
-                for (ProcessObserver o : observers){
-                    new Handler(Looper.getMainLooper()).post(()->o.pending());
-                }
+                observers.stream().forEach(o->o.pending());
 
                 data = data.substring(data.indexOf("<body")). // fjern headere
                         replaceAll("<.+?>", " ").toLowerCase(). // fjern tags
@@ -80,9 +74,8 @@ public class DRWordsDownloader implements WordsDownloader {
     synchronized private void setWords(HashSet<String> newWords){
         words.clear();
         words.addAll(newWords);
-        for (ProcessObserver o : observers){
-            new Handler(Looper.getMainLooper()).post(()->o.processed(words));
-        }
+
+        observers.stream().forEach(o->o.processed(words));
     }
 
     List<ProcessObserver> observers = new ArrayList<>();

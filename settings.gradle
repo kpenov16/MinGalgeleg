@@ -1,3 +1,5 @@
+include ':downloaders'
+include ':impl'
 include ':factories'
 include ':entities'
 include ':usecases'

@@ -33,8 +33,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import dk.hanggame.factories.ProcessObserver;
-import dk.hanggame.factories.WordsDownloader;
+import dk.hanggame.downloaders.ProcessObserver;
+import dk.hanggame.downloaders.WordsDownloader;
 import dk.hanggame.factories.WordsDownloaderFactory;
 import dk.kaloyan.android.playgame.MainActivity;
 import dk.kaloyan.android.R;

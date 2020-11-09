@@ -1,4 +1,4 @@
-package dk.hanggame.factories;
+package dk.hanggame.downloaders;
 
 import java.util.ArrayList;
 
