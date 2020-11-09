@@ -1,7 +1,7 @@
-package dk.kaloyan.core.usecases.playgame;
+package dk.hanggame.usecases.playgame;
 
 import java.util.List;
-import dk.kaloyan.entities.Word;
+import dk.hanggame.usecases.entities.Word;
 
 public interface WordsGateway {
     List<String> getWords();

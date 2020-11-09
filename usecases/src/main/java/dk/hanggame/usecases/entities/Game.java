@@ -1,4 +1,4 @@
-package dk.kaloyan.entities;
+package dk.hanggame.usecases.entities;
 
 import java.util.ArrayList;
 import java.util.List;

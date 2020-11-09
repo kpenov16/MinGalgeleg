@@ -1,4 +1,4 @@
-package dk.kaloyan.core.usecases.playgame;
+package dk.hanggame.usecases.playgame;
 
 import java.util.ArrayList;
 

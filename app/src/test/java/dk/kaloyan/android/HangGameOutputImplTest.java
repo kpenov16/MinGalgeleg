@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import dk.kaloyan.android.playgame.HangGameOutputImpl;
 import dk.kaloyan.android.playgame.HangGameView;
 import dk.kaloyan.android.playgame.HangGameViewModel;
-import dk.kaloyan.entities.Game;
+import dk.hanggame.usecases.entities.Game;
 
 import static org.junit.Assert.assertEquals;
 

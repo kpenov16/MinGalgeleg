@@ -1,4 +1,4 @@
-package dk.kaloyan.entities;
+package dk.hanggame.usecases.entities;
 
 public class Word {
     private String id = "";

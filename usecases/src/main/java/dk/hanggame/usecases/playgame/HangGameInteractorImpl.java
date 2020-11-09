@@ -1,11 +1,11 @@
-package dk.kaloyan.core.usecases.playgame;
+package dk.hanggame.usecases.playgame;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import dk.kaloyan.entities.Game;
-import dk.kaloyan.gateways.OneWordHangGameLogicImpl;
+import dk.hanggame.usecases.entities.Game;
+
 
 public class HangGameInteractorImpl implements HangGameInputPort {
     private HangGameOutputPort outputPort;

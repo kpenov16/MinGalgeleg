@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dk.kaloyan.android.startgame.StartActivity;
-import dk.kaloyan.core.usecases.playgame.HangGameInteractorImpl;
-import dk.kaloyan.core.usecases.playgame.WordsGateway;
+import dk.hanggame.usecases.playgame.HangGameInteractorImpl;
+import dk.hanggame.usecases.playgame.WordsGateway;
 import dk.kaloyan.factories.impl.WordsDownloaderFactoryImpl;
 import dk.kaloyan.gateways.OneWordHangGameLogicImpl;
 

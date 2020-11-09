@@ -11,7 +11,6 @@ import android.widget.TextView;
 import dk.kaloyan.android.R;
 import dk.kaloyan.android.ViewablePlayer;
 import dk.kaloyan.android.playgame.MainActivity;
-import dk.kaloyan.entities.Player;
 
 public class WinGameActivity extends AppCompatActivity {
     private String lastScore;

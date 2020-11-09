@@ -1,8 +1,8 @@
 package dk.kaloyan.android.playgame;
 
-import dk.kaloyan.core.usecases.playgame.HangGameInputPort;
-import dk.kaloyan.entities.Game;
-import dk.kaloyan.entities.Player;
+import dk.hanggame.usecases.playgame.HangGameInputPort;
+import dk.hanggame.usecases.entities.Game;
+import dk.hanggame.usecases.entities.Player;
 
 public class HangGameInputImpl {
     private HangGameInputPort inputPort;

@@ -1,7 +1,7 @@
 package dk.kaloyan.gateways;
 
 import java.util.ArrayList;
-import dk.kaloyan.core.usecases.playgame.HangGameLogicGateway;
+import dk.hanggame.usecases.playgame.HangGameLogicGateway;
 
 public class OneWordHangGameLogicImpl implements HangGameLogicGateway {
     private ArrayList<String> usedLetters = new ArrayList<String>();

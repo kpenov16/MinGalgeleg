@@ -1,2 +1,3 @@
+include ':usecases'
 include ':app'
 rootProject.name = "MinGalgeleg"

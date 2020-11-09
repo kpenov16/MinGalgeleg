@@ -1,6 +1,6 @@
-package dk.kaloyan.core.usecases.playgame;
+package dk.hanggame.usecases.playgame;
 
-import dk.kaloyan.entities.Game;
+import dk.hanggame.usecases.entities.Game;
 
 public interface HangGameInputPort {
     void setup(Game game);

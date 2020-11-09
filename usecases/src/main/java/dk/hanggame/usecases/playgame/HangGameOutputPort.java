@@ -1,9 +1,9 @@
-package dk.kaloyan.core.usecases.playgame;
+package dk.hanggame.usecases.playgame;
 
 import java.util.ArrayList;
 
-import dk.kaloyan.entities.Game;
-import dk.kaloyan.entities.Player;
+import dk.hanggame.usecases.entities.Game;
+import dk.hanggame.usecases.entities.Player;
 
 public interface HangGameOutputPort {
     void present(Game game);
