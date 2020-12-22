@@ -75,6 +75,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     private ProgressBar progressBarGetWords;
 
     public static WordsDownloaderFactory wordsDownloaderFactory;
+    private List<ViewablePlayer> sortedViewablePlayers;
 
     @Override
     public void onClick(View view) {
@@ -409,11 +410,12 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
             List<ViewablePlayer> list = new JsonWorker<ViewablePlayer>().toList(set, ViewablePlayer.class);
             viewablePlayers = list.stream().collect(Collectors.toMap(ViewablePlayer::getNickname,vp->vp));
 
-            List<ViewablePlayer> l = new ArrayList<>(viewablePlayers.values());
-            Collections.sort(l, (p1,p2)->p1.compareTo(p2));
-            Collections.sort(l,Collections.reverseOrder());
+            sortedViewablePlayers = new ArrayList<>(viewablePlayers.values());
+            //List<ViewablePlayer> sortedViewablePlayers = new ArrayList<>(viewablePlayers.values());
+            Collections.sort(sortedViewablePlayers, (p1,p2)->p1.compareTo(p2));
+            Collections.sort(sortedViewablePlayers,Collections.reverseOrder());
             scores = new ArrayList<>();
-            for(ViewablePlayer vp : l){
+            for(ViewablePlayer vp : sortedViewablePlayers){
                 scores.add(String.format("%s wins: %d losses: %d", vp.getNickname(), vp.getWins(), vp.getLoses()));
             }
         }
@@ -423,7 +425,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void updateScores() {
-
+        //sortedViewablePlayers = null;
         if(lastScore != null) {
             if(viewablePlayers.get(viewablePlayer.getNickname()) != null){
                 ViewablePlayer oldPlayer = viewablePlayers.get(viewablePlayer.getNickname());
@@ -433,11 +435,11 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 viewablePlayers.put(viewablePlayer.getNickname(), viewablePlayer);
             }
 
-            List<ViewablePlayer> l = new ArrayList<>(viewablePlayers.values());
-            Collections.sort(l, (p1,p2)->p1.compareTo(p2));
-            Collections.sort(l,Collections.reverseOrder());
+            sortedViewablePlayers = new ArrayList<>(viewablePlayers.values());
+            Collections.sort(sortedViewablePlayers, (p1, p2)->p1.compareTo(p2));
+            Collections.sort(sortedViewablePlayers,Collections.reverseOrder());
             scores = new ArrayList<>();
-            for(ViewablePlayer vp : l){
+            for(ViewablePlayer vp : sortedViewablePlayers){
                 scores.add(String.format("%s wins: %d losses: %d", vp.getNickname(), vp.getWins(), vp.getLoses()));
             }
         }
@@ -449,6 +451,22 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         //use RecyclerView
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewScore.setLayoutManager(linearLayoutManager);
+        List<ViewablePlayerScore> viewablePlayerScores = makeViewablePlayerScores(sortedViewablePlayers);
+        final PlayerScoreRecyclerAdapter playerScoreRecyclerAdapter = new PlayerScoreRecyclerAdapter(this, viewablePlayerScores);
+        recyclerViewScore.setAdapter(playerScoreRecyclerAdapter);
+    }
+
+    private List<ViewablePlayerScore> makeViewablePlayerScores(List<ViewablePlayer> sortedViewablePlayers) {
+        List<ViewablePlayerScore> viewablePlayerScores = null;
+        if(sortedViewablePlayers == null){
+            return viewablePlayerScores;
+        }else{
+            viewablePlayerScores = new ArrayList<>();
+            for (ViewablePlayer p : sortedViewablePlayers){
+                viewablePlayerScores.add(new ViewablePlayerScore(p.getNickname()+":", "wins: "+p.getWins(), "losses: "+p.getLoses()));
+            }
+            return viewablePlayerScores;
+        }
     }
 
     private boolean activityStateNeedToBeRestored(Bundle savedInstanceState) {
