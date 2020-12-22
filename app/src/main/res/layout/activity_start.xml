@@ -24,15 +24,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:clickable="false"
+        android:enabled="false"
         android:text="Start Game"
         app:layout_constraintEnd_toEndOf="@+id/editTextPlayerName"
         app:layout_constraintStart_toStartOf="@+id/editTextPlayerName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPlayerName"
-        android:clickable="false"
-        android:enabled="false"/>
+        app:layout_constraintTop_toBottomOf="@+id/editTextPlayerName" />
 
 
-    <ListView
+<!--    <ListView
         android:id="@+id/listViewScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +40,21 @@
         app:layout_constraintEnd_toEndOf="@+id/buttonStartGame"
         app:layout_constraintHorizontal_bias="0.331"
         app:layout_constraintStart_toStartOf="@+id/buttonStartGame"
-        app:layout_constraintTop_toBottomOf="@+id/buttonStartGame" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonStartGame" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewScore"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonStartGame"
+        tools:listitem="@layout/player_score_item" />
 
     <EditText
         android:id="@+id/editTextPlayerName"

@@ -2,7 +2,7 @@ package dk.kaloyan.fsm.start;
 
 import dk.kaloyan.core.usecases.startgame.StartGameState;
 
-public abstract class StartGameFSM {
+public abstract class StartGameFSM implements StartGameFSMFacade {
 
     private StartGameState state;
 
@@ -24,13 +24,13 @@ public abstract class StartGameFSM {
         state.noCategory(this);
     }
 
-
+/*
     public abstract void DoNameProvided();
     public abstract void DoNameRemoved();
     public abstract void DoCategoryProvided();
     public abstract void DoCategoryRemoved();
     public abstract void DoGameStarting();
     public abstract void DoEnableStart();
-    public abstract void DoDisableStart();
+    public abstract void DoDisableStart();*/
 }
 

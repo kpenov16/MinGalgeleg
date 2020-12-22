@@ -22,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +59,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public static final String PREF_SCORES = "dk.kaloyan.mingalgeleg.StartActivity.PREF_SCORES";
     public static final String SCORES = "dk.kaloyan.mingalgeleg.StartActivity.SCORES";
 
-    private ListView listViewScore;
+    //private ListView listViewScore;
+    private RecyclerView recyclerViewScore;
     private TextView textViewListElement;
     private Button buttonStartGame;
     private EditText editTextPlayerName;
@@ -130,7 +133,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initialize() {
-        listViewScore = findViewById(R.id.listViewScore);
+        //listViewScore = findViewById(R.id.listViewScore);
+        recyclerViewScore = findViewById(R.id.recyclerViewScore);
         textViewListElement = findViewById(R.id.textViewListElement);
         buttonStartGame = findViewById(R.id.buttonStartGame);
         editTextPlayerName = findViewById(R.id.editTextPlayerName);
@@ -439,7 +443,12 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(this, R.layout.highscore_list_element, R.id.textViewListElement, toStringArray(scores));
-        listViewScore.setAdapter(adapter);
+
+        //listViewScore.setAdapter(adapter);
+
+        //use RecyclerView
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerViewScore.setLayoutManager(linearLayoutManager);
     }
 
     private boolean activityStateNeedToBeRestored(Bundle savedInstanceState) {
