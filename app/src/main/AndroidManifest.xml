@@ -12,21 +12,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="dk.kaloyan.android.wingame.WinGameActivity" android:screenOrientation="portrait"/>
-        <activity android:name="dk.kaloyan.android.losegame.LoseGameActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".startgame.ScoreDetailsActivity"></activity>
         <activity
-            android:name="dk.kaloyan.android.startgame.StartActivity" android:screenOrientation="portrait">
-            <!--android:label="@string/title_activity_start">-->
+            android:name=".wingame.WinGameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".losegame.LoseGameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".startgame.StartActivity"
+            android:screenOrientation="portrait">
+
+            <!-- android:label="@string/title_activity_start"> -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="dk.kaloyan.android.playgame.MainActivity" android:screenOrientation="portrait">
-            <!--<intent-filter>
+        <activity
+            android:name=".playgame.MainActivity"
+            android:screenOrientation="portrait">
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
     </application>
 

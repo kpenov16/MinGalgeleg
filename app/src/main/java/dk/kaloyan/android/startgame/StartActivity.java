@@ -463,7 +463,7 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
         }else{
             viewablePlayerScores = new ArrayList<>();
             for (ViewablePlayer p : sortedViewablePlayers){
-                viewablePlayerScores.add(new ViewablePlayerScore(p.getNickname()+":", "wins: "+p.getWins(), "losses: "+p.getLoses()));
+                viewablePlayerScores.add(new ViewablePlayerScore(p.getNickname(), p.getNickname()+":", "wins: "+p.getWins(), "losses: "+p.getLoses()));
             }
             return viewablePlayerScores;
         }

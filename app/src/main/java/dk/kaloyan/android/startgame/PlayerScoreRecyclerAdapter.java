@@ -1,6 +1,7 @@
 package dk.kaloyan.android.startgame;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +34,12 @@ public class PlayerScoreRecyclerAdapter extends RecyclerView.Adapter<PlayerScore
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ViewablePlayerScore viewablePlayerScore = viewablePlayerScoreList.get(position);
-        holder.textViewName.setText(viewablePlayerScore.playerName);
+        holder.textViewName.setText(viewablePlayerScore.viewablePlayerName);
         holder.textViewWins.setText(viewablePlayerScore.wins);
         holder.textViewLosses.setText(viewablePlayerScore.looses);
+
+        holder.currentPosition = position;
+        holder.nickname = viewablePlayerScore.nickname;
     }
 
     @Override
@@ -48,11 +52,23 @@ public class PlayerScoreRecyclerAdapter extends RecyclerView.Adapter<PlayerScore
         public final TextView textViewWins;
         public final TextView textViewLosses;
 
+        public int currentPosition;
+        public String nickname;
+
         public ViewHolder(@NonNull View view) {
             super(view);
             textViewName = view.findViewById(R.id.textViewName);
             textViewWins = view.findViewById(R.id.textViewWins);
             textViewLosses = view.findViewById(R.id.textViewLosses);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ScoreDetailsActivity.class);
+                    intent.putExtra(ScoreDetailsActivity.NICKNAME, nickname);
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }
