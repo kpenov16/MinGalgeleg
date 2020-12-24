@@ -1,5 +1,6 @@
 package dk.kaloyan.app;
 
+import android.app.Activity;
 import android.app.Application;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import dk.kaloyan.android.startgame.StartActivity;
 import dk.hanggame.usecases.playgame.HangGameInteractorImpl;
 import dk.hanggame.usecases.playgame.WordsGateway;
 import dk.hanggame.impl.factories.WordsDownloaderFactoryImpl;
+import dk.kaloyan.gateways.GameGatewayImpl;
 import dk.kaloyan.gateways.OneWordHangGameLogicImpl;
 
 public class ApplicationMain extends Application {
@@ -31,6 +33,8 @@ public class ApplicationMain extends Application {
 
         gameInteractor = new HangGameInteractorImpl();
         gameInteractor.setGameLogicGateway(new OneWordHangGameLogicImpl());
+
+        gameInteractor.setGameGateway( new GameGatewayImpl(KEY->getSharedPreferences(KEY, Activity.MODE_PRIVATE)));
 
         //the specific DRWordsGatewayImpl implements the generic WordsGateway
         //we move step by step the logic away from the Galgelogik so we can achieve SOLID

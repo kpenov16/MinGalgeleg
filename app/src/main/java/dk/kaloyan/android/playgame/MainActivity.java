@@ -22,7 +22,7 @@ import dk.kaloyan.app.ApplicationMain;
 import dk.kaloyan.gateways.GameGatewayImpl;
 
 
-public class MainActivity extends AppCompatActivity implements HangGameView, View.OnClickListener, GameGatewayImpl.SharedPreferencesSource {
+public class MainActivity extends AppCompatActivity implements HangGameView, View.OnClickListener {
     public static final String PREF_HISTORY_PLAYER = "PREF_HISTORY_%s";
     /*
     @Override
@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements HangGameView, Vie
         ((ApplicationMain)getApplication()).gameInteractor.setOutputPort(new HangGameOutputImpl(this, viewModel));
         inputWorker = new HangGameInputImpl(((ApplicationMain)getApplication()).gameInteractor);
 
-        ((ApplicationMain)getApplication()).gameInteractor.setGameGateway( new GameGatewayImpl(this));
         inputWorker.setup(playerName);
 
         /*
@@ -138,11 +137,6 @@ public class MainActivity extends AppCompatActivity implements HangGameView, Vie
                 new GameInteractorImpl( new OutputWorkerImpl(this, viewModel), new MinGalgelogikImpl(new Galgelogik()))
         );
         */
-    }
-
-    @Override
-    public SharedPreferences getSharedPreferences(String KEY) {
-        return getSharedPreferences(KEY, Activity.MODE_PRIVATE);
     }
 
     private void initialize() {
