@@ -8,6 +8,7 @@ public class Game {
     private int wrongLettersCount = 0;
     private List<String> usedLetters = new ArrayList<>();
     private Boolean isWon;
+    private long endGameTimeMilliseconds;
     private Player player = Player.Builder().build();
 
     public static GameBuilder Builder(){
@@ -19,10 +20,15 @@ public class Game {
         private int wrongLettersCount = 0;
         private List<String> usedLetters = new ArrayList<>();
         private Boolean isWon;
+        private long endGameTimeMilliseconds;
         private Player player = Player.Builder().build();
 
         private GameBuilder(){}
 
+        public GameBuilder withEndGameTimeMilliseconds(long endGameTimeMilliseconds) {
+            this.endGameTimeMilliseconds = endGameTimeMilliseconds;
+            return this;
+        }
         public GameBuilder withIsWon(Boolean isWon) {
             this.isWon = isWon;
             return this;
@@ -46,6 +52,7 @@ public class Game {
 
         public Game build(){
             Game game = new Game();
+            game.setEndGameTimeMilliseconds(this.endGameTimeMilliseconds);
             game.setWordToGuess(this.wordToGuess);
             game.setWrongLettersCount(this.wrongLettersCount);
             game.setUsedLetters(this.usedLetters);
@@ -56,6 +63,14 @@ public class Game {
     }
 
     private Game(){}
+
+    public long getEndGameTimeMilliseconds() {
+        return endGameTimeMilliseconds;
+    }
+
+    public void setEndGameTimeMilliseconds(long endGameTimeMilliseconds) {
+        this.endGameTimeMilliseconds = endGameTimeMilliseconds;
+    }
 
     public Boolean getIsWon() {
         return isWon;

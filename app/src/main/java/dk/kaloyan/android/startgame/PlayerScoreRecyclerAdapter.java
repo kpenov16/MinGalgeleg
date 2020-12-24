@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import dk.kaloyan.android.R;
+import dk.kaloyan.android.showscoredetails.ScoreDetailsActivity;
 
 public class PlayerScoreRecyclerAdapter extends RecyclerView.Adapter<PlayerScoreRecyclerAdapter.ViewHolder>{
     private final Context context;

@@ -1,6 +1,9 @@
 package dk.hanggame.usecases.playgame;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -57,6 +60,9 @@ public class HangGameInteractorImpl implements HangGameInputPort {
                 game.setIsWon(false);
                 outputPort.presentLose(game);
             }
+
+            game.setEndGameTimeMilliseconds(Calendar.getInstance().getTimeInMillis());
+
 
             gameGateway.save(game);
             gameLogic.tearDown();

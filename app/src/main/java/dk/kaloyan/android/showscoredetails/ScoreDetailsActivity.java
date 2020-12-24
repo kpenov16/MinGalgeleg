@@ -1,6 +1,8 @@
-package dk.kaloyan.android.startgame;
+package dk.kaloyan.android.showscoredetails;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -10,8 +12,8 @@ import dk.kaloyan.android.playgame.MainActivity;
 
 public class ScoreDetailsActivity extends AppCompatActivity {
 
-    public static final String NICKNAME = "dk.kaloyan.android.startgame.ScoreDetailsActivity.NICKNAME";
-    private TextView textViewNickname;
+    public static final String NICKNAME = "dk.kaloyan.android.showscoredetails.ScoreDetailsActivity.NICKNAME";
+    private RecyclerView recyclerViewScoreDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +25,12 @@ public class ScoreDetailsActivity extends AppCompatActivity {
         Bundle bundleFromStartActivity = getIntent().getExtras();
         String nickname = bundleFromStartActivity.getString(NICKNAME);
 
-        textViewNickname.setText(nickname);
-
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerViewScoreDetails.setLayoutManager(linearLayoutManager);
     }
 
     private void initialize() {
-        textViewNickname = findViewById(R.id.textViewNickname);
+        recyclerViewScoreDetails = findViewById(R.id.recyclerViewScoreDetails);
+
     }
 }
