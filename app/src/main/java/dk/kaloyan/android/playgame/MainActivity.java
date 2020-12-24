@@ -5,7 +5,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,8 +19,11 @@ import dk.kaloyan.android.ViewablePlayer;
 import dk.kaloyan.android.wingame.WinGameActivity;
 import dk.kaloyan.android.startgame.StartActivity;
 import dk.kaloyan.app.ApplicationMain;
+import dk.kaloyan.gateways.GameGatewayImpl;
 
-public class MainActivity extends AppCompatActivity implements HangGameView, View.OnClickListener{//, HangGameState {
+
+public class MainActivity extends AppCompatActivity implements HangGameView, View.OnClickListener, GameGatewayImpl.SharedPreferencesSource {
+    public static final String PREF_HISTORY_PLAYER = "PREF_HISTORY_%s";
     /*
     @Override
     public void start(HangGameFSM fsm) {}
@@ -125,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements HangGameView, Vie
         ((ApplicationMain)getApplication()).gameInteractor.setOutputPort(new HangGameOutputImpl(this, viewModel));
         inputWorker = new HangGameInputImpl(((ApplicationMain)getApplication()).gameInteractor);
 
+        ((ApplicationMain)getApplication()).gameInteractor.setGameGateway( new GameGatewayImpl(this));
         inputWorker.setup(playerName);
 
         /*
@@ -132,6 +138,11 @@ public class MainActivity extends AppCompatActivity implements HangGameView, Vie
                 new GameInteractorImpl( new OutputWorkerImpl(this, viewModel), new MinGalgelogikImpl(new Galgelogik()))
         );
         */
+    }
+
+    @Override
+    public SharedPreferences getSharedPreferences(String KEY) {
+        return getSharedPreferences(KEY, Activity.MODE_PRIVATE);
     }
 
     private void initialize() {

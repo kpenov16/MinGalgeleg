@@ -1,7 +1,5 @@
 package dk.hanggame.entities;
 
-
-
 public class Player {
     private String nickname;
     private int wins = 0;

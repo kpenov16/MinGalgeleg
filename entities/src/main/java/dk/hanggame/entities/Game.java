@@ -7,6 +7,7 @@ public class Game {
     private String wordToGuess = "";
     private int wrongLettersCount = 0;
     private List<String> usedLetters = new ArrayList<>();
+    private Boolean isWon;
     private Player player = Player.Builder().build();
 
     public static GameBuilder Builder(){
@@ -17,10 +18,15 @@ public class Game {
         private String wordToGuess = "";
         private int wrongLettersCount = 0;
         private List<String> usedLetters = new ArrayList<>();
+        private Boolean isWon;
         private Player player = Player.Builder().build();
 
         private GameBuilder(){}
 
+        public GameBuilder withIsWon(Boolean isWon) {
+            this.isWon = isWon;
+            return this;
+        }
         public GameBuilder withWordToGuess(String wordToGuess) {
             this.wordToGuess = wordToGuess;
             return this;
@@ -43,6 +49,7 @@ public class Game {
             game.setWordToGuess(this.wordToGuess);
             game.setWrongLettersCount(this.wrongLettersCount);
             game.setUsedLetters(this.usedLetters);
+            game.setIsWon(this.isWon);
             game.setPlayer(this.player);
             return game;
         }
@@ -50,6 +57,12 @@ public class Game {
 
     private Game(){}
 
+    public Boolean getIsWon() {
+        return isWon;
+    }
+    public void setIsWon(Boolean isWon) {
+        this.isWon = isWon;
+    }
     public String getWordToGuess() {
         return wordToGuess;
     }
@@ -65,7 +78,6 @@ public class Game {
     public void setWrongLettersCount(int wrongLettersCount) {
         this.wrongLettersCount = wrongLettersCount;
     }
-
     public List<String> getUsedLetters() {
         return usedLetters;
     }

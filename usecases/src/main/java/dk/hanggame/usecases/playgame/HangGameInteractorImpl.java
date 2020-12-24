@@ -12,6 +12,7 @@ public class HangGameInteractorImpl implements HangGameInputPort {
     private Game game;
     private WordsGateway wordsGateway;
     private HangGameLogicGateway gameLogic;
+    private GameGateway gameGateway;
 
     public HangGameInteractorImpl() { }
     List<String> words = new ArrayList<String>();
@@ -43,21 +44,37 @@ public class HangGameInteractorImpl implements HangGameInputPort {
         final int countWrongLetters = gameLogic.getCountWrongLetters();
         final ArrayList<String> usedLetters = gameLogic.getUsedLetters();
 
-        if (gameLogic.isGameLost() || gameLogic.isGameWon()) {
-            if (!gameLogic.isGameLost() )
-                outputPort.presentWin(wordToGuess);
-            else
-                outputPort.presentLose(wordToGuess, countWrongLetters, usedLetters);
+        game.setWrongLettersCount(countWrongLetters);
+        game.setUsedLetters(usedLetters);
 
-            gameLogic.tearDown();
-            //setup(game);
-        }else{
-            game.setWrongLettersCount(countWrongLetters);
-            game.setUsedLetters(usedLetters);
+        if (!isGameFinished()) {
             outputPort.present(game);
+        }else{
+            if (isGameWon()) {
+                game.setIsWon(true);
+                outputPort.presentWin(game);
+            } else {
+                game.setIsWon(false);
+                outputPort.presentLose(game);
+            }
+
+            gameGateway.save(game);
+            gameLogic.tearDown();
         }
     }
 
+    public GameGateway getGameGateway() {
+        return gameGateway;
+    }
+    public void setGameGateway(GameGateway gameGateway) {
+        this.gameGateway = gameGateway;
+    }
+    private boolean isGameWon() {
+        return !gameLogic.isGameLost();
+    }
+    private boolean isGameFinished() {
+        return gameLogic.isGameLost() || gameLogic.isGameWon();
+    }
     public HangGameLogicGateway getGameLogicGateway() {
         return gameLogic;
     }

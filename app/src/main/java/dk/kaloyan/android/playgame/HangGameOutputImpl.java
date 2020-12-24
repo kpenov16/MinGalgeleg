@@ -38,22 +38,23 @@ public class HangGameOutputImpl implements HangGameOutputPort {
     private String formatLetters(final List<String> letters, final String separator){
         return letters.stream().collect(Collectors.joining(separator));
     }
+
     @Override
-    public void presentWin(String word) {
-        viewModel.currentGuess = "You WIN!!!\nThe word was: " + word;
+    public void presentWin(Game game) {
+        viewModel.currentGuess = "You WIN!!!\nThe word was: " + game.getWordToGuess();
         viewModel.isWon = true;
         viewModel.viewablePlayer.setWins(viewModel.viewablePlayer.getWins() + 1);
         view.show(viewModel);
     }
 
     @Override
-    public void presentLose(String word, int countWrongLetters, ArrayList<String> usedLetters) {
-        viewModel.wrongCount = countWrongLetters;
+    public void presentLose(Game game) {
+        viewModel.wrongCount = game.getWrongLettersCount();
         viewModel.currentGuess = String.format(
                 CURRENT_GUESS_LOSE_GAME,
-                word,
-                countWrongLetters,
-                formatLetters(usedLetters, USED_LETTERS_SEPARATOR));
+                game.getWordToGuess(),
+                game.getWrongLettersCount(),
+                formatLetters(game.getUsedLetters(), USED_LETTERS_SEPARATOR));
         viewModel.viewablePlayer.setLoses(viewModel.viewablePlayer.getLoses() + 1);
         view.show(viewModel);
     }

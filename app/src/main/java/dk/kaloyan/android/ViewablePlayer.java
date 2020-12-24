@@ -18,8 +18,8 @@ public class ViewablePlayer implements Parcelable, Comparable<ViewablePlayer> {
 
 
     private String nickname;
-        private int wins = 0;
-        private int loses = 0;
+    private int wins = 0;
+    private int loses = 0;
 
     public ViewablePlayer(){}
 
