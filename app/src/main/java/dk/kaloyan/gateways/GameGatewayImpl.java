@@ -15,7 +15,7 @@ public class GameGatewayImpl implements GameGateway{
     public interface SharedPreferencesSource{
         public SharedPreferences getSharedPreferences(final String KEY);
     }
-    private static final String PREF_KAY_PLAYER = "PREF_KEY_%s";
+    private static final String PREF_KEY_PLAYER = "PREF_KEY_%s";
     private SharedPreferencesSource sharedPreferencesSource;
     public GameGatewayImpl(SharedPreferencesSource sharedPreferencesSource){
         this.sharedPreferencesSource = sharedPreferencesSource;
@@ -23,7 +23,7 @@ public class GameGatewayImpl implements GameGateway{
 
     @Override
     public void save(Game game) {
-        final String KEY_PLAYER = String.format(PREF_KAY_PLAYER, game.getPlayer().getNickname());
+        final String KEY_PLAYER = String.format(PREF_KEY_PLAYER, game.getPlayer().getNickname());
         SharedPreferences sharedPreferences = sharedPreferencesSource.getSharedPreferences(KEY_PLAYER);
         //
         Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet(KEY_PLAYER, new LinkedHashSet<>()));
