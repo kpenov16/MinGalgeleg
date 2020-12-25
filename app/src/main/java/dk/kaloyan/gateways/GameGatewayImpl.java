@@ -40,4 +40,13 @@ public class GameGatewayImpl implements GameGateway{
         editor.putStringSet(KEY_PLAYER, new LinkedHashSet<>(new ArrayList<String>(jsonPlayers)));
         editor.commit();
     }
+
+    @Override
+    public List<Game> getAll(final String nickname) {
+        final String KEY_PLAYER = String.format(PREF_KEY_PLAYER, nickname);
+        SharedPreferences sharedPreferences = sharedPreferencesSource.getSharedPreferences(KEY_PLAYER);
+        Set<String> set = new LinkedHashSet<String>(sharedPreferences.getStringSet(KEY_PLAYER, new LinkedHashSet<>()));
+        List<Game> list = new JsonWorker<Game>().toList(set, Game.class);
+        return list;
+    }
 }
