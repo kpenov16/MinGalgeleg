@@ -8,7 +8,8 @@ public class Game {
     private int wrongLettersCount = 0;
     private List<String> usedLetters = new ArrayList<>();
     private Boolean isWon;
-    private long endGameTimeMilliseconds;
+    private long startTimeMilliseconds;
+    private long elapsedTimeMilliseconds;
     private Player player = Player.Builder().build();
 
     public static GameBuilder Builder(){
@@ -20,13 +21,18 @@ public class Game {
         private int wrongLettersCount = 0;
         private List<String> usedLetters = new ArrayList<>();
         private Boolean isWon;
-        private long endGameTimeMilliseconds;
+        private long startTimeMilliseconds;
+        private long elapsedTimeMilliseconds;
         private Player player = Player.Builder().build();
 
         private GameBuilder(){}
 
-        public GameBuilder withEndGameTimeMilliseconds(long endGameTimeMilliseconds) {
-            this.endGameTimeMilliseconds = endGameTimeMilliseconds;
+        public GameBuilder withStartTimeMilliseconds(long startTimeMilliseconds) {
+            this.startTimeMilliseconds = startTimeMilliseconds;
+            return this;
+        }
+        public GameBuilder withElapsedTimeMilliseconds(long elapsedTimeMilliseconds) {
+            this.elapsedTimeMilliseconds = elapsedTimeMilliseconds;
             return this;
         }
         public GameBuilder withIsWon(Boolean isWon) {
@@ -52,7 +58,7 @@ public class Game {
 
         public Game build(){
             Game game = new Game();
-            game.setEndGameTimeMilliseconds(this.endGameTimeMilliseconds);
+            game.setElapsedTimeMilliseconds(this.elapsedTimeMilliseconds);
             game.setWordToGuess(this.wordToGuess);
             game.setWrongLettersCount(this.wrongLettersCount);
             game.setUsedLetters(this.usedLetters);
@@ -64,12 +70,20 @@ public class Game {
 
     private Game(){}
 
-    public long getEndGameTimeMilliseconds() {
-        return endGameTimeMilliseconds;
+    public long getStartTimeMilliseconds() {
+        return startTimeMilliseconds;
     }
 
-    public void setEndGameTimeMilliseconds(long endGameTimeMilliseconds) {
-        this.endGameTimeMilliseconds = endGameTimeMilliseconds;
+    public void setStartTimeMilliseconds(long startTimeMilliseconds) {
+        this.startTimeMilliseconds = startTimeMilliseconds;
+    }
+
+    public long getElapsedTimeMilliseconds() {
+        return elapsedTimeMilliseconds;
+    }
+
+    public void setElapsedTimeMilliseconds(long elapsedTimeMilliseconds) {
+        this.elapsedTimeMilliseconds = elapsedTimeMilliseconds;
     }
 
     public Boolean getIsWon() {

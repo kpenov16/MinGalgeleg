@@ -30,7 +30,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textViewWrongLetters"
+                android:id="@+id/textViewUsedLetters"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Used letters: t, s, f, r"
@@ -47,7 +47,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewWrongLetters" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewUsedLetters" />
 
             <TextView
                 android:id="@+id/textViewGameStarted"

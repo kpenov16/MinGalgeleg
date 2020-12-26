@@ -7,5 +7,4 @@ public interface HangGameInputPort {
 
     void play(String guess);
 
-
 }

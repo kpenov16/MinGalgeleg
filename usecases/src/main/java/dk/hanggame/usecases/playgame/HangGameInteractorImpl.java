@@ -1,9 +1,7 @@
 package dk.hanggame.usecases.playgame;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +14,7 @@ public class HangGameInteractorImpl implements HangGameInputPort {
     private WordsGateway wordsGateway;
     private HangGameLogicGateway gameLogic;
     private GameGateway gameGateway;
+    private long startedTimeMilliseconds;
 
     public HangGameInteractorImpl() { }
     List<String> words = new ArrayList<String>();
@@ -30,6 +29,7 @@ public class HangGameInteractorImpl implements HangGameInputPort {
             gameLogic.setup(
                     wordsToGuess.get(new Random().nextInt(wordsToGuess.size()))
             );
+            startedTimeMilliseconds = Calendar.getInstance().getTimeInMillis();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,6 +47,7 @@ public class HangGameInteractorImpl implements HangGameInputPort {
         final int countWrongLetters = gameLogic.getCountWrongLetters();
         final ArrayList<String> usedLetters = gameLogic.getUsedLetters();
 
+        game.setWordToGuess(wordToGuess);
         game.setWrongLettersCount(countWrongLetters);
         game.setUsedLetters(usedLetters);
 
@@ -61,12 +62,15 @@ public class HangGameInteractorImpl implements HangGameInputPort {
                 outputPort.presentLose(game);
             }
 
-            game.setEndGameTimeMilliseconds(Calendar.getInstance().getTimeInMillis());
-
-
-            gameGateway.save(game);
-            gameLogic.tearDown();
+            tearDown();
         }
+    }
+
+    private void tearDown() {
+        game.setElapsedTimeMilliseconds(Calendar.getInstance().getTimeInMillis()-startedTimeMilliseconds);
+        game.setStartTimeMilliseconds(startedTimeMilliseconds);
+        gameGateway.save(game);
+        gameLogic.tearDown();
     }
 
     public GameGateway getGameGateway() {
